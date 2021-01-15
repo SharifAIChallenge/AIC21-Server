@@ -12,6 +12,7 @@ public class ScoreHandler {
 
     /**
      * Create a ScoreHandler for a game with specific users.
+     *
      * @param playersIds Id of players who are attending in the Game.
      */
     public ScoreHandler(ArrayList<String> playersIds) {

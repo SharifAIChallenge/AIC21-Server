@@ -4,7 +4,7 @@ package ir.sharif.aichallenge.server.logic.handlers;
 import java.util.HashMap;
 
 /**
- *  Handles Logic of node owner.
+ * Handles Logic of node owner.
  */
 public class OwnerHandler {
     private HashMap<Integer, String> nodeIdToOwner;
