@@ -5,7 +5,9 @@ import ir.sharif.aichallenge.server.logic.handlers.ScoreHandler;
 import ir.sharif.aichallenge.server.logic.handlers.TurnHandler;
 
 import java.util.HashMap;
-
+/** Represents the Major class to control a game.
+ *
+ */
 public class Game {
     private HashMap<Integer, Node> nodes;
     private OwnerHandler ownerHandler;
@@ -13,6 +15,13 @@ public class Game {
     private ScoreHandler scoreHandler;
     public static final int GAME_MAXIMUM_TURN_COUNT = 50;
 
+    /**
+     * Create a Game with specific Map and Handlers.
+     * @param nodes The map of the Game.
+     * @param ownerHandler Handles all stuff about owner of nodes.
+     * @param turnHandler Handles turn logic of the game.
+     * @param scoreHandler The scoring system.
+     */
     public Game(HashMap<Integer, Node> nodes, OwnerHandler ownerHandler, TurnHandler turnHandler, ScoreHandler scoreHandler) {
         this.nodes = nodes;
         this.ownerHandler = ownerHandler;

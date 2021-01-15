@@ -3,9 +3,15 @@ package ir.sharif.aichallenge.server.logic.handlers;
 
 import java.util.HashMap;
 
+/**
+ *  Handles Logic of node owner.
+ */
 public class OwnerHandler {
     private HashMap<Integer, String> nodeIdToOwner;
 
+    /**
+     * Create a OwnerHandler for a game.
+     */
     public OwnerHandler() {
         this.nodeIdToOwner = new HashMap<Integer, String>();
     }
