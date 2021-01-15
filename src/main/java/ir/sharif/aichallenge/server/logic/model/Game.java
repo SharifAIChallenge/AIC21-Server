@@ -1,4 +1,4 @@
-package ir.sharif.aichallenge.server.logic.entities;
+package ir.sharif.aichallenge.server.logic.model;
 
 import ir.sharif.aichallenge.server.logic.handlers.OwnerHandler;
 import ir.sharif.aichallenge.server.logic.handlers.ScoreHandler;

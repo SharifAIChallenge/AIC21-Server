@@ -7,7 +7,7 @@ public class OwnerHandler {
     private HashMap<Integer, String> nodeIdToOwner;
 
     public OwnerHandler() {
-        this.nodeIdToOwner = new HashMap<>();
+        this.nodeIdToOwner = new HashMap<Integer, String>();
     }
 
     public boolean hasOwner(int nodeId) {

@@ -8,7 +8,7 @@ public class ScoreHandler {
     private HashMap<String, Integer> playersScore;
 
     public ScoreHandler(ArrayList<String> playersIds) {
-        playersScore = new HashMap<>();
+        playersScore = new HashMap<String, Integer>();
 
         for (String playerId : playersIds) {
             playersScore.put(playerId, 0);
@@ -26,6 +26,6 @@ public class ScoreHandler {
     }
 
     public HashMap<String, Integer> getScores() {
-        return new HashMap<>(playersScore);
+        return new HashMap<String, Integer>(playersScore);
     }
 }
