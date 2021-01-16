@@ -2,7 +2,7 @@ package ir.sharif.aichallenge.server.common.network.data;
 
 import com.google.gson.JsonObject;
 import ir.sharif.aichallenge.server.common.network.Json;
-import ir.sharif.aichallenge.server.utils.Log;
+import ir.sharif.aichallenge.server.common.util.Log;
 import lombok.Getter;
 
 import java.lang.reflect.Type;
@@ -11,6 +11,10 @@ import java.lang.reflect.Type;
 public class ClientMessage extends Message {
 
     private final int turn;
+
+    public int getTurn() {
+        return turn;
+    }
 
     public ClientMessage(String type, JsonObject info, int turn) {
         super(type, info);

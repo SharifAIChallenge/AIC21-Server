@@ -16,4 +16,12 @@ public class Message {
         this.type = type;
         this.info = info;
     }
+
+    public String getType() {
+        return type;
+    }
+
+    public JsonObject getInfo() {
+        return info;
+    }
 }
