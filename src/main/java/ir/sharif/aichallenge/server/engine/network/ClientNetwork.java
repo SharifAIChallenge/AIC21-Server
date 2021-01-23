@@ -6,8 +6,8 @@ import ir.sharif.aichallenge.server.common.network.data.ClientMessage;
 import ir.sharif.aichallenge.server.common.network.data.ClientMessageInfo;
 import ir.sharif.aichallenge.server.common.network.data.Message;
 import ir.sharif.aichallenge.server.common.network.data.MessageTypes;
+import ir.sharif.aichallenge.server.common.util.Log;
 import ir.sharif.aichallenge.server.engine.config.Configs;
-import ir.sharif.aichallenge.server.utils.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;

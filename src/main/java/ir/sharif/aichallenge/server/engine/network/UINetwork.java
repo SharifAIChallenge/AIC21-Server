@@ -3,8 +3,8 @@ package ir.sharif.aichallenge.server.engine.network;
 import ir.sharif.aichallenge.server.common.network.JsonSocket;
 import ir.sharif.aichallenge.server.common.network.data.Message;
 import ir.sharif.aichallenge.server.common.network.data.MessageTypes;
+import ir.sharif.aichallenge.server.common.util.Log;
 import ir.sharif.aichallenge.server.engine.config.Configs;
-import ir.sharif.aichallenge.server.utils.Log;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;

@@ -22,27 +22,28 @@ public class ClientMessage extends Message {
     }
 
     public ClientMessageInfo getParsedInfo() {
-        Class clazz;
-        switch (this.getType()) {
-            case MessageTypes.PUT_UNIT:
-                clazz = UnitPutInfo.class;
-                break;
-            case MessageTypes.CAST_SPELL:
-                clazz = SpellCastInfo.class;
-                break;
-            case MessageTypes.UPGRADE_DAMAGE:
-                clazz = DamageUpgradeInfo.class;
-                break;
-            case MessageTypes.UPGRADE_RANGE:
-                clazz = RangeUpgradeInfo.class;
-                break;
-            case MessageTypes.PICK:
-                clazz = PickInfo.class;
-                break;
-            default:
-                Log.e("ClientMessage", "Invalid message type: " + this.getType());
-                return null;
-        }
-        return (ClientMessageInfo) Json.GSON.fromJson(this.getInfo(), clazz);
+//        Class clazz;
+//        switch (this.getType()) {
+//            case MessageTypes.PUT_UNIT:
+//                clazz = UnitPutInfo.class;
+//                break;
+//            case MessageTypes.CAST_SPELL:
+//                clazz = SpellCastInfo.class;
+//                break;
+//            case MessageTypes.UPGRADE_DAMAGE:
+//                clazz = DamageUpgradeInfo.class;
+//                break;
+//            case MessageTypes.UPGRADE_RANGE:
+//                clazz = RangeUpgradeInfo.class;
+//                break;
+//            case MessageTypes.PICK:
+//                clazz = PickInfo.class;
+//                break;
+//            default:
+//                Log.e("ClientMessage", "Invalid message type: " + this.getType());
+//                return null;
+//        }
+//        return (ClientMessageInfo) Json.GSON.fromJson(this.getInfo(), clazz);
+        return null;
     }
 }

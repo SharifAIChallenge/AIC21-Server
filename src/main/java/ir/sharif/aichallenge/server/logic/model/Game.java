@@ -7,6 +7,8 @@ import ir.sharif.aichallenge.server.logic.handlers.exceptions.GameActionExceptio
 import ir.sharif.aichallenge.server.logic.handlers.validators.GameActionValidator;
 
 import java.util.HashMap;
+import java.util.Random;
+import java.util.UUID;
 
 /**
  * Represents the Major class to control a game.
@@ -35,6 +37,18 @@ public class Game {
         this.turnHandler = turnHandler;
         this.scoreHandler = scoreHandler;
         this.validator = validator;
+    }
+
+    /**
+     * Create random initialized game
+     */
+    public Game() {
+        // initialize a game
+        nodes = new HashMap<Integer, Node>();
+        // TODO: random initialization
+        int initialValue = new Random().nextInt() % 10;
+
+
     }
 
     public void decreaseOnePointAndGetNewNode(String playerId, int nodeIdToDecrease, int nodeIdToCatch)

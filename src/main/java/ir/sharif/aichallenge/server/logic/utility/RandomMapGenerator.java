@@ -2,10 +2,7 @@ package ir.sharif.aichallenge.server.logic.utility;
 
 import ir.sharif.aichallenge.server.logic.model.Node;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Represents a MapGenerator which generates a random Map with specific number of nodes.
@@ -16,15 +13,15 @@ public class RandomMapGenerator implements MapGenerator {
     public HashMap<Integer, Node> generateMap(int size) {
         HashMap<Integer, Node> nodes = new HashMap<Integer, Node>();
         for (int i = 0; i < size; i++) {
-            ArrayList<Integer> neighbours = getNeighbours(nodes.values());
-            Node newNode = new Node(i, neighbours, 0);
+            ArrayList<String> neighbours = getNeighbours(nodes.values());
+            Node newNode = new Node(UUID.randomUUID().toString(), neighbours, 0);
             nodes.put(i, newNode);
         }
         return nodes;
     }
 
-    private ArrayList<Integer> getNeighbours(Collection<Node> nodes) {
-        ArrayList<Integer> neighbours = new ArrayList<Integer>();
+    private ArrayList<String> getNeighbours(Collection<Node> nodes) {
+        ArrayList<String> neighbours = new ArrayList<String>();
         for (Node node : nodes) {
             if (rand.nextBoolean()) {
                 neighbours.add(node.getId());
