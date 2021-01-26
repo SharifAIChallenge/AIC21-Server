@@ -3,6 +3,7 @@ package ir.sharif.aichallenge.server.logic.handlers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Handles scoring of a game.
@@ -15,7 +16,7 @@ public class ScoreHandler {
      *
      * @param playersIds Id of players who are attending in the Game.
      */
-    public ScoreHandler(ArrayList<String> playersIds) {
+    public ScoreHandler(List<String> playersIds) {
         playersScore = new HashMap<String, Integer>();
 
         for (String playerId : playersIds) {

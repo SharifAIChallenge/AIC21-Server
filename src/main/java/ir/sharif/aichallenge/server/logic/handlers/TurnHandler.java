@@ -1,10 +1,12 @@
 package ir.sharif.aichallenge.server.logic.handlers;
 
+import java.util.List;
+
 public class TurnHandler {
     private int currentTurn;
-    private String[] playerIds;
+    private List<String> playerIds;
 
-    public TurnHandler(String[] playerIds) {
+    public TurnHandler(List<String> playerIds) {
         currentTurn = 1;
         this.playerIds = playerIds;
     }
@@ -14,8 +16,8 @@ public class TurnHandler {
     }
 
     public String getCurrentPlayer() {
-        int currentPlayerIndicator = (currentTurn - 1) % playerIds.length;
-        return playerIds[currentPlayerIndicator];
+        int currentPlayerIndicator = (currentTurn - 1) % playerIds.size();
+        return playerIds.get(currentPlayerIndicator);
     }
 
     public int getCurrentTurn() {

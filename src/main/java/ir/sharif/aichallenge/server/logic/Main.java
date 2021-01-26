@@ -12,15 +12,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException, FileNotFoundException {
-//        AtomicInteger currentTurn = new AtomicInteger(0);
-//        new File("Log/server").mkdirs();
-//        Log.outputFile = new PrintStream(new FileOutputStream("Log/server/server.log", false));
-//        int extraTime = extractExtraTime(args);
-//
-//        GameServer gameServer = new GameServer(new GameHandler(currentTurn, extraTime), args, currentTurn);
-//        gameServer.start();
-//        gameServer.waitForFinish();
-        System.out.println(new Random().nextInt());
+        AtomicInteger currentTurn = new AtomicInteger(0);
+        new File("Log/server").mkdirs();
+        Log.outputFile = new PrintStream(new FileOutputStream("Log/server/server.log", false));
+        int extraTime = extractExtraTime(args);
+
+        GameServer gameServer = new GameServer(new GameHandler(), args, currentTurn);
+        gameServer.start();
+        gameServer.waitForFinish();
     }
 
     private static int extractExtraTime(String[] args) {

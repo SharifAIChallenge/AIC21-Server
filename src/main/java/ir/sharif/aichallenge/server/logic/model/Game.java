@@ -1,5 +1,7 @@
 package ir.sharif.aichallenge.server.logic.model;
 
+import ir.sharif.aichallenge.server.common.network.data.ClientMessageInfo;
+import ir.sharif.aichallenge.server.common.network.data.Message;
 import ir.sharif.aichallenge.server.logic.handlers.OwnerHandler;
 import ir.sharif.aichallenge.server.logic.handlers.ScoreHandler;
 import ir.sharif.aichallenge.server.logic.handlers.TurnHandler;
@@ -7,8 +9,8 @@ import ir.sharif.aichallenge.server.logic.handlers.exceptions.GameActionExceptio
 import ir.sharif.aichallenge.server.logic.handlers.validators.GameActionValidator;
 
 import java.util.HashMap;
-import java.util.Random;
-import java.util.UUID;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Represents the Major class to control a game.
@@ -19,36 +21,27 @@ public class Game {
     private TurnHandler turnHandler;
     private ScoreHandler scoreHandler;
     private GameActionValidator validator;
+    // messages to be sent to clients in this turn
+    private Message[] clientTurnMessages;
+
     public static final int GAME_MAXIMUM_TURN_COUNT = 50;
+
 
     /**
      * Create a Game with specific Map and Handlers.
      *
-     * @param nodes        The map of the Game.
-     * @param ownerHandler Handles all stuff about owner of nodes.
-     * @param turnHandler  Handles turn logic of the game.
-     * @param scoreHandler The scoring system.
-     * @param validator    The validator for players actions.
+     * @param nodes The map of the Game.
+     *              //     * @param ownerHandler Handles all stuff about owner of nodes.
+     *              //     * @param turnHandler  Handles turn logic of the game.
+     *              //     * @param scoreHandler The scoring system.
+     *              //     * @param validator    The validator for players actions.
      */
-    public Game(HashMap<Integer, Node> nodes, OwnerHandler ownerHandler, TurnHandler turnHandler
-            , ScoreHandler scoreHandler, GameActionValidator validator) {
+    public Game(HashMap<Integer, Node> nodes, List<String> players) {
         this.nodes = nodes;
-        this.ownerHandler = ownerHandler;
-        this.turnHandler = turnHandler;
-        this.scoreHandler = scoreHandler;
-        this.validator = validator;
-    }
-
-    /**
-     * Create random initialized game
-     */
-    public Game() {
-        // initialize a game
-        nodes = new HashMap<Integer, Node>();
-        // TODO: random initialization
-        int initialValue = new Random().nextInt() % 10;
-
-
+        this.ownerHandler = new OwnerHandler();
+        this.turnHandler = new TurnHandler(players);
+        this.scoreHandler = new ScoreHandler(players);
+        this.validator = new GameActionValidator(nodes, ownerHandler, turnHandler);
     }
 
     public void decreaseOnePointAndGetNewNode(String playerId, int nodeIdToDecrease, int nodeIdToCatch)
@@ -99,16 +92,27 @@ public class Game {
     public boolean isFinished() {
         return turnHandler.getCurrentTurn() == GAME_MAXIMUM_TURN_COUNT;
     }
-}
 
-//class ExpireTask extends TimerTask {
-//    private Game callbackClass;
-//
-//    ExpireTask(Game callbackClass) {
-//        this.callbackClass = callbackClass;
-//    }
-//
-//    public void run() {
-//        callbackClass.turnTimeExpired();
-//    }
-//}
+    public int getTurn() {
+        return turnHandler.getCurrentTurn();
+    }
+
+    public Message[] getClientTurnMessages() {
+        return clientTurnMessages;
+    }
+
+    public Node getNodeByID(String id) {
+        // TODO: get a node by id
+        return null;
+    }
+
+    public void passTurn(Map<String, List<ClientMessageInfo>> messages) {
+        // TODO: based on the messages in MessageTypes, do changes in game
+        // for example:
+        //      increment turn
+        //      generate messages for clients and add them to [clientTurnMessages]
+        //      set [isGameFinished] when necessary
+        //      and many many other things :)
+
+    }
+}

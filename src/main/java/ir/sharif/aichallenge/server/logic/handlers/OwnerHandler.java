@@ -13,6 +13,7 @@ public class OwnerHandler {
      * Create a OwnerHandler for a game.
      */
     public OwnerHandler() {
+        // TODO: initialize or change nodeIdToOwner
         this.nodeIdToOwner = new HashMap<Integer, String>();
     }
 

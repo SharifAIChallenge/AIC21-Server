@@ -10,11 +10,22 @@ import lombok.Getter;
 public class Message {
 
     private final String type;
-    private final JsonObject info;
+    // null for server messages
+    private final String token;
+    // payload = info
+    private final JsonObject payload;
 
-    public Message(String type, JsonObject info) {
+    public Message(String type, JsonObject payload, String token) {
         this.type = type;
-        this.info = info;
+        this.payload = payload;
+        this.token = token;
+    }
+
+    // for server messages
+    public Message(String type, JsonObject payload) {
+        this.type = type;
+        this.payload = payload;
+        this.token = null;
     }
 
     public String getType() {
@@ -22,6 +33,6 @@ public class Message {
     }
 
     public JsonObject getInfo() {
-        return info;
+        return payload;
     }
 }
