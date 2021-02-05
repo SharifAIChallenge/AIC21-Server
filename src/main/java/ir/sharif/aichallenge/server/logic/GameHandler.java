@@ -9,6 +9,8 @@ import ir.sharif.aichallenge.server.engine.core.GameLogic;
 import ir.sharif.aichallenge.server.logic.dto.payloads.Token;
 import ir.sharif.aichallenge.server.logic.model.Game;
 import ir.sharif.aichallenge.server.logic.model.Node;
+import ir.sharif.aichallenge.server.logic.utility.MapGenerator;
+import ir.sharif.aichallenge.server.logic.utility.RandomMapGenerator;
 
 import java.util.*;
 
@@ -16,10 +18,13 @@ public class GameHandler implements GameLogic {
 
     private Game game;
     private static final StringParam[] CLIENT_NAMES = new StringParam[2];
+    private static final int MAP_SIZE = 50;
+    private MapGenerator mapGenerator;
 
-    public GameHandler() {
-        CLIENT_NAMES[0] = new StringParam("Player 2", "player");
+    public GameHandler(MapGenerator mapGenerator) {
+        CLIENT_NAMES[0] = new StringParam("Player 1", "player");
         CLIENT_NAMES[1] = new StringParam("Player 2", "player");
+        this.mapGenerator = mapGenerator == null ? new RandomMapGenerator() : mapGenerator;
     }
 
     @Override
@@ -49,8 +54,8 @@ public class GameHandler implements GameLogic {
         for (StringParam clientName : CLIENT_NAMES) {
             players.add(clientName.getValue());
         }
-        // TODO: initialize a Game here
-        game = new Game(new HashMap<Integer, Node>(), players);
+        HashMap<Integer, Node> nodes = mapGenerator.generateMap(MAP_SIZE);
+        game = new Game(nodes, players);
     }
 
     @Override

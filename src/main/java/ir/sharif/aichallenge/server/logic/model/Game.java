@@ -101,9 +101,9 @@ public class Game {
         return clientTurnMessages;
     }
 
-    public Node getNodeByID(String id) {
+    public Node getNodeByID(int id) {
         // TODO: get a node by id
-        return null;
+        return nodes.get(id);
     }
 
     public void passTurn(Map<String, List<ClientMessageInfo>> messages) {
