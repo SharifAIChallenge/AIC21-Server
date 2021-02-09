@@ -9,6 +9,8 @@ public class ConstConfigs {
     public static int GENERATE_SOLDIER_GRASS_AMOUNT = 50;
     public static int MAX_VIEW_DISTANCE = 50;
     public static int MAX_ATTACK_DISTANCE = 50;
+    public static int CHAT_LIMIT = 50;
+    public static int MAX_MESSAGE_LENGTH = 10;
 
 
 }

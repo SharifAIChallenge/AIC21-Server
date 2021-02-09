@@ -11,6 +11,7 @@ public class Colony {
     private Cell base;
     private int baseHealth;
     private HashMap<Integer, Ant> ants;
+    private ChatBox chatBox;
 
     public Colony(int id, Cell base, int baseHealth) {
         this.id = id;
@@ -45,5 +46,9 @@ public class Colony {
 
     public Ant getAnt(int antId){
         return ants.get(antId);
+    }
+
+    public ChatBox getChatBox() {
+        return chatBox;
     }
 }
