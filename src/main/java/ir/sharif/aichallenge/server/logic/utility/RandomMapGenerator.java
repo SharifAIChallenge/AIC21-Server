@@ -1,11 +1,9 @@
 package ir.sharif.aichallenge.server.logic.utility;
 
-import ir.sharif.aichallenge.server.logic.model.Node;
-
 import java.util.*;
 
 /**
- * Represents a MapGenerator which generates a random Map with specific number of nodes.
+ * Represents a MapGenerator which generates a random GameMap with specific number of nodes.
  */
 public class RandomMapGenerator implements MapGenerator {
     private Random rand = new Random();

@@ -7,8 +7,8 @@ import ir.sharif.aichallenge.server.common.network.data.MessageTypes;
 import ir.sharif.aichallenge.server.engine.config.StringParam;
 import ir.sharif.aichallenge.server.engine.core.GameLogic;
 import ir.sharif.aichallenge.server.logic.dto.payloads.Token;
+import ir.sharif.aichallenge.server.logic.model.Ant;
 import ir.sharif.aichallenge.server.logic.model.Game;
-import ir.sharif.aichallenge.server.logic.model.Node;
 import ir.sharif.aichallenge.server.logic.utility.MapGenerator;
 import ir.sharif.aichallenge.server.logic.utility.RandomMapGenerator;
 
@@ -54,8 +54,7 @@ public class GameHandler implements GameLogic {
         for (StringParam clientName : CLIENT_NAMES) {
             players.add(clientName.getValue());
         }
-        HashMap<Integer, Node> nodes = mapGenerator.generateMap(MAP_SIZE);
-        game = new Game(nodes, players);
+//        game = new Game();
     }
 
     @Override

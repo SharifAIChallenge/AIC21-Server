@@ -3,7 +3,6 @@ package ir.sharif.aichallenge.server.logic.handlers.validators;
 import ir.sharif.aichallenge.server.logic.handlers.OwnerHandler;
 import ir.sharif.aichallenge.server.logic.handlers.TurnHandler;
 import ir.sharif.aichallenge.server.logic.handlers.exceptions.*;
-import ir.sharif.aichallenge.server.logic.model.Node;
 
 import java.util.HashMap;
 
