@@ -1,9 +1,9 @@
 package ir.sharif.aichallenge.server.logic.handlers;
 
-import ir.sharif.aichallenge.server.logic.model.Ant;
-import ir.sharif.aichallenge.server.logic.model.Cell;
+import ir.sharif.aichallenge.server.logic.model.ant.Ant;
+import ir.sharif.aichallenge.server.logic.model.cell.Cell;
 import ir.sharif.aichallenge.server.logic.model.Colony;
-import ir.sharif.aichallenge.server.logic.model.GameMap;
+import ir.sharif.aichallenge.server.logic.model.map.GameMap;
 
 import java.util.HashMap;
 

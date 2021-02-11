@@ -1,4 +1,4 @@
-package ir.sharif.aichallenge.server.logic.model;
+package ir.sharif.aichallenge.server.logic.model.chatbox;
 
 public class ChatMessage {
     private String message;

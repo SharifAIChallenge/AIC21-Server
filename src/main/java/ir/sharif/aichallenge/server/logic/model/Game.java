@@ -3,6 +3,10 @@ package ir.sharif.aichallenge.server.logic.model;
 import ir.sharif.aichallenge.server.common.network.data.ClientMessageInfo;
 import ir.sharif.aichallenge.server.common.network.data.Message;
 import ir.sharif.aichallenge.server.logic.handlers.AttackHandler;
+import ir.sharif.aichallenge.server.logic.model.ant.Ant;
+import ir.sharif.aichallenge.server.logic.model.ant.MoveType;
+import ir.sharif.aichallenge.server.logic.model.cell.CellType;
+import ir.sharif.aichallenge.server.logic.model.map.GameMap;
 
 import java.util.HashMap;
 import java.util.List;
@@ -101,6 +105,16 @@ public class Game {
     }
 
     public boolean isFinished() {
+        return false;
+    }
+
+    public boolean isAntAlive(int antId) {
+        for (int colonyID : colonyHashMap.keySet()) {
+            Ant ant = colonyHashMap.get(colonyID).getAnt(antId);
+            if (ant != null) {
+                return !ant.isDead();
+            }
+        }
         return false;
     }
 }

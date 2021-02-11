@@ -8,28 +8,32 @@ import ir.sharif.aichallenge.server.engine.config.StringParam;
 import ir.sharif.aichallenge.server.engine.core.GameLogic;
 import ir.sharif.aichallenge.server.logic.dto.payloads.Token;
 import ir.sharif.aichallenge.server.logic.model.Game;
+import ir.sharif.aichallenge.server.logic.model.map.GameMap;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class GameHandler implements GameLogic {
 
     private Game game;
-    private static final StringParam[] CLIENT_NAMES = new StringParam[2];
-    private static final int MAP_SIZE = 50;
+    private ArrayList<Integer> antIds;
 
     public GameHandler() {
-        CLIENT_NAMES[0] = new StringParam("Player 1", "player");
-        CLIENT_NAMES[1] = new StringParam("Player 2", "player");
+        this.antIds = new ArrayList<>();
     }
 
     @Override
     public int getClientsNum() {
-        return 2;
+        return antIds.size();
     }
 
     @Override
     public boolean[] getActiveClients() {
-        return new boolean[]{true, true};
+        boolean[] bitArray = new boolean[antIds.size()];
+        for (int i = 0; i < antIds.size(); i++) {
+            bitArray[i] = game.isAntAlive(antIds.get(i));
+        }
+        return bitArray;
     }
 
     @Override
@@ -45,11 +49,9 @@ public class GameHandler implements GameLogic {
 
     @Override
     public void init() {
-        List<String> players = new ArrayList<>();
-        for (StringParam clientName : CLIENT_NAMES) {
-            players.add(clientName.getValue());
-        }
-//        game = new Game();
+        // TODO: more than two ants
+        // GameMap map = new GameMap(cells, width, height)
+        // game = new Game();
     }
 
     @Override
@@ -61,11 +63,9 @@ public class GameHandler implements GameLogic {
     public Message[] getClientInitialMessages() {
         Message[] initialMessages = new Message[2];
 
-        initialMessages[0] = new Message(MessageTypes.INIT,
-                Json.GSON.toJsonTree(new Token()).getAsJsonObject(), null);
+        initialMessages[0] = new Message(MessageTypes.INIT, Json.GSON.toJsonTree(new Token()).getAsJsonObject(), null);
 
-        initialMessages[1] = new Message(MessageTypes.INIT,
-                Json.GSON.toJsonTree(new Token()).getAsJsonObject(), null);
+        initialMessages[1] = new Message(MessageTypes.INIT, Json.GSON.toJsonTree(new Token()).getAsJsonObject(), null);
 
         return initialMessages;
     }

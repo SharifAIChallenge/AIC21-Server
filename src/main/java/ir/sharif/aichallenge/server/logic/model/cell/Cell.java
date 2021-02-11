@@ -1,12 +1,14 @@
-package ir.sharif.aichallenge.server.logic.model;
+package ir.sharif.aichallenge.server.logic.model.cell;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import ir.sharif.aichallenge.server.logic.model.ant.Ant;
+
 public class Cell {
     protected int xPosition;
     protected int yPosition;
-    protected CellType cellType;
+    public CellType cellType;
     protected ResourceType resourceType;
     protected int resourceAmount;
     protected List<Ant> ants;

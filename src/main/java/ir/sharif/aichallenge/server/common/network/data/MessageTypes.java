@@ -2,16 +2,18 @@ package ir.sharif.aichallenge.server.common.network.data;
 
 public class MessageTypes {
     // Server messages
-    public static final String INIT = "2"; // connection established
+    public static final String INIT = "3"; // connection established
     public static final String GAME_STATUS = "4";
-    public static final String YOUR_TURN = "6";
-
-    // public static final String TURN = "turn";
-    public static final String SHUTDOWN = "shutdown";
+    public static final String YOUR_TURN = "5";
 
     // Client messages
-    public static final String GET_GAME_STATUS = "3";
-    public static final String ACTION = "5";
+    public static final String GET_GAME_STATUS = "0";
+    public static final String ACTION = "1";
+    public static final String SEND_MESSAGE = "2";
+
+    // old Types
+    // public static final String TURN = "turn";
+    public static final String SHUTDOWN = "shutdown";
 
     public static final String TOKEN = "token";
     public static final String PICK = "pick";

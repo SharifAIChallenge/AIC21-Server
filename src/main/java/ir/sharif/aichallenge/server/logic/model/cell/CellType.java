@@ -1,4 +1,4 @@
-package ir.sharif.aichallenge.server.logic.model;
+package ir.sharif.aichallenge.server.logic.model.cell;
 
 public enum CellType {
     WALL,
