@@ -62,4 +62,8 @@ public class Cell {
         resourceAmount -= amount;
     }
 
+    public boolean isBase(){
+        return cellType == CellType.BASE;
+    }
+
 }
