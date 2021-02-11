@@ -2,7 +2,7 @@ package ir.sharif.aichallenge.server.common.network.data;
 
 public class MessageTypes {
     // Server messages
-    public static final String INIT = "3"; // connection established
+    public static final String INIT = "3"; // connection established, send game config
     public static final String GAME_STATUS = "4";
     public static final String YOUR_TURN = "5";
 

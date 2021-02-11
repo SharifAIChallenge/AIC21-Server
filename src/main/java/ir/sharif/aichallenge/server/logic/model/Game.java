@@ -3,6 +3,8 @@ package ir.sharif.aichallenge.server.logic.model;
 import ir.sharif.aichallenge.server.common.network.data.ClientMessageInfo;
 import ir.sharif.aichallenge.server.common.network.data.Message;
 import ir.sharif.aichallenge.server.logic.handlers.AttackHandler;
+import ir.sharif.aichallenge.server.logic.handlers.exceptions.ColonyNotExistsException;
+import ir.sharif.aichallenge.server.logic.handlers.exceptions.GameActionException;
 import ir.sharif.aichallenge.server.logic.model.ant.Ant;
 import ir.sharif.aichallenge.server.logic.model.ant.MoveType;
 import ir.sharif.aichallenge.server.logic.model.cell.CellType;
@@ -113,5 +115,31 @@ public class Game {
             }
         }
         return false;
+    }
+
+    public void addAntToGame(Ant ant, int colonyId) throws GameActionException {
+        Colony colony = colonyHashMap.get(colonyId);
+        if (colony == null) {
+            throw new ColonyNotExistsException("", colonyId);
+        }
+        
+    }
+
+    public Ant getAntByID (int antId) {
+        for (int colId : colonyHashMap.keySet()) {
+            Ant ant = colonyHashMap.get(colId).getAnt(antId);
+            if (ant != null)
+                return ant;
+        }
+        // not exists
+        return null;
+    }
+
+    public GameMap getMap() {
+        return map;
+    }
+
+    public Colony getColony(int colonyId) {
+        return colonyHashMap.get(colonyId);
     }
 }

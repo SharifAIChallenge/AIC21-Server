@@ -15,9 +15,10 @@ public class Main {
         AtomicInteger currentTurn = new AtomicInteger(0);
         new File("Log/server").mkdirs();
         Log.outputFile = new PrintStream(new FileOutputStream("Log/server/server.log", false));
-        int extraTime = extractExtraTime(args);
+        // int extraTime = extractExtraTime(args);
+        boolean showConsoleGameLog = true;
 
-        GameServer gameServer = new GameServer(new GameHandler(), args, currentTurn);
+        GameServer gameServer = new GameServer(new GameHandler(showConsoleGameLog), args, currentTurn);
         gameServer.start();
         gameServer.waitForFinish();
     }

@@ -8,9 +8,11 @@ public class Ant {
     private int colonyId;
     private int health;
     private AntType antType;
+    // TODO: use Cell instead of x, y
     private int xPosition;
     private int yPosition;
     private ResourceType resourceType;
+    private int resourceAmount;
 
     public Ant(int id, int colonyId, int xPosition, int yPosition, AntType antType) {
         this.id = id;
@@ -22,6 +24,11 @@ public class Ant {
                 ConstConfigs.WORKER_ANT_INITIAL_HEALTH :
                 ConstConfigs.SOLDIER_ANT_INITIAL_HEALTH;
         resourceType = ResourceType.NONE;
+        this.resourceAmount = 0;
+    }
+
+    public int getResourceAmount() {
+        return resourceAmount;
     }
 
     public void moveTo(int newX, int newY) {

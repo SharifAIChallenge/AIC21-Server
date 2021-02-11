@@ -1,6 +1,8 @@
 package ir.sharif.aichallenge.server.logic.model;
 
 import ir.sharif.aichallenge.server.logic.config.ConstConfigs;
+import ir.sharif.aichallenge.server.logic.handlers.exceptions.GameActionException;
+import ir.sharif.aichallenge.server.logic.handlers.exceptions.InvalidAntForColonyException;
 import ir.sharif.aichallenge.server.logic.model.ant.Ant;
 import ir.sharif.aichallenge.server.logic.model.cell.Cell;
 import ir.sharif.aichallenge.server.logic.model.chatbox.ChatBox;
@@ -26,6 +28,13 @@ public class Colony {
         ants = new HashMap<>();
     }
 
+    public void addNewAnt(Ant ant) throws GameActionException {
+        if (ant.getColonyId() != this.id) {
+            throw new InvalidAntForColonyException("");
+        }
+        this.ants.put(ant.getId(), ant);
+    }
+
     public void addBread(int amount) {
         gainedBread += amount;
         if (gainedBread >= ConstConfigs.GENERATE_WORKER_BREAD_AMOUNT) {
@@ -48,7 +57,7 @@ public class Colony {
     private void generateWorker() {
     }
 
-    public Ant getAnt(int antId){
+    public Ant getAnt(int antId) {
         return ants.get(antId);
     }
 
