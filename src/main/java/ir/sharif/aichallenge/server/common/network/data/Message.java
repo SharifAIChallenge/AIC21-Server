@@ -11,11 +11,11 @@ public class Message {
 
     private final String type;
     // payload = info
-    private final JsonObject payload;
+    private final JsonObject info;
 
-    public Message(String type, JsonObject payload) {
+    public Message(String type, JsonObject info) {
         this.type = type;
-        this.payload = payload;
+        this.info = info;
     }
 
     public String getType() {
@@ -23,6 +23,6 @@ public class Message {
     }
 
     public JsonObject getInfo() {
-        return payload;
+        return info;
     }
 }

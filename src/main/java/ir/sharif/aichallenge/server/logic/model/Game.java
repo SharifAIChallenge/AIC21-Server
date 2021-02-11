@@ -21,7 +21,7 @@ public class Game {
     // maps colony ids to colony
     private HashMap<Integer, Colony> colonyHashMap;
     private GameMap map;
-    private int currentTurn = 1;
+    public int currentTurn = 0;
     private AttackHandler attackHandler;
 
     // messages to be sent to clients in this turn
@@ -122,7 +122,7 @@ public class Game {
         if (colony == null) {
             throw new ColonyNotExistsException("", colonyId);
         }
-        
+        colony.addNewAnt(ant);        
     }
 
     public Ant getAntByID (int antId) {

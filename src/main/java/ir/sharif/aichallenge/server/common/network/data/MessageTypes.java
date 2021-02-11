@@ -10,6 +10,7 @@ public class MessageTypes {
     public static final String GET_GAME_STATUS = "0";
     public static final String ACTION = "1";
     public static final String SEND_MESSAGE = "2";
+    public static final String END_TURN = "6";
 
     // old Types
     // public static final String TURN = "turn";
@@ -21,5 +22,4 @@ public class MessageTypes {
     public static final String CAST_SPELL = "castSpell";
     public static final String UPGRADE_RANGE = "rangeUpgrade";
     public static final String UPGRADE_DAMAGE = "damageUpgrade";
-    public static final String END_TURN = "endTurn";
 }

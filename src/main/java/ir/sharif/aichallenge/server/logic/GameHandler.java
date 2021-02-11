@@ -54,7 +54,7 @@ public class GameHandler implements GameLogic {
 
     @Override
     public long getTurnTimeout() {
-        return 0;
+        return 3000;
     }
 
     @Override
@@ -76,7 +76,6 @@ public class GameHandler implements GameLogic {
             System.out.println("Can't add ants to game!");
             e.printStackTrace();
         }
-
     }
 
     @Override
@@ -95,6 +94,8 @@ public class GameHandler implements GameLogic {
         initialMessages[1] = new Message(MessageTypes.INIT, Json.GSON.toJsonTree
                     (new GameConfigDTO(this.game, antIds.get(1)), GameConfigDTO.class).getAsJsonObject());
 
+
+        System.out.println("initial messages returned....");
         return initialMessages;
     }
 
@@ -102,7 +103,7 @@ public class GameHandler implements GameLogic {
     public void simulateEvents(Map<String, List<ClientMessageInfo>> messages) {
         // TODO: pass one turn
         // game.passTurn(messages);
-
+        game.currentTurn++;
     }
 
     @Override

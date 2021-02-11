@@ -18,9 +18,9 @@ public class MapGenerator {
         }
         GameMap map = new GameMap(cells, width, height);
         cells[0][0].cellType = CellType.BASE;
-        cells[10][10].cellType = CellType.BASE;
+        cells[5][5].cellType = CellType.BASE;
         Colony firstColony = new Colony(0, cells[0][0], 100);
-        Colony secondColony = new Colony(1, cells[10][10], 100);
+        Colony secondColony = new Colony(1, cells[5][5], 100);
         HashMap<Integer, Colony> colonies = new HashMap<>();
         colonies.put(0, firstColony);
         colonies.put(1, secondColony);
