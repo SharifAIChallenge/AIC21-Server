@@ -2,6 +2,7 @@ package ir.sharif.aichallenge.server.logic.model;
 
 import ir.sharif.aichallenge.server.common.network.data.ClientMessageInfo;
 import ir.sharif.aichallenge.server.common.network.data.Message;
+import ir.sharif.aichallenge.server.logic.handlers.AttackHandler;
 
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +14,8 @@ import java.util.Map;
 public class Game {
     private HashMap<Integer, Colony> colonyHashMap;
     private GameMap map;
+    private int currentTurn = 1;
+    private AttackHandler attackHandler;
 
     // messages to be sent to clients in this turn
     private Message[] clientTurnMessages;
@@ -31,6 +34,7 @@ public class Game {
      */
     public Game(GameMap map) {
         this.map = map;
+        attackHandler = new AttackHandler(map, colonyHashMap);
     }
 
     public void moveAnt(int colonyId, int antId, MoveType moveType) {
@@ -56,7 +60,7 @@ public class Game {
         newX = newX % map.getWidth();
         newY = newY % map.getHeight();
 
-        if(map.getCell(newX, newY).cellType == CellType.WALL)
+        if (map.getCell(newX, newY).cellType == CellType.WALL)
             return;
 
         moveAnt(ant, newX, newY);
@@ -80,11 +84,16 @@ public class Game {
         //      generate messages for clients and add them to [clientTurnMessages]
         //      set [isGameFinished] when necessary
         //      and many many other things :)
-
+        for (Colony colony : colonyHashMap.values()) {
+            for (Ant ant : colony.getAnts()) {
+                attackHandler.runAttack(ant);
+            }
+        }
+        currentTurn++;
     }
 
     public int getTurn() {
-        return 0;
+        return currentTurn;
     }
 
     public Message[] getClientTurnMessages() {

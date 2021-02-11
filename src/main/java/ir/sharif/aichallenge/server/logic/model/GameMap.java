@@ -19,11 +19,20 @@ public class GameMap {
         return cells[yPosition][xPosition];
     }
 
-    public Cell[] getAroundCells(int xPosition, int yPosition) {
+    public Cell[] getViewableCells(int xPosition, int yPosition) {
+        return getAroundCells(xPosition, yPosition, ConstConfigs.MAX_VIEW_DISTANCE);
+
+    }
+
+    public Cell[] getAttackableCells(int xPosition, int yPosition) {
+        return getAroundCells(xPosition, yPosition, ConstConfigs.MAX_ATTACK_DISTANCE);
+    }
+
+    private Cell[] getAroundCells(int xPosition, int yPosition, int maxDistance) {
         ArrayList<Cell> aroundCells = new ArrayList<>();
-        for (int i = xPosition - ConstConfigs.MAX_VIEW_DISTANCE; i <= xPosition + ConstConfigs.MAX_VIEW_DISTANCE; i++) {
-            for (int j = yPosition - ConstConfigs.MAX_VIEW_DISTANCE; j <= yPosition + ConstConfigs.MAX_VIEW_DISTANCE; j++) {
-                if (Math.abs(i - xPosition) + Math.abs(j - yPosition) > ConstConfigs.MAX_VIEW_DISTANCE)
+        for (int i = xPosition - maxDistance; i <= xPosition + maxDistance; i++) {
+            for (int j = yPosition - maxDistance; j <= yPosition + maxDistance; j++) {
+                if (Math.abs(i - xPosition) + Math.abs(j - yPosition) > maxDistance)
                     continue;
                 aroundCells.add(cells[j][i]);
             }

@@ -3,6 +3,7 @@ package ir.sharif.aichallenge.server.logic.model;
 import ir.sharif.aichallenge.server.logic.config.ConstConfigs;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class Colony {
     private int id;
@@ -48,7 +49,15 @@ public class Colony {
         return ants.get(antId);
     }
 
+    public List<Ant> getAnts() {
+        return List.copyOf(ants.values());
+    }
+
     public ChatBox getChatBox() {
         return chatBox;
+    }
+
+    public Cell getBase() {
+        return base;
     }
 }

@@ -27,7 +27,7 @@ import java.nio.charset.Charset;
  * Note that the other endpoint of the communication must use a
  * <code>JsonSocket</code> to send and receive objects correctly.
  * <p>
- * This class is a member of {@link server.network}.
+ * This class is a member of {@link }.
  *
  * @see com.google.gson.Gson
  * @see Socket
