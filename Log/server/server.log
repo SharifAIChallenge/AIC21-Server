@@ -14,22 +14,14 @@ Info (JsonSocket): Message received: {"type": "token", "info": {"token": "000000
 Info (ClientNetwork): Client accepted.
 Info (JsonSocket): Message sent.
 Info (JsonSocket): Message sent.
-Info (GameServer): Simulation timeout passed by spending 3082 time!
+Info (GameServer): Simulation timeout passed by spending 3072 time!
 Info (JsonSocket): Message sent.
 Info (JsonSocket): Message sent.
 Info (JsonSocket): Message received: {"type": "1", "info": {"direction": 1}, "turn": 0}
+Info (JsonSocket): Message received: {"type": "1", "info": {"direction": 1}, "turn": 0}
+Info (JsonSocket): Message received: {"type": "2", "info": {"message": "salam", "value": 10}, "turn": 0}
 Info (JsonSocket): Message received: {"type": "2", "info": {"message": "salam", "value": 10}, "turn": 0}
 Info (JsonSocket): Message received: {"type": "6", "info": {}, "turn": 0}
-Info (JsonSocket): Message received: {"type": "1", "info": {"direction": 1}, "turn": 0}
-Info (JsonSocket): Message received: {"type": "2", "info": {"message": "salam", "value": 10}, "turn": 0}
-Info (JsonSocket): Message received: {"type": "6", "info": {}, "turn": 0}
-Info (JsonSocket): Message sent.
-Info (JsonSocket): Message sent.
-Info (JsonSocket): Message received: {"type": "1", "info": {"direction": 1}, "turn": 0}
-Info (JsonSocket): Message received: {"type": "2", "info": {"message": "salam", "value": 10}, "turn": 0}
-Info (JsonSocket): Message received: {"type": "6", "info": {}, "turn": 0}
-Info (JsonSocket): Message received: {"type": "1", "info": {"direction": 1}, "turn": 0}
-Info (JsonSocket): Message received: {"type": "2", "info": {"message": "salam", "value": 10}, "turn": 0}
 Info (JsonSocket): Message received: {"type": "6", "info": {}, "turn": 0}
 Info (JsonSocket): Message sent.
 Info (JsonSocket): Message sent.
@@ -42,34 +34,10 @@ Info (JsonSocket): Message received: {"type": "6", "info": {}, "turn": 0}
 Info (JsonSocket): Message sent.
 Info (JsonSocket): Message sent.
 Info (JsonSocket): Message received: {"type": "1", "info": {"direction": 1}, "turn": 0}
-Info (JsonSocket): Message received: {"type": "2", "info": {"message": "salam", "value": 10}, "turn": 0}
-Info (JsonSocket): Message received: {"type": "6", "info": {}, "turn": 0}
 Info (JsonSocket): Message received: {"type": "1", "info": {"direction": 1}, "turn": 0}
 Info (JsonSocket): Message received: {"type": "2", "info": {"message": "salam", "value": 10}, "turn": 0}
-Info (JsonSocket): Message received: {"type": "6", "info": {}, "turn": 0}
-Info (JsonSocket): Message sent.
-Info (JsonSocket): Message sent.
-Info (JsonSocket): Message received: {"type": "1", "info": {"direction": 1}, "turn": 0}
 Info (JsonSocket): Message received: {"type": "2", "info": {"message": "salam", "value": 10}, "turn": 0}
 Info (JsonSocket): Message received: {"type": "6", "info": {}, "turn": 0}
-Info (JsonSocket): Message received: {"type": "1", "info": {"direction": 1}, "turn": 0}
-Info (JsonSocket): Message received: {"type": "2", "info": {"message": "salam", "value": 10}, "turn": 0}
-Info (JsonSocket): Message received: {"type": "6", "info": {}, "turn": 0}
-Info (JsonSocket): Message sent.
-Info (JsonSocket): Message sent.
-Info (JsonSocket): Message received: {"type": "1", "info": {"direction": 1}, "turn": 0}
-Info (JsonSocket): Message received: {"type": "2", "info": {"message": "salam", "value": 10}, "turn": 0}
-Info (JsonSocket): Message received: {"type": "6", "info": {}, "turn": 0}
-Info (JsonSocket): Message received: {"type": "1", "info": {"direction": 1}, "turn": 0}
-Info (JsonSocket): Message received: {"type": "2", "info": {"message": "salam", "value": 10}, "turn": 0}
-Info (JsonSocket): Message received: {"type": "6", "info": {}, "turn": 0}
-Info (JsonSocket): Message sent.
-Info (JsonSocket): Message sent.
-Info (JsonSocket): Message received: {"type": "1", "info": {"direction": 1}, "turn": 0}
-Info (JsonSocket): Message received: {"type": "2", "info": {"message": "salam", "value": 10}, "turn": 0}
-Info (JsonSocket): Message received: {"type": "6", "info": {}, "turn": 0}
-Info (JsonSocket): Message received: {"type": "1", "info": {"direction": 1}, "turn": 0}
-Info (JsonSocket): Message received: {"type": "2", "info": {"message": "salam", "value": 10}, "turn": 0}
 Info (JsonSocket): Message received: {"type": "6", "info": {}, "turn": 0}
 Info (JsonSocket): Message sent.
 Info (JsonSocket): Message sent.
