@@ -16,6 +16,7 @@ import java.util.Map;
  * Represents the Major class to control a game.
  */
 public class Game {
+    // maps colony ids to colony
     private HashMap<Integer, Colony> colonyHashMap;
     private GameMap map;
     private int currentTurn = 1;
@@ -24,20 +25,17 @@ public class Game {
     // messages to be sent to clients in this turn
     private Message[] clientTurnMessages;
 
-    public static final int GAME_MAXIMUM_TURN_COUNT = 50;
-
-
     /**
      * Create a Game with specific GameMap and Handlers.
      *
-     * @param map The gameMap of the Game.
-     *            //     * @param ownerHandler Handles all stuff about owner of nodes.
-     *            //     * @param turnHandler  Handles turn logic of the game.
-     *            //     * @param scoreHandler The scoring system.
-     *            //     * @param validator    The validator for players actions.
+     * @param map The gameMap of the Game. // * @param ownerHandler Handles all
+     *            stuff about owner of nodes. // * @param turnHandler Handles turn
+     *            logic of the game. // * @param scoreHandler The scoring system. //
+     *            * @param validator The validator for players actions.
      */
-    public Game(GameMap map) {
+    public Game(GameMap map, HashMap<Integer, Colony> colonyHashMap) {
         this.map = map;
+        this.colonyHashMap = colonyHashMap;
         attackHandler = new AttackHandler(map, colonyHashMap);
     }
 
@@ -80,14 +78,13 @@ public class Game {
 
     }
 
-
     public void passTurn(Map<String, List<ClientMessageInfo>> messages) {
         // TODO: based on the messages in MessageTypes, do changes in game
         // for example:
-        //      increment turn
-        //      generate messages for clients and add them to [clientTurnMessages]
-        //      set [isGameFinished] when necessary
-        //      and many many other things :)
+        // increment turn
+        // generate messages for clients and add them to [clientTurnMessages]
+        // set [isGameFinished] when necessary
+        // and many many other things :)
         for (Colony colony : colonyHashMap.values()) {
             for (Ant ant : colony.getAnts()) {
                 attackHandler.runAttack(ant);

@@ -11,6 +11,5 @@ public class ConstConfigs {
     public static int MAX_ATTACK_DISTANCE = 50;
     public static int CHAT_LIMIT = 50;
     public static int MAX_MESSAGE_LENGTH = 10;
-
-
+    public static int GAME_MAXIMUM_TURN_COUNT = 50;
 }

@@ -7,8 +7,11 @@ import ir.sharif.aichallenge.server.common.network.data.MessageTypes;
 import ir.sharif.aichallenge.server.engine.config.StringParam;
 import ir.sharif.aichallenge.server.engine.core.GameLogic;
 import ir.sharif.aichallenge.server.logic.dto.payloads.Token;
+import ir.sharif.aichallenge.server.logic.model.Colony;
 import ir.sharif.aichallenge.server.logic.model.Game;
 import ir.sharif.aichallenge.server.logic.model.map.GameMap;
+import ir.sharif.aichallenge.server.logic.model.map.MapGenerator;
+import ir.sharif.aichallenge.server.logic.model.map.MapGenerator.MapGeneratorResult;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -49,9 +52,13 @@ public class GameHandler implements GameLogic {
 
     @Override
     public void init() {
-        // TODO: more than two ants
-        // GameMap map = new GameMap(cells, width, height)
-        // game = new Game();
+        // TODO: map generation
+
+        // generate map
+        MapGeneratorResult generatedMap = MapGenerator.generateRandomMap(20, 10);
+        // create Game
+        this.game = new Game(generatedMap.map, generatedMap.colonies);
+
     }
 
     @Override
