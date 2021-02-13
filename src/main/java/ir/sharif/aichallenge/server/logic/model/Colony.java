@@ -57,7 +57,11 @@ public class Colony {
     private void generateWorker() {
     }
 
-    public Ant getAnt(int antId) {
+    public int getId() {
+        return id;
+    }
+
+    public Ant getAnt(String antId) {
         return ants.get(antId);
     }
 
@@ -71,5 +75,9 @@ public class Colony {
 
     public Cell getBase() {
         return base;
+    }
+
+    public void decreaseBaseHealth(int amount){
+        baseHealth -= amount;
     }
 }
