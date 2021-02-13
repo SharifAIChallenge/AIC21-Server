@@ -108,7 +108,7 @@ public class Game {
     }
 
     public boolean isAntAlive(int antId) {
-        for (int colonyID : colonyHashMap.keySet()) {
+        for (Integer colonyID : colonyHashMap.keySet()) {
             Ant ant = colonyHashMap.get(colonyID).getAnt(antId);
             if (ant != null) {
                 return !ant.isDead();
@@ -117,7 +117,7 @@ public class Game {
         return false;
     }
 
-    public void addAntToGame(Ant ant, int colonyId) throws GameActionException {
+    public void addAntToGame(Ant ant, Integer colonyId) throws GameActionException {
         Colony colony = colonyHashMap.get(colonyId);
         if (colony == null) {
             throw new ColonyNotExistsException("", colonyId);
@@ -126,7 +126,7 @@ public class Game {
     }
 
     public Ant getAntByID (int antId) {
-        for (int colId : colonyHashMap.keySet()) {
+        for (Integer colId : colonyHashMap.keySet()) {
             Ant ant = colonyHashMap.get(colId).getAnt(antId);
             if (ant != null)
                 return ant;

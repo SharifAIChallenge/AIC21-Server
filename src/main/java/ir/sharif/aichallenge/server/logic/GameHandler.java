@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class GameHandler implements GameLogic {
 
     private Game game;
-    private ArrayList<Integer> antIds;
+    private ArrayList<String> antIds;
     private boolean showConsoleLog;
 
     public GameHandler(boolean showConsoleLog) {
