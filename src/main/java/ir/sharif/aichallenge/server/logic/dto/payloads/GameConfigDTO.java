@@ -18,6 +18,7 @@ public class GameConfigDTO {
     int rate_death_resource;
 
     public GameConfigDTO(Game game, Integer antId) {
+        System.out.println("id config: " + antId);
         Ant ant = game.getAntByID(antId);
         this.map_width = game.getMap().getWidth();
         this.map_height = game.getMap().getHeight();

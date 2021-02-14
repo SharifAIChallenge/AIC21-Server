@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Colony {
+    public static Integer colonyUUID = 1000;
+
     private int id;
     private int gainedBread = 0;
     private int gainedGrass = 0;
