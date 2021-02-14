@@ -80,4 +80,8 @@ public class Colony {
     public void decreaseBaseHealth(int amount){
         baseHealth -= amount;
     }
+
+    public void removeAnt(String id) {
+        ants.remove(id);
+    }
 }

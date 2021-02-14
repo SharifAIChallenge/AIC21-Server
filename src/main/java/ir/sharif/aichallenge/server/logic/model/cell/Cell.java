@@ -22,7 +22,7 @@ public class Cell {
         ants = new ArrayList<>();
     }
 
-    public void AddAnt(Ant ant) {
+    public void addAnt(Ant ant) {
         ants.add(ant);
     }
 
@@ -64,8 +64,11 @@ public class Cell {
         resourceAmount -= amount;
     }
 
-    public boolean isBase(){
+    public boolean isBase() {
         return cellType == CellType.BASE;
     }
 
+    public void removeAnt(Ant ant) {
+        ants.remove(ant);
+    }
 }

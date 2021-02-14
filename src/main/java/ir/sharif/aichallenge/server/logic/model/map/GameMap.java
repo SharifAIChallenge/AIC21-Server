@@ -2,6 +2,7 @@ package ir.sharif.aichallenge.server.logic.model.map;
 
 import ir.sharif.aichallenge.server.logic.config.ConstConfigs;
 import ir.sharif.aichallenge.server.logic.model.cell.Cell;
+import ir.sharif.aichallenge.server.logic.model.cell.ResourceType;
 
 import java.util.ArrayList;
 
@@ -33,9 +34,9 @@ public class GameMap {
         ArrayList<Cell> aroundCells = new ArrayList<>();
         for (int i = xPosition - maxDistance; i <= xPosition + maxDistance; i++) {
             for (int j = yPosition - maxDistance; j <= yPosition + maxDistance; j++) {
-                if (Math.abs(i - xPosition) + Math.abs(j - yPosition) > maxDistance)
+                if (getManhattanDistance(i, j, xPosition, yPosition) > maxDistance)
                     continue;
-                aroundCells.add(cells[j][i]);
+                aroundCells.add(cells[j % width][i % height]);
             }
         }
         return aroundCells.toArray(new Cell[0]);
@@ -47,5 +48,24 @@ public class GameMap {
 
     public int getHeight() {
         return height;
+    }
+
+    public void addResource(ResourceType resourceType, int resourceAmount, int xPos, int yPos) {
+        for (int i = 0; i <= Math.min(width, height) / 2; i++) {
+            for (int j = xPos - i; j <= xPos + i; j++) {
+                for (int k = yPos - i; k <= yPos + i; k++) {
+                    if (getManhattanDistance(j, k, xPos, yPos) > i)
+                        return;
+                    if (resourceType == cells[k % width% height][j].getResourceType()) {
+                        cells[k][j].increaseResource(resourceAmount);
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    public int getManhattanDistance(int x1, int y1, int x2, int y2) {
+        return Math.abs(x1 - x2) + Math.abs(y1 - y2);
     }
 }

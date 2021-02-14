@@ -19,5 +19,13 @@ public class SendMessageInfo extends ClientMessageInfo {
     public String getType() {
         return MessageTypes.SEND_MESSAGE;
     }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public int getValue() {
+        return value;
+    }
 }
 
