@@ -13,7 +13,7 @@ public class GameStatusDTO {
     int current_resource_type;
     int health;
     
-    public GameStatusDTO(Game game, String antID) {
+    public GameStatusDTO(Game game, Integer antID) {
         Ant currentAnt = game.getAntByID(antID);
         this.current_x = currentAnt.getXPosition();
         this.current_y = currentAnt.getYPosition();

@@ -16,7 +16,7 @@ public class Colony {
     private int gainedGrass = 0;
     private Cell base;
     private int baseHealth;
-    private HashMap<String, Ant> ants;
+    private HashMap<Integer, Ant> ants;
     private ChatBox chatBox;
 
     public Colony(int id, Cell base, int baseHealth) {
@@ -61,7 +61,7 @@ public class Colony {
         return id;
     }
 
-    public Ant getAnt(String antId) {
+    public Ant getAnt(Integer antId) {
         return ants.get(antId);
     }
 

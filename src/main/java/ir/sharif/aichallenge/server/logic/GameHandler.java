@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class GameHandler implements GameLogic {
 
     private Game game;
-    private ArrayList<String> antIds;
+    private ArrayList<Integer> antIds;
     private boolean showConsoleLog;
 
     public GameHandler(boolean showConsoleLog) {
@@ -65,10 +65,10 @@ public class GameHandler implements GameLogic {
         // create Game
         this.game = new Game(generatedMap.map, generatedMap.colonies);
         // add initial ants to game (for test)
-        Ant ant1 = new Ant("10", 0, 0, 0, AntType.SOLDIER);
-        Ant ant2 = new Ant("11", 1, 10, 10, AntType.SOLDIER);
-        antIds.add("10");
-        antIds.add("11");
+        Ant ant1 = new Ant(10, 0, 0, 0, AntType.SOLDIER);
+        Ant ant2 = new Ant(11, 1, 10, 10, AntType.SOLDIER);
+        antIds.add(10);
+        antIds.add(11);
         try {
             game.addAntToGame(ant1, 0);
             game.addAntToGame(ant2, 1);
@@ -88,12 +88,11 @@ public class GameHandler implements GameLogic {
         Message[] initialMessages = new Message[2];
 
         // send game config to Ants!
-        initialMessages[0] = new Message(MessageTypes.INIT, Json.GSON.toJsonTree
-                    (new GameConfigDTO(this.game, antIds.get(0)), GameConfigDTO.class).getAsJsonObject());
+        initialMessages[0] = new Message(MessageTypes.INIT, Json.GSON
+                .toJsonTree(new GameConfigDTO(this.game, antIds.get(0)), GameConfigDTO.class).getAsJsonObject());
 
-        initialMessages[1] = new Message(MessageTypes.INIT, Json.GSON.toJsonTree
-                    (new GameConfigDTO(this.game, antIds.get(1)), GameConfigDTO.class).getAsJsonObject());
-
+        initialMessages[1] = new Message(MessageTypes.INIT, Json.GSON
+                .toJsonTree(new GameConfigDTO(this.game, antIds.get(1)), GameConfigDTO.class).getAsJsonObject());
 
         System.out.println("initial messages returned....");
         return initialMessages;
@@ -130,9 +129,8 @@ public class GameHandler implements GameLogic {
         // Send game status to each ant
         Message[] messages = new Message[antIds.size()];
         for (int i = 0; i < antIds.size(); i++) {
-            messages[i] = new Message(MessageTypes.GAME_STATUS, Json.GSON.toJsonTree(
-                new GameStatusDTO(this.game, antIds.get(i)), GameStatusDTO.class
-            ).getAsJsonObject());
+            messages[i] = new Message(MessageTypes.GAME_STATUS, Json.GSON
+                    .toJsonTree(new GameStatusDTO(this.game, antIds.get(i)), GameStatusDTO.class).getAsJsonObject());
         }
         return messages;
     }

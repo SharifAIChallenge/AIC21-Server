@@ -41,7 +41,7 @@ public class Game {
         attackHandler = new AttackHandler(map, colonyHashMap);
     }
 
-    public void moveAnt(int colonyId, String antId, MoveType moveType) {
+    public void moveAnt(int colonyId, Integer antId, MoveType moveType) {
         Ant ant = colonyHashMap.get(colonyId).getAnt(antId);
         int newX = ant.getXPosition();
         int newY = ant.getYPosition();
@@ -108,7 +108,7 @@ public class Game {
         return false;
     }
 
-    public boolean isAntAlive(String antId) {
+    public boolean isAntAlive(Integer antId) {
         for (Integer colonyID : colonyHashMap.keySet()) {
             Ant ant = colonyHashMap.get(colonyID).getAnt(antId);
             if (ant != null) {
@@ -126,7 +126,7 @@ public class Game {
         colony.addNewAnt(ant);        
     }
 
-    public Ant getAntByID (String antId) {
+    public Ant getAntByID (Integer antId) {
         for (Integer colId : colonyHashMap.keySet()) {
             Ant ant = colonyHashMap.get(colId).getAnt(antId);
             if (ant != null)
