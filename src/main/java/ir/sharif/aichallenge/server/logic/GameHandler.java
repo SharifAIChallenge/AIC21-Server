@@ -68,6 +68,7 @@ public class GameHandler implements GameLogic {
         this.game = new Game(generatedMap.map, generatedMap.colonies);
         // add initial ants to game (for test)
         // antId, colonyId, x, y
+        // one soldier for each
         antsNum = 2;
         Ant ant1 = new Ant(0, 0, 0, 0, AntType.SOLDIER);
         Ant ant2 = new Ant(1, 1, 10, 10, AntType.SOLDIER);
@@ -105,12 +106,12 @@ public class GameHandler implements GameLogic {
         // game.passTurn(messages);
         // System.out.println("messages received: ");
         // for (String k : messages.keySet()) {
-        //     if (k == MessageTypes.ACTION) {
-        //         for (ClientMessageInfo msg : messages.get(k)) {
-        //             ActionInfo ac = (ActionInfo) msg;
-        //             System.out.println("dir: " + ac.getDirection() + " id: " + ac.getPlayerId());
-        //         }
-        //     }
+        // if (k == MessageTypes.ACTION) {
+        // for (ClientMessageInfo msg : messages.get(k)) {
+        // ActionInfo ac = (ActionInfo) msg;
+        // System.out.println("dir: " + ac.getDirection() + " id: " + ac.getPlayerId());
+        // }
+        // }
         // }
         game.currentTurn++;
     }

@@ -4,8 +4,6 @@ import ir.sharif.aichallenge.server.logic.config.ConstConfigs;
 import ir.sharif.aichallenge.server.logic.model.cell.ResourceType;
 
 public class Ant {
-    public static Integer antUUID = 100;
-
     private Integer id;
     private int colonyId;
     private int health;

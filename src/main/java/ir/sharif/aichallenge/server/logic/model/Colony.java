@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Colony {
-    public static Integer colonyUUID = 1000;
+    private static Integer colonyUUID = 1000;
 
     private int id;
     private int gainedBread = 0;
@@ -79,7 +79,11 @@ public class Colony {
         return base;
     }
 
-    public void decreaseBaseHealth(int amount){
+    public void decreaseBaseHealth(int amount) {
         baseHealth -= amount;
+    }
+
+    public static Integer generateNewID() {
+        return colonyUUID++;
     }
 }
