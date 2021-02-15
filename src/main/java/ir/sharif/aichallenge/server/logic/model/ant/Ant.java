@@ -31,6 +31,10 @@ public class Ant {
         return resourceAmount;
     }
 
+    public void setResourceAmount(int resourceAmount) {
+        this.resourceAmount = resourceAmount;
+    }
+
     public void moveTo(int newX, int newY) {
         xPosition = newX;
         yPosition = newY;

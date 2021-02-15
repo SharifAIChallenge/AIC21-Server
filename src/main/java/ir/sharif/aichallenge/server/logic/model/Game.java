@@ -127,6 +127,8 @@ public class Game {
             moveAnt(ant.getColonyId(), ant.getId(), actionMessage.getDirection());
         }
 
+        map.handleNewActions();
+
         currentTurn++;
     }
 
