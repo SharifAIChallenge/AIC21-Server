@@ -1,10 +1,12 @@
 package ir.sharif.aichallenge.server.logic.handlers;
 
+import ir.sharif.aichallenge.server.logic.config.ConstConfigs;
 import ir.sharif.aichallenge.server.logic.model.ant.Ant;
 import ir.sharif.aichallenge.server.logic.model.ant.AntType;
 import ir.sharif.aichallenge.server.logic.model.cell.BaseCell;
 import ir.sharif.aichallenge.server.logic.model.cell.Cell;
 import ir.sharif.aichallenge.server.logic.model.Colony;
+import ir.sharif.aichallenge.server.logic.model.cell.ResourceType;
 import ir.sharif.aichallenge.server.logic.model.map.GameMap;
 
 import java.util.ArrayList;
@@ -14,16 +16,28 @@ import java.util.Random;
 
 public class AttackHandler {
     private HashMap<Integer, Colony> colonyHashMap;
+    private HashMap<Integer, Ant> antHashMap;
     private GameMap map;
     private Random rand;
+    private HashMap<Integer, Ant> newDeadAnts;
 
-    public AttackHandler(GameMap map, HashMap<Integer, Colony> colonyHashMap) {
+    public AttackHandler(GameMap map, HashMap<Integer, Colony> colonyHashMap, HashMap<Integer, Ant> antHashMap) {
         this.map = map;
         this.colonyHashMap = colonyHashMap;
+        this.antHashMap = antHashMap;
         rand = new Random();
     }
 
-    public void runAttack(Ant ant) {
+    public void handleAttacks() {
+        for (Colony colony : colonyHashMap.values()) {
+            for (Ant ant : colony.getAnts()) {
+                runAttack(ant);
+            }
+        }
+        handleDeadAnts();
+    }
+
+    private void runAttack(Ant ant) {
         Cell[] cells = map.getAttackableCells(ant.getXPosition(), ant.getYPosition());
         List<Ant> workers = new ArrayList<>();
         List<Ant> soldiers = new ArrayList<>();
@@ -53,5 +67,34 @@ public class AttackHandler {
             int index = rand.nextInt(workers.size());
             workers.get(index).decreaseHealth(1);
         }
+    }
+
+    private void handleDeadAnts() {
+        newDeadAnts = new HashMap<>();
+        for (Ant ant : antHashMap.values()) {
+            if (!ant.isDead())
+                continue;
+            colonyHashMap.get(ant.getColonyId()).removeAnt(ant.getId());
+            map.getCell(ant.getXPosition(), ant.getYPosition()).removeAnt(ant);
+            antHashMap.remove(ant.getId());
+            newDeadAnts.put(ant.getId(), ant);
+            if (ant.getAntType() == AntType.SOLDIER) {
+                map.addResource(ResourceType.GRASS, ConstConfigs.RATE_DEATH_RESOURCE, ant.getXPosition(), ant.getYPosition());
+            } else {
+                if (ant.getCarryingResourceType() == ResourceType.NONE)
+                    map.addResource(ResourceType.BREAD, ConstConfigs.RATE_DEATH_RESOURCE, ant.getXPosition(), ant.getYPosition());
+                else if (ant.getCarryingResourceType() == ResourceType.BREAD)
+                    map.addResource(ResourceType.BREAD, ConstConfigs.RATE_DEATH_RESOURCE + ant.getCarryingResourceAmount()
+                            , ant.getXPosition(), ant.getYPosition());
+                else {
+                    map.addResource(ResourceType.BREAD, ConstConfigs.RATE_DEATH_RESOURCE, ant.getXPosition(), ant.getYPosition());
+                    map.addResource(ResourceType.GRASS, ant.getCarryingResourceAmount(), ant.getXPosition(), ant.getYPosition());
+                }
+            }
+        }
+    }
+
+    public HashMap<Integer, Ant> getNewDeadAnts() {
+        return newDeadAnts;
     }
 }

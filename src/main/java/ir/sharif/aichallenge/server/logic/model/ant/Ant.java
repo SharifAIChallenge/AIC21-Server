@@ -11,8 +11,9 @@ public class Ant {
     // TODO: use Cell instead of x, y
     private int xPosition;
     private int yPosition;
-    private ResourceType resourceType;
-    private int resourceAmount;
+    // just used for worker ant
+    private ResourceType carryingResourceType;
+    private int carryingResourceAmount;
 
     public Ant(int id, int colonyId, int xPosition, int yPosition, AntType antType) {
         this.id = id;
@@ -20,19 +21,27 @@ public class Ant {
         this.xPosition = xPosition;
         this.yPosition = yPosition;
         this.antType = antType;
+        setInitialHealth(antType);
+        setInitialResourceSettings();
+    }
+
+    private void setInitialResourceSettings() {
+        carryingResourceType = ResourceType.NONE;
+        this.carryingResourceAmount = 0;
+    }
+
+    private void setInitialHealth(AntType antType) {
         health = antType == AntType.WORKER ?
                 ConstConfigs.WORKER_ANT_INITIAL_HEALTH :
                 ConstConfigs.SOLDIER_ANT_INITIAL_HEALTH;
-        resourceType = ResourceType.NONE;
-        this.resourceAmount = 0;
     }
 
-    public int getResourceAmount() {
-        return resourceAmount;
+    public int getCarryingResourceAmount() {
+        return carryingResourceAmount;
     }
 
-    public void setResourceAmount(int resourceAmount) {
-        this.resourceAmount = resourceAmount;
+    public void setCarryingResourceAmount(int carryingResourceAmount) {
+        this.carryingResourceAmount = carryingResourceAmount;
     }
 
     public void moveTo(int newX, int newY) {
@@ -72,14 +81,14 @@ public class Ant {
         return antType;
     }
 
-    public ResourceType getResourceType() {
+    public ResourceType getCarryingResourceType() {
         if (antType == AntType.SOLDIER)
             return ResourceType.NONE;
-        return resourceType;
+        return carryingResourceType;
     }
 
-    public void setResourceType(ResourceType resourceType) {
-        this.resourceType = resourceType;
+    public void setCarryingResourceType(ResourceType carryingResourceType) {
+        this.carryingResourceType = carryingResourceType;
     }
 }
 

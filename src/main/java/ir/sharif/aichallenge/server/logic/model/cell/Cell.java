@@ -2,16 +2,21 @@ package ir.sharif.aichallenge.server.logic.model.cell;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 
+import ir.sharif.aichallenge.server.logic.model.Colony;
 import ir.sharif.aichallenge.server.logic.model.ant.Ant;
+import ir.sharif.aichallenge.server.logic.model.ant.AntType;
 
 public class Cell {
-    protected int xPosition;
-    protected int yPosition;
+    private int xPosition;
+    private int yPosition;
     public CellType cellType;
-    protected ResourceType resourceType;
-    protected int resourceAmount;
-    protected List<Ant> ants;
+    private ResourceType resourceType;
+    private int resourceAmount;
+    private List<Ant> ants;
+    private Random random;
 
     public Cell(int xPosition, int yPosition, CellType cellType, ResourceType resourceType, int resourceAmount) {
         this.xPosition = xPosition;
@@ -20,13 +25,18 @@ public class Cell {
         this.resourceType = resourceType;
         this.resourceAmount = resourceAmount;
         ants = new ArrayList<>();
+        random = new Random();
+    }
+
+    public List<Ant> getAnts() {
+        return ants;
     }
 
     public void addAnt(Ant ant) {
         ants.add(ant);
     }
 
-    public void RemoveAnt(Ant ant) {
+    public void removeAnt(Ant ant) {
         ants.remove(ant);
     }
 
@@ -52,10 +62,6 @@ public class Cell {
         return resourceAmount;
     }
 
-    public List<Ant> getAnts() {
-        return ants;
-    }
-
     public void increaseResource(int amount) {
         resourceAmount += amount;
     }
@@ -68,7 +74,30 @@ public class Cell {
         return cellType == CellType.BASE;
     }
 
-    public void removeAnt(Ant ant) {
-        ants.remove(ant);
+    public List<Ant> getWorkerAnts() {
+        return ants.stream().filter(x -> x.getAntType() == AntType.WORKER).collect(Collectors.toList());
+    }
+
+    public void manageResources() {
+        if (cellType == CellType.WALL)
+            return;
+        List<Ant> freeWorkerAnts = getWorkerAnts().stream()
+                .filter(x -> x.getCarryingResourceType() == ResourceType.NONE)
+                .collect(Collectors.toList());
+        if (freeWorkerAnts.size() <= getResourceAmount()) {
+            decreaseResource(freeWorkerAnts.size());
+            for (Ant ant : freeWorkerAnts) {
+                ant.setCarryingResourceAmount(1);
+                ant.setCarryingResourceType(getResourceType());
+            }
+        } else {
+            for (int i = 0; i < getResourceAmount(); i++) {
+                int randomIndex = random.nextInt(freeWorkerAnts.size());
+                Ant ant = freeWorkerAnts.get(randomIndex);
+                freeWorkerAnts.remove(randomIndex);
+                ant.setCarryingResourceAmount(1);
+                ant.setCarryingResourceType(getResourceType());
+            }
+        }
     }
 }
