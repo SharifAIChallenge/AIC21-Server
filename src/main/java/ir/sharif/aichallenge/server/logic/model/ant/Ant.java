@@ -4,7 +4,7 @@ import ir.sharif.aichallenge.server.logic.config.ConstConfigs;
 import ir.sharif.aichallenge.server.logic.model.cell.ResourceType;
 
 public class Ant {
-    private String id;
+    private int id;
     private int colonyId;
     private int health;
     private AntType antType;
@@ -14,7 +14,7 @@ public class Ant {
     private ResourceType resourceType;
     private int resourceAmount;
 
-    public Ant(String id, int colonyId, int xPosition, int yPosition, AntType antType) {
+    public Ant(int id, int colonyId, int xPosition, int yPosition, AntType antType) {
         this.id = id;
         this.colonyId = colonyId;
         this.xPosition = xPosition;
@@ -40,7 +40,7 @@ public class Ant {
         yPosition = newY;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 

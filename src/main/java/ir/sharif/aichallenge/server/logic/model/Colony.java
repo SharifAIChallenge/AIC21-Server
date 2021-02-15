@@ -2,7 +2,6 @@ package ir.sharif.aichallenge.server.logic.model;
 
 import ir.sharif.aichallenge.server.logic.config.ConstConfigs;
 import ir.sharif.aichallenge.server.logic.handlers.exceptions.GameActionException;
-import ir.sharif.aichallenge.server.logic.handlers.exceptions.InvalidAntForColonyException;
 import ir.sharif.aichallenge.server.logic.model.ant.Ant;
 import ir.sharif.aichallenge.server.logic.model.cell.Cell;
 import ir.sharif.aichallenge.server.logic.model.cell.ResourceType;
@@ -17,7 +16,7 @@ public class Colony {
     private int gainedGrass = 0;
     private Cell base;
     private int baseHealth;
-    private HashMap<String, Ant> ants;
+    private HashMap<Integer, Ant> ants;
     private ChatBox chatBox;
     private int toBeGeneratedWorkersCount;
     private int toBeGeneratedSoldiersCount;
@@ -75,7 +74,7 @@ public class Colony {
         return id;
     }
 
-    public Ant getAnt(String antId) {
+    public Ant getAnt(int antId) {
         return ants.get(antId);
     }
 
@@ -95,7 +94,7 @@ public class Colony {
         baseHealth -= amount;
     }
 
-    public void removeAnt(String id) {
+    public void removeAnt(int id) {
         ants.remove(id);
     }
 

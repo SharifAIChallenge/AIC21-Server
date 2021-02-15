@@ -65,8 +65,8 @@ public class GameHandler implements GameLogic {
         // create Game
         this.game = new Game(generatedMap.map, generatedMap.colonies);
         // add initial ants to game (for test)
-        Ant ant1 = new Ant("10", 0, 0, 0, AntType.SOLDIER);
-        Ant ant2 = new Ant("11", 1, 10, 10, AntType.SOLDIER);
+        Ant ant1 = new Ant(10, 0, 0, 0, AntType.SOLDIER);
+        Ant ant2 = new Ant(11, 1, 10, 10, AntType.SOLDIER);
         antIds.add("10");
         antIds.add("11");
         try {

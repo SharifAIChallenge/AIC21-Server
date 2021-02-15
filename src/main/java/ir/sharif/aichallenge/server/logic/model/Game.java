@@ -3,7 +3,6 @@ package ir.sharif.aichallenge.server.logic.model;
 import ir.sharif.aichallenge.server.common.network.data.*;
 import ir.sharif.aichallenge.server.logic.config.ConstConfigs;
 import ir.sharif.aichallenge.server.logic.handlers.AttackHandler;
-import ir.sharif.aichallenge.server.logic.handlers.exceptions.ColonyNotExistsException;
 import ir.sharif.aichallenge.server.logic.handlers.exceptions.GameActionException;
 import ir.sharif.aichallenge.server.logic.model.ant.Ant;
 import ir.sharif.aichallenge.server.logic.model.ant.AntType;
