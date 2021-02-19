@@ -4,6 +4,7 @@ import ir.sharif.aichallenge.server.logic.config.ConstConfigs;
 import ir.sharif.aichallenge.server.logic.handlers.exceptions.GameActionException;
 import ir.sharif.aichallenge.server.logic.handlers.exceptions.InvalidAntForColonyException;
 import ir.sharif.aichallenge.server.logic.model.ant.Ant;
+import ir.sharif.aichallenge.server.logic.model.ant.AntType;
 import ir.sharif.aichallenge.server.logic.model.cell.Cell;
 import ir.sharif.aichallenge.server.logic.model.cell.ResourceType;
 import ir.sharif.aichallenge.server.logic.model.chatbox.ChatBox;
@@ -21,6 +22,8 @@ public class Colony {
     private ChatBox chatBox;
     private int toBeGeneratedWorkersCount;
     private int toBeGeneratedSoldiersCount;
+    private int allWorkerAntsGeneratedCount;
+    private int allSoldierAntsGeneratedCount;
 
     public Colony(int id, Cell base, int baseHealth) {
         this.id = id;
@@ -29,12 +32,18 @@ public class Colony {
         this.base = base;
         this.baseHealth = baseHealth;
         ants = new HashMap<>();
+        allSoldierAntsGeneratedCount = 0;
+        allWorkerAntsGeneratedCount = 0;
     }
 
     public void addNewAnt(Ant ant) throws GameActionException {
         if (ant.getColonyId() != this.id) {
             throw new InvalidAntForColonyException("");
         }
+        if (ant.getAntType() == AntType.WORKER)
+            allWorkerAntsGeneratedCount++;
+        else
+            allSoldierAntsGeneratedCount++;
         this.ants.put(ant.getId(), ant);
     }
 
@@ -52,7 +61,7 @@ public class Colony {
         }
     }
 
-    public void addResource(ResourceType resourceType, int amount){
+    public void addResource(ResourceType resourceType, int amount) {
         if (resourceType == ResourceType.GRASS)
             addGrass(amount);
         else
@@ -60,13 +69,13 @@ public class Colony {
     }
 
     private void generateSoldier() {
-        int count = Math.floorDiv(gainedGrass , ConstConfigs.GENERATE_SOLDIER_GRASS_AMOUNT);
+        int count = Math.floorDiv(gainedGrass, ConstConfigs.GENERATE_SOLDIER_GRASS_AMOUNT);
         toBeGeneratedSoldiersCount += count;
         gainedGrass -= count * ConstConfigs.GENERATE_SOLDIER_GRASS_AMOUNT;
     }
 
     private void generateWorker() {
-        int count = Math.floorDiv(gainedBread , ConstConfigs.GENERATE_WORKER_BREAD_AMOUNT);
+        int count = Math.floorDiv(gainedBread, ConstConfigs.GENERATE_WORKER_BREAD_AMOUNT);
         toBeGeneratedWorkersCount += count;
         gainedBread -= count * ConstConfigs.GENERATE_WORKER_BREAD_AMOUNT;
     }
@@ -91,7 +100,7 @@ public class Colony {
         return base;
     }
 
-    public void decreaseBaseHealth(int amount){
+    public void decreaseBaseHealth(int amount) {
         baseHealth -= amount;
     }
 
@@ -110,4 +119,17 @@ public class Colony {
     public int getToBeGeneratedSoldiersCount() {
         return toBeGeneratedSoldiersCount;
     }
+
+    public int getAllSoldierAntsGeneratedCount() {
+        return allSoldierAntsGeneratedCount;
+    }
+
+    public int getAllAntsGeneratedCount() {
+        return allSoldierAntsGeneratedCount + allWorkerAntsGeneratedCount;
+    }
+
+    public int getAllResources(){
+        return gainedBread + gainedGrass;
+    }
+
 }

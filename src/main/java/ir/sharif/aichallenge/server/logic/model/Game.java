@@ -1,6 +1,7 @@
 package ir.sharif.aichallenge.server.logic.model;
 
 import ir.sharif.aichallenge.server.common.network.data.*;
+import ir.sharif.aichallenge.server.logic.config.ConstConfigs;
 import ir.sharif.aichallenge.server.logic.handlers.AttackHandler;
 import ir.sharif.aichallenge.server.logic.handlers.exceptions.ColonyNotExistsException;
 import ir.sharif.aichallenge.server.logic.handlers.exceptions.GameActionException;
@@ -29,6 +30,7 @@ public class Game {
     public int currentTurn = 0;
     private AttackHandler attackHandler;
     private MessageAdapter messageAdapter;
+    private GameJudge gameJudge;
 
     // messages to be sent to clients in this turn
     private Message[] clientTurnMessages;
@@ -48,6 +50,7 @@ public class Game {
         initAntHashMap();
         attackHandler = new AttackHandler(map, colonyHashMap, antHashMap);
         messageAdapter = new MessageAdapter();
+        gameJudge = new GameJudge(this);
     }
 
     private void initAntHashMap() {
@@ -72,6 +75,9 @@ public class Game {
         handleChatMessages(messages);
         handleAntsMove(messages);
         map.getAllCells().forEach(Cell::manageResources);
+        if(isFinished()){
+            Colony winnerColony = gameJudge.getWinner();
+        }
         currentTurn++;
     }
 
@@ -114,6 +120,14 @@ public class Game {
     }
 
     public boolean isFinished() {
+        if(currentTurn >= ConstConfigs.GAME_MAXIMUM_TURN_COUNT){
+            return true;
+        }
+        for (Colony colony : colonyHashMap.values()) {
+            if(colony.getBaseHealth() <= 0){
+                return true;
+            }
+        }
         return false;
     }
 
@@ -140,5 +154,9 @@ public class Game {
 
     public Colony getColony(int colonyId) {
         return colonyHashMap.get(colonyId);
+    }
+
+    public List<Colony> getColonies() {
+        return (List<Colony>) colonyHashMap.values();
     }
 }
