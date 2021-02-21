@@ -13,4 +13,6 @@ public class ConstConfigs {
     public static int MAX_MESSAGE_LENGTH = 10;
     public static int GAME_MAXIMUM_TURN_COUNT = 50;
     public static int RATE_DEATH_RESOURCE = 1;
+    public static int MAP_WIDTH = 10;
+    public static int MAP_HEIGHT = 20;
 }

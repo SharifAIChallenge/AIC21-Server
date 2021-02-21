@@ -1,6 +1,7 @@
 package ir.sharif.aichallenge.server.logic;
 
 import ir.sharif.aichallenge.server.common.network.Json;
+import ir.sharif.aichallenge.server.common.network.data.ActionInfo;
 import ir.sharif.aichallenge.server.common.network.data.ClientMessageInfo;
 import ir.sharif.aichallenge.server.common.network.data.Message;
 import ir.sharif.aichallenge.server.common.network.data.MessageTypes;
@@ -19,24 +20,24 @@ import java.util.*;
 public class GameHandler implements GameLogic {
 
     private Game game;
-    private ArrayList<Integer> antIds;
+    private Integer antsNum;
     private boolean showConsoleLog;
 
     public GameHandler(boolean showConsoleLog) {
-        this.antIds = new ArrayList<>();
+        this.antsNum = 0;
         this.showConsoleLog = showConsoleLog;
     }
 
     @Override
     public int getClientsNum() {
-        return antIds.size();
+        return antsNum;
     }
 
     @Override
     public boolean[] getActiveClients() {
-        boolean[] bitArray = new boolean[antIds.size()];
-        for (int i = 0; i < antIds.size(); i++) {
-            bitArray[i] = game.isAntAlive(antIds.get(i));
+        boolean[] bitArray = new boolean[antsNum];
+        for (int i = 0; i < antsNum; i++) {
+            bitArray[i] = game.isAntAlive(i);
         }
         return bitArray;
     }
@@ -60,10 +61,11 @@ public class GameHandler implements GameLogic {
         // create Game
         this.game = new Game(generatedMap.map, generatedMap.colonies);
         // add initial ants to game (for test)
-        Ant ant1 = new Ant(10, 0, 0, 0, AntType.SOLDIER);
-        Ant ant2 = new Ant(11, 1, 10, 10, AntType.SOLDIER);
-        antIds.add(10);
-        antIds.add(11);
+        // antId, colonyId, x, y
+        // one soldier for each
+        antsNum = 2;
+        Ant ant1 = new Ant(0, 0, 0, 0, AntType.SOLDIER);
+        Ant ant2 = new Ant(1, 1, 10, 10, AntType.SOLDIER);
         try {
             game.addAntToGame(ant1, 0);
             game.addAntToGame(ant2, 1);
@@ -80,17 +82,15 @@ public class GameHandler implements GameLogic {
 
     @Override
     public Message[] getClientInitialMessages() {
-        Message[] initialMessages = new Message[2];
+        Message[] initialMessages = new Message[antsNum];
 
         // send game config to Ants!
-        initialMessages[0] = new Message(MessageTypes.INIT, Json.GSON.toJsonTree
-                (new GameConfigDTO(this.game, antIds.get(0)), GameConfigDTO.class).getAsJsonObject());
+        for (int i = 0; i < antsNum; i++) {
+            initialMessages[i] = new Message(MessageTypes.INIT,
+                    Json.GSON.toJsonTree(new GameConfigDTO(this.game, i), GameConfigDTO.class).getAsJsonObject());
+        }
 
-        initialMessages[1] = new Message(MessageTypes.INIT, Json.GSON.toJsonTree
-                (new GameConfigDTO(this.game, antIds.get(1)), GameConfigDTO.class).getAsJsonObject());
-
-
-        System.out.println("initial messages returned....");
+        System.out.println("initial messages created");
         return initialMessages;
     }
 
@@ -98,12 +98,21 @@ public class GameHandler implements GameLogic {
     public void simulateEvents(Map<String, List<ClientMessageInfo>> messages) {
         // TODO: pass one turn
         // game.passTurn(messages);
+        // System.out.println("messages received: ");
+        // for (String k : messages.keySet()) {
+        // if (k == MessageTypes.ACTION) {
+        // for (ClientMessageInfo msg : messages.get(k)) {
+        // ActionInfo ac = (ActionInfo) msg;
+        // System.out.println("dir: " + ac.getDirection() + " id: " + ac.getPlayerId());
+        // }
+        // }
+        // }
         game.currentTurn++;
     }
 
     @Override
     public void generateOutputs() {
-
+        // AIC 2019 - Graphic
     }
 
     @Override
@@ -123,11 +132,10 @@ public class GameHandler implements GameLogic {
         }
 
         // Send game status to each ant
-        Message[] messages = new Message[antIds.size()];
-        for (int i = 0; i < antIds.size(); i++) {
-            messages[i] = new Message(MessageTypes.GAME_STATUS, Json.GSON.toJsonTree(
-                    new GameStatusDTO(this.game, antIds.get(i)), GameStatusDTO.class
-            ).getAsJsonObject());
+        Message[] messages = new Message[antsNum];
+        for (int i = 0; i < antsNum; i++) {
+            messages[i] = new Message(MessageTypes.GAME_STATUS,
+                    Json.GSON.toJsonTree(new GameStatusDTO(this.game, i), GameStatusDTO.class).getAsJsonObject());
         }
         return messages;
     }

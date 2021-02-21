@@ -144,6 +144,7 @@ public class Game {
         antHashMap.put(ant.getId(), ant);
     }
 
+
     public Ant getAntByID(int antId) {
         return antHashMap.getOrDefault(antId, null);
     }

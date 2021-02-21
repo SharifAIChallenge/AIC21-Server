@@ -17,6 +17,7 @@ public class GameConfigDTO {
     int generate_sarbaaz;
     int rate_death_resource;
 
+
     public GameConfigDTO(Game game, int antId) {
         Ant ant = game.getAntByID(antId);
         this.map_width = game.getMap().getWidth();

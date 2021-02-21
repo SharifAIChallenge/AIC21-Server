@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Colony {
+    private static Integer colonyUUID = 1000;
+
     private int id;
     private int gainedBread = 0;
     private int gainedGrass = 0;
@@ -84,6 +86,7 @@ public class Colony {
         return id;
     }
 
+
     public Ant getAnt(int antId) {
         return ants.get(antId);
     }
@@ -102,6 +105,11 @@ public class Colony {
 
     public void decreaseBaseHealth(int amount) {
         baseHealth -= amount;
+    }
+
+
+    public static Integer generateNewID() {
+        return colonyUUID++;
     }
 
     public void removeAnt(int id) {
@@ -131,5 +139,4 @@ public class Colony {
     public int getAllResources(){
         return gainedBread + gainedGrass;
     }
-
 }
