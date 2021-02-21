@@ -1,0 +1,10 @@
+Info (PARAM): Deploy=false
+Info (PARAM): UIToken=00000000000000000000000000000000
+Info (PARAM): OCSendToUI=false
+Info (PARAM): OCSendToFile=false
+Info (PARAM): Client0Token=00000000000000000000000000000000
+Info (PARAM): Client1Token=00000000000000000000000000000000
+Info (PARAM): UIEnable=false
+Info (PARAM): ClientsPort=7099
+Info (ClientNetwork): Listening on port 7099.
+Info (PARAM): ClientsConnectionTimeout=2147483647
