@@ -23,7 +23,7 @@ public class GameMap {
     }
 
     public Cell getCell(int xPosition, int yPosition) {
-        return cells[yPosition % width][xPosition % height];
+        return cells[((yPosition % width) + width) % width][((xPosition % height) + height) % height];
     }
 
     public Cell[] getViewableCells(int xPosition, int yPosition) {

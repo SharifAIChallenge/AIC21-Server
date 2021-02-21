@@ -3,6 +3,7 @@ package ir.sharif.aichallenge.server.logic.model.map;
 import java.util.HashMap;
 
 import ir.sharif.aichallenge.server.logic.model.Colony;
+import ir.sharif.aichallenge.server.logic.model.cell.BaseCell;
 import ir.sharif.aichallenge.server.logic.model.cell.Cell;
 import ir.sharif.aichallenge.server.logic.model.cell.CellType;
 import ir.sharif.aichallenge.server.logic.model.cell.ResourceType;
@@ -17,10 +18,12 @@ public class MapGenerator {
             }
         }
         GameMap map = new GameMap(cells, width, height);
-        cells[0][0].cellType = CellType.BASE;
-        cells[5][5].cellType = CellType.BASE;
+        cells[0][0] = new BaseCell(0, 0);
+        cells[5][5] = new BaseCell(5, 5);
         Colony firstColony = new Colony(0, cells[0][0], 100);
         Colony secondColony = new Colony(1, cells[5][5], 100);
+        ((BaseCell)(cells[0][0])).setColony(firstColony);
+        ((BaseCell)(cells[5][5])).setColony(secondColony);
         HashMap<Integer, Colony> colonies = new HashMap<>();
         colonies.put(0, firstColony);
         colonies.put(1, secondColony);

@@ -97,7 +97,7 @@ public class GameHandler implements GameLogic {
 
     @Override
     public void simulateEvents(Map<String, List<ClientMessageInfo>> messages) {
-        // game.passTurn(messages);
+        game.passTurn(messages);
         showMap();
     }
 
