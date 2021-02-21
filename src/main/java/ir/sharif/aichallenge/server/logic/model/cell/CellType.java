@@ -17,4 +17,18 @@ public enum CellType {
                 return 1;
         }
     }
+
+    @Override
+    public String toString() {
+        switch (this) {
+            case WALL:
+                return "wall";
+            case EMPTY:
+                return "empty";
+            case BASE:
+                return "base";
+            default:
+                return "empty";
+        }
+    }
 }

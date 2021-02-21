@@ -13,4 +13,16 @@ public enum AntType {
                 return 1;
         }
     }
+
+    @Override
+    public String toString() {
+        switch (this) {
+            case WORKER:
+                return "worker";
+            case SOLDIER:
+                return "solder";
+            default:
+                return "none";
+        }
+    }
 }

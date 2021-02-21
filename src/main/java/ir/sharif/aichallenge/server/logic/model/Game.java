@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-
 /**
  * Represents the Major class to control a game.
  */
@@ -63,19 +62,13 @@ public class Game {
     }
 
     public void passTurn(Map<String, List<ClientMessageInfo>> messages) {
-        // TODO: based on the messages in MessageTypes, do changes in game
-        // for example:
-        // increment turn
-        // generate messages for clients and add them to [clientTurnMessages]
-        // set [isGameFinished] when necessary
-        // and many many other things :)
         attackHandler.handleAttacks();
         newDeadAnts = attackHandler.getNewDeadAnts();
         removeDeadAntsMessages(messages);
         handleChatMessages(messages);
         handleAntsMove(messages);
         map.getAllCells().forEach(Cell::manageResources);
-        if(isFinished()){
+        if (isFinished()) {
             Colony winnerColony = gameJudge.getWinner();
         }
         currentTurn++;
@@ -83,8 +76,8 @@ public class Game {
 
     private void handleChatMessages(Map<String, List<ClientMessageInfo>> messages) {
         Map<Integer, List<ClientMessageInfo>> groupedSendMessages = messages
-                .getOrDefault(MessageTypes.SEND_MESSAGE, new ArrayList<>())
-                .stream().collect(Collectors.groupingBy(x -> antHashMap.get(x.getPlayerId()).getColonyId()));
+                .getOrDefault(MessageTypes.SEND_MESSAGE, new ArrayList<>()).stream()
+                .collect(Collectors.groupingBy(x -> antHashMap.get(x.getPlayerId()).getColonyId()));
         for (Integer colonyId : groupedSendMessages.keySet()) {
             addMessage(getColony(colonyId), groupedSendMessages.get(colonyId));
         }
@@ -96,9 +89,8 @@ public class Game {
     }
 
     private void handleAntsMove(Map<String, List<ClientMessageInfo>> messages) {
-        List<ActionInfo> actionMessages = messages
-                .getOrDefault(MessageTypes.ACTION, new ArrayList<>())
-                .stream().map(x -> ((ActionInfo) (x))).collect(Collectors.toList());
+        List<ActionInfo> actionMessages = messages.getOrDefault(MessageTypes.ACTION, new ArrayList<>()).stream()
+                .map(x -> ((ActionInfo) (x))).collect(Collectors.toList());
         for (ActionInfo actionMessage : actionMessages) {
             Ant ant = antHashMap.get(actionMessage.getPlayerId());
             map.moveAnt(ant, actionMessage.getDirection());
@@ -120,11 +112,11 @@ public class Game {
     }
 
     public boolean isFinished() {
-        if(currentTurn >= ConstConfigs.GAME_MAXIMUM_TURN_COUNT){
+        if (currentTurn >= ConstConfigs.GAME_MAXIMUM_TURN_COUNT) {
             return true;
         }
         for (Colony colony : colonyHashMap.values()) {
-            if(colony.getBaseHealth() <= 0){
+            if (colony.getBaseHealth() <= 0) {
                 return true;
             }
         }
@@ -142,8 +134,8 @@ public class Game {
         }
         colony.addNewAnt(ant);
         antHashMap.put(ant.getId(), ant);
+        map.getCell(ant.getXPosition(), ant.getYPosition()).addAnt(ant);
     }
-
 
     public Ant getAntByID(int antId) {
         return antHashMap.getOrDefault(antId, null);

@@ -13,7 +13,7 @@ public class MapGenerator {
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 // TODO: add resourceTypes and cellTypes
-                cells[i][j] = new Cell(width, height, CellType.EMPTY, ResourceType.NONE, 0);
+                cells[i][j] = new Cell(j, i, CellType.EMPTY, ResourceType.NONE, 0);
             }
         }
         GameMap map = new GameMap(cells, width, height);

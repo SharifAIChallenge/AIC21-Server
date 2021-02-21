@@ -12,6 +12,7 @@ import ir.sharif.aichallenge.server.logic.handlers.exceptions.GameActionExceptio
 import ir.sharif.aichallenge.server.logic.model.Game;
 import ir.sharif.aichallenge.server.logic.model.ant.Ant;
 import ir.sharif.aichallenge.server.logic.model.ant.AntType;
+import ir.sharif.aichallenge.server.logic.model.cell.Cell;
 import ir.sharif.aichallenge.server.logic.model.map.MapGenerator;
 import ir.sharif.aichallenge.server.logic.model.map.MapGenerator.MapGeneratorResult;
 
@@ -57,7 +58,7 @@ public class GameHandler implements GameLogic {
     public void init() {
         // TODO: map generation
         // generate map
-        MapGeneratorResult generatedMap = MapGenerator.generateRandomMap(20, 10);
+        MapGeneratorResult generatedMap = MapGenerator.generateRandomMap(10, 10);
         // create Game
         this.game = new Game(generatedMap.map, generatedMap.colonies);
         // add initial ants to game (for test)
@@ -65,7 +66,7 @@ public class GameHandler implements GameLogic {
         // one soldier for each
         antsNum = 2;
         Ant ant1 = new Ant(0, 0, 0, 0, AntType.SOLDIER);
-        Ant ant2 = new Ant(1, 1, 10, 10, AntType.SOLDIER);
+        Ant ant2 = new Ant(1, 1, 5, 5, AntType.SOLDIER);
         try {
             game.addAntToGame(ant1, 0);
             game.addAntToGame(ant2, 1);
@@ -96,18 +97,25 @@ public class GameHandler implements GameLogic {
 
     @Override
     public void simulateEvents(Map<String, List<ClientMessageInfo>> messages) {
-        // TODO: pass one turn
         // game.passTurn(messages);
-        // System.out.println("messages received: ");
-        // for (String k : messages.keySet()) {
-        // if (k == MessageTypes.ACTION) {
-        // for (ClientMessageInfo msg : messages.get(k)) {
-        // ActionInfo ac = (ActionInfo) msg;
-        // System.out.println("dir: " + ac.getDirection() + " id: " + ac.getPlayerId());
-        // }
-        // }
-        // }
-        game.currentTurn++;
+        showMap();
+    }
+
+    private void showMap() {
+        System.out.println("--------this turn--------");
+        for (Cell cell : game.getMap().getAllCells()) {
+            System.out.println("[ " + cell.getX() + ", " + cell.getY() + "]: " + cell.getCellType().toString() + " --> "
+                    + getAntsIds(cell.getAnts()));
+        }
+        System.out.println();
+    }
+
+    private String getAntsIds(List<Ant> ants) {
+        String result = "";
+        for (Ant a : ants) {
+            result += " [" + a.getId() + ":" + (a.getAntType().toString()) + " ]";
+        }
+        return result;
     }
 
     @Override
