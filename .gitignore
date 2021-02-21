@@ -120,3 +120,4 @@ buildNumber.properties
 
 # End of https://www.toptal.com/developers/gitignore/api/intellij,maven
 Log/server/server.log
+Log
