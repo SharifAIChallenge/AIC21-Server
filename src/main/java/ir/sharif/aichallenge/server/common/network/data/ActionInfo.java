@@ -16,4 +16,8 @@ public class ActionInfo extends ClientMessageInfo {
     public String getType() {
         return MessageTypes.ACTION;
     }
+
+    public int getDirection() {
+        return direction;
+    }
 }

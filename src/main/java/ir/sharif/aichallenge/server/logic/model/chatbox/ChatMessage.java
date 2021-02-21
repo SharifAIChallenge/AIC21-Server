@@ -6,7 +6,7 @@ public class ChatMessage {
     private int messageLength;
     private int turn;
 
-    public ChatMessage(String message, int value, int messageLength, int turn) {
+    public ChatMessage(String message, int value, int turn) {
         this.message = message;
         this.value = value;
         this.messageLength = messageLength;

@@ -4,31 +4,44 @@ import ir.sharif.aichallenge.server.logic.config.ConstConfigs;
 import ir.sharif.aichallenge.server.logic.model.cell.ResourceType;
 
 public class Ant {
-    private Integer id;
+    private int id;
     private int colonyId;
     private int health;
     private AntType antType;
     // TODO: use Cell instead of x, y
     private int xPosition;
     private int yPosition;
-    private ResourceType resourceType;
-    private int resourceAmount;
+    // just used for worker ant
+    private ResourceType carryingResourceType;
+    private int carryingResourceAmount;
 
-    public Ant(Integer id, int colonyId, int xPosition, int yPosition, AntType antType) {
+    public Ant(int id, int colonyId, int xPosition, int yPosition, AntType antType) {
         this.id = id;
         this.colonyId = colonyId;
         this.xPosition = xPosition;
         this.yPosition = yPosition;
         this.antType = antType;
+        setInitialHealth(antType);
+        setInitialResourceSettings();
+    }
+
+    private void setInitialResourceSettings() {
+        carryingResourceType = ResourceType.NONE;
+        this.carryingResourceAmount = 0;
+    }
+
+    private void setInitialHealth(AntType antType) {
         health = antType == AntType.WORKER ?
                 ConstConfigs.WORKER_ANT_INITIAL_HEALTH :
                 ConstConfigs.SOLDIER_ANT_INITIAL_HEALTH;
-        resourceType = ResourceType.NONE;
-        this.resourceAmount = 0;
     }
 
-    public int getResourceAmount() {
-        return resourceAmount;
+    public int getCarryingResourceAmount() {
+        return carryingResourceAmount;
+    }
+
+    public void setCarryingResourceAmount(int carryingResourceAmount) {
+        this.carryingResourceAmount = carryingResourceAmount;
     }
 
     public void moveTo(int newX, int newY) {
@@ -36,7 +49,7 @@ public class Ant {
         yPosition = newY;
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
@@ -68,14 +81,14 @@ public class Ant {
         return antType;
     }
 
-    public ResourceType getResourceType() {
+    public ResourceType getCarryingResourceType() {
         if (antType == AntType.SOLDIER)
             return ResourceType.NONE;
-        return resourceType;
+        return carryingResourceType;
     }
 
-    public void setResourceType(ResourceType resourceType) {
-        this.resourceType = resourceType;
+    public void setCarryingResourceType(ResourceType carryingResourceType) {
+        this.carryingResourceType = carryingResourceType;
     }
 }
 
