@@ -3,7 +3,6 @@ package ir.sharif.aichallenge.server.logic.model;
 import ir.sharif.aichallenge.server.common.network.data.*;
 import ir.sharif.aichallenge.server.logic.config.ConstConfigs;
 import ir.sharif.aichallenge.server.logic.handlers.AttackHandler;
-import ir.sharif.aichallenge.server.logic.handlers.exceptions.ColonyNotExistsException;
 import ir.sharif.aichallenge.server.logic.handlers.exceptions.GameActionException;
 import ir.sharif.aichallenge.server.logic.model.Colony.Colony;
 import ir.sharif.aichallenge.server.logic.model.ant.Ant;
@@ -37,10 +36,8 @@ public class Game {
     /**
      * Create a Game with specific GameMap and Handlers.
      *
-     * @param map The gameMap of the Game. // * @param ownerHandler Handles all
-     *            stuff about owner of nodes. // * @param turnHandler Handles turn
-     *            logic of the game. // * @param scoreHandler The scoring system. //
-     *            * @param validator The validator for players actions.
+     * @param map The gameMap of the Game.
+     * @param colonyHashMap A HashMap from colonyId to Colony and contains game colonies.
      */
     public Game(GameMap map, HashMap<Integer, Colony> colonyHashMap) {
         this.map = map;
@@ -53,7 +50,7 @@ public class Game {
     public void passTurn(Map<String, List<ClientMessageInfo>> messages) {
         attackHandler.handleAttacks();
         newDeadAnts = attackHandler.getNewDeadAnts();
-        removeDeadAntsMessages(messages);
+        removeDeadAntsNewMessages(messages);
         handleChatMessages(messages);
         handleAntsMove(messages);
         map.getAllCells().forEach(Cell::manageResources);
@@ -83,11 +80,11 @@ public class Game {
                 .map(x -> ((ActionInfo) (x))).collect(Collectors.toList());
         for (ActionInfo actionMessage : actionMessages) {
             Ant ant = antRepository.getAnt(actionMessage.getPlayerId());
-            map.moveAnt(ant, actionMessage.getDirection());
+            map.changeAntCurrentCell(ant, actionMessage.getDirection());
         }
     }
 
-    private void removeDeadAntsMessages(Map<String, List<ClientMessageInfo>> messages) {
+    private void removeDeadAntsNewMessages(Map<String, List<ClientMessageInfo>> messages) {
         for (String messageType : messages.keySet()) {
             messages.get(messageType).removeIf(x -> newDeadAnts.containsKey(x.getPlayerId()));
         }
@@ -122,12 +119,12 @@ public class Game {
         map.getCell(ant.getXPosition(), ant.getYPosition()).addAnt(ant);
     }
 
-    public Ant getAntByID(int antId) {
-        return antRepository.getAnt(antId);
-    }
-
     public GameMap getMap() {
         return map;
+    }
+
+    public Ant getAntByID(int antId) {
+        return antRepository.getAnt(antId);
     }
 
     public Colony getColony(int colonyId) {

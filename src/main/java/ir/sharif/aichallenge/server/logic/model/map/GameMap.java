@@ -81,7 +81,7 @@ public class GameMap {
         return allCells;
     }
 
-    public void moveAnt(Ant ant, int moveType) {
+    public void changeAntCurrentCell(Ant ant, int moveType) {
         int newX = ant.getXPosition();
         int newY = ant.getYPosition();
         switch (moveType) {
@@ -106,10 +106,10 @@ public class GameMap {
         if (getCell(newX, newY).cellType == CellType.WALL)
             return;
 
-        moveAnt(ant, newX, newY);
+        changeAntCurrentCell(ant, newX, newY);
     }
 
-    private void moveAnt(Ant ant, int newX, int newY) {
+    private void changeAntCurrentCell(Ant ant, int newX, int newY) {
         getCell(ant.getXPosition(), ant.getYPosition()).removeAnt(ant);
         ant.moveTo(newX, newY);
         getCell(newX, newY).addAnt(ant);

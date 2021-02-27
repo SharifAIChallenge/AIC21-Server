@@ -11,7 +11,7 @@ import java.util.HashMap;
 public class AntRepository {
     // maps colony ids to colony
     private HashMap<Integer, Colony> colonyHashMap;
-    // maps ant ids to ant
+    // contains alive ants and maps ant ids to ant
     private HashMap<Integer, Ant> antHashMap;
 
     public AntRepository(HashMap<Integer, Colony> colonyHashMap) {
