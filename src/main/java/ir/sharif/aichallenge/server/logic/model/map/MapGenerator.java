@@ -2,7 +2,7 @@ package ir.sharif.aichallenge.server.logic.model.map;
 
 import java.util.HashMap;
 
-import ir.sharif.aichallenge.server.logic.model.Colony;
+import ir.sharif.aichallenge.server.logic.model.Colony.Colony;
 import ir.sharif.aichallenge.server.logic.model.cell.BaseCell;
 import ir.sharif.aichallenge.server.logic.model.cell.Cell;
 import ir.sharif.aichallenge.server.logic.model.cell.CellType;

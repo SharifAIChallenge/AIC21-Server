@@ -1,11 +1,12 @@
 package ir.sharif.aichallenge.server.logic.handlers;
 
 import ir.sharif.aichallenge.server.logic.config.ConstConfigs;
+import ir.sharif.aichallenge.server.logic.model.AntRepository;
 import ir.sharif.aichallenge.server.logic.model.ant.Ant;
 import ir.sharif.aichallenge.server.logic.model.ant.AntType;
 import ir.sharif.aichallenge.server.logic.model.cell.BaseCell;
 import ir.sharif.aichallenge.server.logic.model.cell.Cell;
-import ir.sharif.aichallenge.server.logic.model.Colony;
+import ir.sharif.aichallenge.server.logic.model.Colony.Colony;
 import ir.sharif.aichallenge.server.logic.model.cell.ResourceType;
 import ir.sharif.aichallenge.server.logic.model.map.GameMap;
 
@@ -15,21 +16,19 @@ import java.util.List;
 import java.util.Random;
 
 public class AttackHandler {
-    private HashMap<Integer, Colony> colonyHashMap;
-    private HashMap<Integer, Ant> antHashMap;
+    private  AntRepository antRepository;
     private GameMap map;
     private Random rand;
     private HashMap<Integer, Ant> newDeadAnts;
 
-    public AttackHandler(GameMap map, HashMap<Integer, Colony> colonyHashMap, HashMap<Integer, Ant> antHashMap) {
+    public AttackHandler(GameMap map, AntRepository antRepository) {
         this.map = map;
-        this.colonyHashMap = colonyHashMap;
-        this.antHashMap = antHashMap;
+        this.antRepository = antRepository;
         rand = new Random();
     }
 
     public void handleAttacks() {
-        for (Colony colony : colonyHashMap.values()) {
+        for (Colony colony : antRepository.getColonies()) {
             for (Ant ant : colony.getAnts()) {
                 runAttack(ant);
             }
@@ -71,12 +70,12 @@ public class AttackHandler {
 
     private void handleDeadAnts() {
         newDeadAnts = new HashMap<>();
-        for (Ant ant : antHashMap.values()) {
+        for (Ant ant : antRepository.getAllAnts()) {
             if (!ant.isDead())
                 continue;
-            colonyHashMap.get(ant.getColonyId()).removeAnt(ant.getId());
+            antRepository.getColony(ant.getColonyId()).removeAnt(ant.getId());
             map.getCell(ant.getXPosition(), ant.getYPosition()).removeAnt(ant);
-            antHashMap.remove(ant.getId());
+            antRepository.removeDeadAnt(ant.getId());
             newDeadAnts.put(ant.getId(), ant);
             if (ant.getAntType() == AntType.SOLDIER) {
                 map.addResource(ResourceType.GRASS, ConstConfigs.RATE_DEATH_RESOURCE, ant.getXPosition(), ant.getYPosition());

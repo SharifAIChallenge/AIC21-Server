@@ -1,8 +1,9 @@
 package ir.sharif.aichallenge.server.logic.model;
 
+import ir.sharif.aichallenge.server.logic.model.Colony.Colony;
+
 import java.util.Comparator;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 public class GameJudge {

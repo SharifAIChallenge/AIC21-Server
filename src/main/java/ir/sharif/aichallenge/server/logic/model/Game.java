@@ -5,6 +5,7 @@ import ir.sharif.aichallenge.server.logic.config.ConstConfigs;
 import ir.sharif.aichallenge.server.logic.handlers.AttackHandler;
 import ir.sharif.aichallenge.server.logic.handlers.exceptions.ColonyNotExistsException;
 import ir.sharif.aichallenge.server.logic.handlers.exceptions.GameActionException;
+import ir.sharif.aichallenge.server.logic.model.Colony.Colony;
 import ir.sharif.aichallenge.server.logic.model.ant.Ant;
 import ir.sharif.aichallenge.server.logic.model.cell.Cell;
 import ir.sharif.aichallenge.server.logic.model.chatbox.ChatMessage;
@@ -21,10 +22,8 @@ import java.util.stream.Collectors;
  * Represents the Major class to control a game.
  */
 public class Game {
-    // maps colony ids to colony
-    private HashMap<Integer, Colony> colonyHashMap;
-    // maps ant ids to ant
-    private HashMap<Integer, Ant> antHashMap;
+
+    private AntRepository antRepository;
     private GameMap map;
     public int currentTurn = 0;
     private AttackHandler attackHandler;
@@ -45,20 +44,10 @@ public class Game {
      */
     public Game(GameMap map, HashMap<Integer, Colony> colonyHashMap) {
         this.map = map;
-        this.colonyHashMap = colonyHashMap;
-        initAntHashMap();
-        attackHandler = new AttackHandler(map, colonyHashMap, antHashMap);
+        antRepository = new AntRepository(colonyHashMap);
+        attackHandler = new AttackHandler(map, antRepository);
         messageAdapter = new MessageAdapter();
         gameJudge = new GameJudge(this);
-    }
-
-    private void initAntHashMap() {
-        antHashMap = new HashMap<>();
-        for (Colony colony : colonyHashMap.values()) {
-            for (Ant ant : colony.getAnts()) {
-                antHashMap.put(ant.getId(), ant);
-            }
-        }
     }
 
     public void passTurn(Map<String, List<ClientMessageInfo>> messages) {
@@ -77,10 +66,11 @@ public class Game {
     private void handleChatMessages(Map<String, List<ClientMessageInfo>> messages) {
         Map<Integer, List<ClientMessageInfo>> groupedSendMessages = messages
                 .getOrDefault(MessageTypes.SEND_MESSAGE, new ArrayList<>()).stream()
-                .collect(Collectors.groupingBy(x -> antHashMap.get(x.getPlayerId()).getColonyId()));
+                .collect(Collectors.groupingBy(x -> antRepository.getAnt(x.getPlayerId()).getColonyId()));
         for (Integer colonyId : groupedSendMessages.keySet()) {
             addMessage(getColony(colonyId), groupedSendMessages.get(colonyId));
         }
+        antRepository.getColony(1);
     }
 
     private void addMessage(Colony colony, List<ClientMessageInfo> messages) {
@@ -92,7 +82,7 @@ public class Game {
         List<ActionInfo> actionMessages = messages.getOrDefault(MessageTypes.ACTION, new ArrayList<>()).stream()
                 .map(x -> ((ActionInfo) (x))).collect(Collectors.toList());
         for (ActionInfo actionMessage : actionMessages) {
-            Ant ant = antHashMap.get(actionMessage.getPlayerId());
+            Ant ant = antRepository.getAnt(actionMessage.getPlayerId());
             map.moveAnt(ant, actionMessage.getDirection());
         }
     }
@@ -115,7 +105,7 @@ public class Game {
         if (currentTurn >= ConstConfigs.GAME_MAXIMUM_TURN_COUNT) {
             return true;
         }
-        for (Colony colony : colonyHashMap.values()) {
+        for (Colony colony : antRepository.getColonies()) {
             if (colony.getBaseHealth() <= 0) {
                 return true;
             }
@@ -124,21 +114,16 @@ public class Game {
     }
 
     public boolean isAntAlive(int antId) {
-        return antHashMap.containsKey(antId);
+        return antRepository.doesAntExists(antId);
     }
 
     public void addAntToGame(Ant ant, Integer colonyId) throws GameActionException {
-        Colony colony = colonyHashMap.get(colonyId);
-        if (colony == null) {
-            throw new ColonyNotExistsException("", colonyId);
-        }
-        colony.addNewAnt(ant);
-        antHashMap.put(ant.getId(), ant);
+        antRepository.addAnt(ant, colonyId);
         map.getCell(ant.getXPosition(), ant.getYPosition()).addAnt(ant);
     }
 
     public Ant getAntByID(int antId) {
-        return antHashMap.getOrDefault(antId, null);
+        return antRepository.getAnt(antId);
     }
 
     public GameMap getMap() {
@@ -146,10 +131,10 @@ public class Game {
     }
 
     public Colony getColony(int colonyId) {
-        return colonyHashMap.get(colonyId);
+        return antRepository.getColony(colonyId);
     }
 
     public List<Colony> getColonies() {
-        return (List<Colony>) colonyHashMap.values();
+        return (List<Colony>) antRepository.getColonies();
     }
 }

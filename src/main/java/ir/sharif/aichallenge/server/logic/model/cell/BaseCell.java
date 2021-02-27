@@ -1,6 +1,6 @@
 package ir.sharif.aichallenge.server.logic.model.cell;
 
-import ir.sharif.aichallenge.server.logic.model.Colony;
+import ir.sharif.aichallenge.server.logic.model.Colony.Colony;
 import ir.sharif.aichallenge.server.logic.model.ant.Ant;
 
 import java.util.List;
