@@ -10,9 +10,11 @@ import ir.sharif.aichallenge.server.logic.dto.payloads.GameConfigDTO;
 import ir.sharif.aichallenge.server.logic.dto.payloads.GameStatusDTO;
 import ir.sharif.aichallenge.server.logic.handlers.exceptions.GameActionException;
 import ir.sharif.aichallenge.server.logic.model.Game;
+import ir.sharif.aichallenge.server.logic.model.Colony.Colony;
 import ir.sharif.aichallenge.server.logic.model.ant.Ant;
 import ir.sharif.aichallenge.server.logic.model.ant.AntType;
 import ir.sharif.aichallenge.server.logic.model.cell.Cell;
+import ir.sharif.aichallenge.server.logic.model.chatbox.ChatMessage;
 import ir.sharif.aichallenge.server.logic.model.map.MapGenerator;
 import ir.sharif.aichallenge.server.logic.model.map.MapGenerator.MapGeneratorResult;
 
@@ -98,14 +100,26 @@ public class GameHandler implements GameLogic {
     @Override
     public void simulateEvents(Map<String, List<ClientMessageInfo>> messages) {
         game.passTurn(messages);
-        showMap();
+        showMap(true);
+        if (game.getTurn() == 5) {
+            System.exit(4);
+        }
     }
 
-    private void showMap() {
-        System.out.println("--------this turn--------");
+    private void showMap(boolean showChatbox) {
+        System.out.println("--------this turn: " + (game.getTurn() - 1) + "--------");
         for (Cell cell : game.getMap().getAllCells()) {
             System.out.println("[ " + cell.getX() + ", " + cell.getY() + "]: " + cell.getCellType().toString() + " --> "
                     + getAntsIds(cell.getAnts()));
+        }
+        System.out.println();
+        if (showChatbox) {
+            for (Colony colony : game.getColonies()) {
+                System.out.println("chatbox for colony: " + colony.getId());
+                for (ChatMessage message : colony.getChatBox().getChatMessages()) {
+                    System.out.println(Json.GSON.toJson(message, ChatMessage.class));
+                }
+            }
         }
         System.out.println();
     }

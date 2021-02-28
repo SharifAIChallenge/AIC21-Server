@@ -9,7 +9,7 @@ public class ChatMessage {
     public ChatMessage(String message, int value, int turn) {
         this.message = message;
         this.value = value;
-        this.messageLength = messageLength;
+        this.messageLength = message.length();
         this.turn = turn;
     }
 

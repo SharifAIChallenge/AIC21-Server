@@ -5,8 +5,10 @@ import ir.sharif.aichallenge.server.logic.handlers.exceptions.GameActionExceptio
 import ir.sharif.aichallenge.server.logic.model.Colony.Colony;
 import ir.sharif.aichallenge.server.logic.model.ant.Ant;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 public class AntRepository {
     // maps colony ids to colony
@@ -36,8 +38,8 @@ public class AntRepository {
         return antHashMap.getOrDefault(antId, null);
     }
 
-    public Collection<Colony> getColonies() {
-        return colonyHashMap.values();
+    public List<Colony> getColonies() {
+        return new ArrayList<Colony>(colonyHashMap.values());
     }
 
     public boolean doesAntExists(int antId) {

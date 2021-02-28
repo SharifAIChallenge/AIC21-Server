@@ -36,8 +36,9 @@ public class Game {
     /**
      * Create a Game with specific GameMap and Handlers.
      *
-     * @param map The gameMap of the Game.
-     * @param colonyHashMap A HashMap from colonyId to Colony and contains game colonies.
+     * @param map           The gameMap of the Game.
+     * @param colonyHashMap A HashMap from colonyId to Colony and contains game
+     *                      colonies.
      */
     public Game(GameMap map, HashMap<Integer, Colony> colonyHashMap) {
         this.map = map;
@@ -132,6 +133,6 @@ public class Game {
     }
 
     public List<Colony> getColonies() {
-        return (List<Colony>) antRepository.getColonies();
+        return antRepository.getColonies();
     }
 }

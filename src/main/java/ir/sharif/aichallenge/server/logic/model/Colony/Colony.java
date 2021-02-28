@@ -21,7 +21,7 @@ public class Colony {
     private Cell base;
     private int baseHealth;
     private HashMap<Integer, Ant> ants;
-    private ChatBox chatBox;
+    private ChatBox chatBox = new ChatBox();
     private int toBeGeneratedWorkersCount;
     private int toBeGeneratedSoldiersCount;
     private int allWorkerAntsGeneratedCount;
@@ -86,7 +86,6 @@ public class Colony {
         return id;
     }
 
-
     public Ant getAnt(int antId) {
         return ants.get(antId);
     }
@@ -106,7 +105,6 @@ public class Colony {
     public void decreaseBaseHealth(int amount) {
         baseHealth -= amount;
     }
-
 
     public static Integer generateNewID() {
         return colonyUUID++;
@@ -136,7 +134,7 @@ public class Colony {
         return allSoldierAntsGeneratedCount + allWorkerAntsGeneratedCount;
     }
 
-    public int getAllResources(){
+    public int getAllResources() {
         return gainedBread + gainedGrass;
     }
 }
