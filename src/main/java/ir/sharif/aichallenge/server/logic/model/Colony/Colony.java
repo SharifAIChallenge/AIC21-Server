@@ -38,6 +38,14 @@ public class Colony {
         allWorkerAntsGeneratedCount = 0;
     }
 
+    public int getGainedBread() {
+        return gainedBread;
+    }
+
+    public int getGainedGrass() {
+        return gainedGrass;
+    }
+
     public void addNewAnt(Ant ant) throws GameActionException {
         if (ant.getColonyId() != this.id) {
             throw new InvalidAntForColonyException("");
