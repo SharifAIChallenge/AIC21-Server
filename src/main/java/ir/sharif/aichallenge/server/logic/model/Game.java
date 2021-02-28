@@ -62,7 +62,7 @@ public class Game {
         currentTurn++;
     }
 
-    // remove dead ants messages
+    // remove dead ants messages (if client is alive!)
     private Map<String, List<ClientMessageInfo>> filterMessages(Map<String, List<ClientMessageInfo>> messages) {
         Map<String, List<ClientMessageInfo>> filteredMessages = new HashMap<>();
         for (String key : messages.keySet()) {

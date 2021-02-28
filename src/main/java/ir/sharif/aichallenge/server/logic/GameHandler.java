@@ -70,7 +70,7 @@ public class GameHandler implements GameLogic {
         // antId, colonyId, x, y
         // one soldier for each
         antsNum = 2;
-        Ant ant11 = new Ant(0, 0, 5, 0, AntType.WORKER);
+        Ant ant11 = new Ant(0, 0, 7, 0, AntType.WORKER);
         // Ant ant21 = new Ant(1, 0, 6, 0, AntType.SOLDIER);
         // Ant ant31 = new Ant(2, 0, 2, 0, AntType.WORKER);
 
