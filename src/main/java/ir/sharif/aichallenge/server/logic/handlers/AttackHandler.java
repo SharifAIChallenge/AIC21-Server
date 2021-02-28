@@ -71,12 +71,14 @@ public class AttackHandler {
 
     private void handleDeadAnts() {
         newDeadAnts = new HashMap<>();
+        ArrayList<Integer> deadAntIDs = new ArrayList<>();
         for (Ant ant : antRepository.getAllAnts()) {
             if (!ant.isDead())
                 continue;
             antRepository.getColony(ant.getColonyId()).removeAnt(ant.getId());
             map.getCell(ant.getXPosition(), ant.getYPosition()).removeAnt(ant);
-            antRepository.removeDeadAnt(ant.getId());
+            // antRepository.removeDeadAnt(ant.getId());
+            deadAntIDs.add(ant.getId());
             newDeadAnts.put(ant.getId(), ant);
             if (ant.getAntType() == AntType.SOLDIER) {
                 map.addResource(ResourceType.GRASS, ConstConfigs.RATE_DEATH_RESOURCE, ant.getXPosition(),
@@ -97,6 +99,10 @@ public class AttackHandler {
                 }
             }
         }
+        for (Integer antId : deadAntIDs) {
+            antRepository.removeDeadAnt(antId);
+        }
+
     }
 
     public HashMap<Integer, Ant> getNewDeadAnts() {

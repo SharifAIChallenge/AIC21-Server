@@ -49,6 +49,7 @@ public class Game {
     }
 
     public void passTurn(Map<String, List<ClientMessageInfo>> messages) {
+        messages = filterMessages(messages);
         attackHandler.handleAttacks();
         newDeadAnts = attackHandler.getNewDeadAnts();
         removeDeadAntsNewMessages(messages);
@@ -59,6 +60,26 @@ public class Game {
             Colony winnerColony = gameJudge.getWinner();
         }
         currentTurn++;
+    }
+
+    // remove dead ants messages
+    private Map<String, List<ClientMessageInfo>> filterMessages(Map<String, List<ClientMessageInfo>> messages) {
+        Map<String, List<ClientMessageInfo>> filteredMessages = new HashMap<>();
+        for (String key : messages.keySet()) {
+            filteredMessages.put(key, new ArrayList<ClientMessageInfo>());
+            for (ClientMessageInfo info : messages.get(key)) {
+                if (antRepository.getAnt(info.getPlayerId()) != null) {
+                    List<ClientMessageInfo> list = filteredMessages.get(key);
+                    list.add(info);
+                    filteredMessages.put(key, list);
+                }
+            }
+        }
+        return filteredMessages;
+    }
+
+    public HashMap<Integer, Ant> getNewDeadAnts() {
+        return newDeadAnts;
     }
 
     private void handleChatMessages(Map<String, List<ClientMessageInfo>> messages) {
@@ -81,7 +102,8 @@ public class Game {
                 .map(x -> ((ActionInfo) (x))).collect(Collectors.toList());
         for (ActionInfo actionMessage : actionMessages) {
             Ant ant = antRepository.getAnt(actionMessage.getPlayerId());
-            map.changeAntCurrentCell(ant, actionMessage.getDirection());
+            if (ant != null)
+                map.changeAntCurrentCell(ant, actionMessage.getDirection());
         }
     }
 
@@ -112,6 +134,7 @@ public class Game {
     }
 
     public boolean isAntAlive(int antId) {
+        System.out.println("ant id : " + antId + " exists: " + antRepository.doesAntExists(antId));
         return antRepository.doesAntExists(antId);
     }
 

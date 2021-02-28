@@ -17,8 +17,6 @@ public class MapGenerator {
                 cells[i][j] = new Cell(j, i, CellType.EMPTY, ResourceType.NONE, 0);
             }
         }
-        cells[1][5].setResourceType(ResourceType.BREAD);
-        cells[1][5].setResourceAmount(5);
         GameMap map = new GameMap(cells, width, height);
         cells[0][0] = new BaseCell(0, 0);
         cells[5][5] = new BaseCell(5, 5);

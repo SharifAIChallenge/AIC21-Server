@@ -21,6 +21,8 @@ import ir.sharif.aichallenge.server.logic.model.map.MapGenerator.MapGeneratorRes
 
 import java.util.*;
 
+import com.google.gson.JsonObject;
+
 public class GameHandler implements GameLogic {
 
     private Game game;
@@ -72,7 +74,7 @@ public class GameHandler implements GameLogic {
         // Ant ant21 = new Ant(1, 0, 6, 0, AntType.SOLDIER);
         // Ant ant31 = new Ant(2, 0, 2, 0, AntType.WORKER);
 
-        Ant ant211 = new Ant(1, 1, 5, 0, AntType.WORKER);
+        Ant ant211 = new Ant(1, 1, 5, 5, AntType.SOLDIER);
         // Ant ant22 = new Ant(3, 1, 6, 5, AntType.WORKER);
         // Ant ant23 = new Ant(5, 1, 7, 5, AntType.WORKER);
 
@@ -166,11 +168,18 @@ public class GameHandler implements GameLogic {
             return getClientInitialMessages();
         }
 
+        // dead ants
+        HashMap<Integer, Ant> deadAnts = game.getNewDeadAnts();
+
         // Send game status to each ant
         Message[] messages = new Message[antsNum];
         for (int i = 0; i < antsNum; i++) {
-            messages[i] = new Message(MessageTypes.GAME_STATUS,
-                    Json.GSON.toJsonTree(new GameStatusDTO(this.game, i), GameStatusDTO.class).getAsJsonObject());
+            if (deadAnts != null && deadAnts.keySet().contains(i)) {
+                messages[i] = new Message(MessageTypes.KILL, new JsonObject());
+            } else {
+                messages[i] = new Message(MessageTypes.GAME_STATUS,
+                        Json.GSON.toJsonTree(new GameStatusDTO(this.game, i), GameStatusDTO.class).getAsJsonObject());
+            }
         }
         return messages;
     }

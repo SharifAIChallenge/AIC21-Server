@@ -18,9 +18,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
- * {@link ClientNetwork} is a engine which is responsible for
- * sending messages from engine to players
- * and receiving players' requests (messages).
+ * {@link ClientNetwork} is a engine which is responsible for sending messages
+ * from engine to players and receiving players' requests (messages).
  * <p>
  * First of all clients (players) must be defined to the engine via method
  * {@link #defineClient}. Server assigns an ID to each client so further calls
@@ -59,16 +58,16 @@ public class ClientNetwork extends NetServer {
     // A thread pool used to accept and verify clients
     private ExecutorService acceptExecutor;
 
-    //Simulate Thread Semaphore
+    // Simulate Thread Semaphore
     private Semaphore simulationSemaphore;
 
-    //Current Turn of game
+    // Current Turn of game
     private AtomicInteger currentTurn;
 
-    //End flags for clients
+    // End flags for clients
     private ArrayList<AtomicBoolean> endReceivedFlags;
 
-    //Active flags for clients
+    // Active flags for clients
     private ArrayList<AtomicBoolean> isActiveFlags;
 
     /**
@@ -96,8 +95,8 @@ public class ClientNetwork extends NetServer {
     }
 
     /**
-     * Defines a client with a token. It actually assigns an ID and a handler to
-     * the client.
+     * Defines a client with a token. It actually assigns an ID and a handler to the
+     * client.
      *
      * @param token token of the client
      * @return ID of the client
@@ -177,18 +176,24 @@ public class ClientNetwork extends NetServer {
     }
 
     /**
-     * Sends all queued messages. Method will not return until all messages
-     * sent. (or some failure occur)
+     * Sends all queued messages. Method will not return until all messages sent.
+     * (or some failure occur)
      *
      * @see {@link #queue}
      */
     public void sendAllBlocking() {
-//        CyclicBarrier sendBarrier = new CyclicBarrier(mClients.size() + 1);
+        // CyclicBarrier sendBarrier = new CyclicBarrier(mClients.size() + 1);
         CyclicBarrier sendBarrier = new CyclicBarrier(getNumberOfConnected() + 1);
         for (ClientHandler client : mClients) {
             if (!client.isConnected()) {
                 continue;
             }
+            
+            // added in AIC 2021
+            // if (!isActiveFlags.get(client.getId()).get()) {
+            //     continue;
+            // }
+            
             sendExecutor.submit(() -> {
                 try {
                     sendBarrier.await();
@@ -214,8 +219,8 @@ public class ClientNetwork extends NetServer {
     }
 
     /**
-     * Stops receiving messages from clients. Any message which is arrived after
-     * a call of this method is discarded by the handler.
+     * Stops receiving messages from clients. Any message which is arrived after a
+     * call of this method is discarded by the handler.
      *
      * @see {@link #startReceivingAll}
      */
@@ -261,16 +266,13 @@ public class ClientNetwork extends NetServer {
      * @see {@link #getReceivedMessages}
      */
     public List<ClientMessageInfo> getReceivedEvents(int clientID) {
-        return getReceivedMessages(clientID).stream()
-                .map(ClientMessage::getParsedInfo)
-                .filter(info -> {
-                    if (info == null) {
-                        Log.e("ClientNetwork", "Invalid message type from client: " + clientID);
-                        return false;
-                    }
-                    return true;
-                })
-                .collect(Collectors.toList());
+        return getReceivedMessages(clientID).stream().map(ClientMessage::getParsedInfo).filter(info -> {
+            if (info == null) {
+                Log.e("ClientNetwork", "Invalid message type from client: " + clientID);
+                return false;
+            }
+            return true;
+        }).collect(Collectors.toList());
     }
 
     @Override
@@ -292,8 +294,7 @@ public class ClientNetwork extends NetServer {
 
     private synchronized void verifyClient(JsonSocket client) throws Exception {
         // get the token, timeout is 2000 seconds
-        Future<Message> futureMessage
-                = acceptExecutor.submit(() -> client.get(Message.class));
+        Future<Message> futureMessage = acceptExecutor.submit(() -> client.get(Message.class));
         Message message = futureMessage.get(2000, TimeUnit.SECONDS);
         // check the token
         if (message != null && message.getType().equals(MessageTypes.TOKEN) && message.getInfo().has("token")) {
@@ -325,8 +326,8 @@ public class ClientNetwork extends NetServer {
     }
 
     /**
-     * Blocks caller method at most <code>timeout</code> milliseconds until
-     * the specified client send a message.
+     * Blocks caller method at most <code>timeout</code> milliseconds until the
+     * specified client send a message.
      *
      * @param clientID ID of the client
      * @throws InterruptedException if current thread is interrupted.
@@ -348,8 +349,8 @@ public class ClientNetwork extends NetServer {
     }
 
     /**
-     * Blocks caller method at most <code>timeout</code> milliseconds until
-     * the specified client is connected to the engine.
+     * Blocks caller method at most <code>timeout</code> milliseconds until the
+     * specified client is connected to the engine.
      *
      * @param clientID ID of the client
      * @param timeout  timeout in milliseconds

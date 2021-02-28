@@ -387,4 +387,8 @@ public class ClientHandler {
         if (numOfExceptions > MAX_NUM_EXCEPTIONS)
             terminate();
     }
+
+    public int getId() {
+        return id;
+    }
 }

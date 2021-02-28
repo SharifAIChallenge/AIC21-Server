@@ -1,8 +1,8 @@
 package ir.sharif.aichallenge.server.logic.config;
 
 public class ConstConfigs {
-    public static int WORKER_ANT_INITIAL_HEALTH = 50;
-    public static int SOLDIER_ANT_INITIAL_HEALTH = 50;
+    public static int WORKER_ANT_INITIAL_HEALTH = 3;
+    public static int SOLDIER_ANT_INITIAL_HEALTH = 3;
     public static int COLONY_INITIAL_BREAD = 50;
     public static int COLONY_INITIAL_GRASS = 50;
     public static int GENERATE_WORKER_BREAD_AMOUNT = 50;
