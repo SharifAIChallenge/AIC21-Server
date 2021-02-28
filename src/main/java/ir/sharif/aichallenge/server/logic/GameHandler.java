@@ -67,11 +67,21 @@ public class GameHandler implements GameLogic {
         // antId, colonyId, x, y
         // one soldier for each
         antsNum = 2;
-        Ant ant1 = new Ant(0, 0, 0, 0, AntType.SOLDIER);
-        Ant ant2 = new Ant(1, 1, 5, 5, AntType.SOLDIER);
+        Ant ant11 = new Ant(0, 0, 5, 0, AntType.WORKER);
+        // Ant ant21 = new Ant(1, 0, 1, 0, AntType.WORKER);
+        // Ant ant31 = new Ant(2, 0, 2, 0, AntType.WORKER);
+
+        Ant ant211 = new Ant(1, 1, 5, 5, AntType.SOLDIER);
+        // Ant ant22 = new Ant(3, 1, 6, 5, AntType.WORKER);
+        // Ant ant23 = new Ant(5, 1, 7, 5, AntType.WORKER);
+
         try {
-            game.addAntToGame(ant1, 0);
-            game.addAntToGame(ant2, 1);
+            game.addAntToGame(ant11, 0);
+            // game.addAntToGame(ant21, 0);
+            // game.addAntToGame(ant31, 0);
+            game.addAntToGame(ant211, 1);
+            // game.addAntToGame(ant22, 1);
+            // game.addAntToGame(ant23, 1);
         } catch (GameActionException e) {
             System.out.println("Can't add ants to game!");
             e.printStackTrace();
@@ -99,17 +109,18 @@ public class GameHandler implements GameLogic {
 
     @Override
     public void simulateEvents(Map<String, List<ClientMessageInfo>> messages) {
-        game.passTurn(messages);
-        showMap(true);
-        if (game.getTurn() == 5) {
+        if (game.getTurn() == 12) {
             System.exit(4);
         }
+        game.passTurn(messages);
+        showMap(true);
     }
 
     private void showMap(boolean showChatbox) {
         System.out.println("--------this turn: " + (game.getTurn() - 1) + "--------");
         for (Cell cell : game.getMap().getAllCells()) {
-            System.out.println("[ " + cell.getX() + ", " + cell.getY() + "]: " + cell.getCellType().toString() + " --> "
+            System.out.println("[" + cell.getX() + "," + cell.getY() + "]: " + cell.getCellType().toString() + " "
+                    + cell.getResourceType().toString() + ":" + cell.getResourceAmount() + " --> "
                     + getAntsIds(cell.getAnts()));
         }
         System.out.println();
@@ -127,7 +138,7 @@ public class GameHandler implements GameLogic {
     private String getAntsIds(List<Ant> ants) {
         String result = "";
         for (Ant a : ants) {
-            result += " [" + a.getId() + ":" + (a.getAntType().toString()) + " ]";
+            result += " [" + Json.GSON.toJson(a, Ant.class) + "] ";
         }
         return result;
     }

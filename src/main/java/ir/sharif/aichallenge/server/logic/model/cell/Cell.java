@@ -27,6 +27,14 @@ public class Cell {
         random = new Random();
     }
 
+    public void setResourceType(ResourceType resourceType) {
+        this.resourceType = resourceType;
+    }
+
+    public void setResourceAmount(int resourceAmount) {
+        this.resourceAmount = resourceAmount;
+    }
+
     public List<Ant> getAnts() {
         return ants;
     }

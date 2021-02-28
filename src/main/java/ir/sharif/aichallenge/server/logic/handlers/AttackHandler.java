@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Random;
 
 public class AttackHandler {
-    private  AntRepository antRepository;
+    private AntRepository antRepository;
     private GameMap map;
     private Random rand;
     private HashMap<Integer, Ant> newDeadAnts;
@@ -30,7 +30,8 @@ public class AttackHandler {
     public void handleAttacks() {
         for (Colony colony : antRepository.getColonies()) {
             for (Ant ant : colony.getAnts()) {
-                runAttack(ant);
+                if (ant.getAntType().equals(AntType.SOLDIER))
+                    runAttack(ant);
             }
         }
         handleDeadAnts();
@@ -78,16 +79,21 @@ public class AttackHandler {
             antRepository.removeDeadAnt(ant.getId());
             newDeadAnts.put(ant.getId(), ant);
             if (ant.getAntType() == AntType.SOLDIER) {
-                map.addResource(ResourceType.GRASS, ConstConfigs.RATE_DEATH_RESOURCE, ant.getXPosition(), ant.getYPosition());
+                map.addResource(ResourceType.GRASS, ConstConfigs.RATE_DEATH_RESOURCE, ant.getXPosition(),
+                        ant.getYPosition());
             } else {
                 if (ant.getCarryingResourceType() == ResourceType.NONE)
-                    map.addResource(ResourceType.BREAD, ConstConfigs.RATE_DEATH_RESOURCE, ant.getXPosition(), ant.getYPosition());
+                    map.addResource(ResourceType.BREAD, ConstConfigs.RATE_DEATH_RESOURCE, ant.getXPosition(),
+                            ant.getYPosition());
                 else if (ant.getCarryingResourceType() == ResourceType.BREAD)
-                    map.addResource(ResourceType.BREAD, ConstConfigs.RATE_DEATH_RESOURCE + ant.getCarryingResourceAmount()
-                            , ant.getXPosition(), ant.getYPosition());
+                    map.addResource(ResourceType.BREAD,
+                            ConstConfigs.RATE_DEATH_RESOURCE + ant.getCarryingResourceAmount(), ant.getXPosition(),
+                            ant.getYPosition());
                 else {
-                    map.addResource(ResourceType.BREAD, ConstConfigs.RATE_DEATH_RESOURCE, ant.getXPosition(), ant.getYPosition());
-                    map.addResource(ResourceType.GRASS, ant.getCarryingResourceAmount(), ant.getXPosition(), ant.getYPosition());
+                    map.addResource(ResourceType.BREAD, ConstConfigs.RATE_DEATH_RESOURCE, ant.getXPosition(),
+                            ant.getYPosition());
+                    map.addResource(ResourceType.GRASS, ant.getCarryingResourceAmount(), ant.getXPosition(),
+                            ant.getYPosition());
                 }
             }
         }

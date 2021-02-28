@@ -20,7 +20,7 @@ public enum AntType {
             case WORKER:
                 return "worker";
             case SOLDIER:
-                return "solder";
+                return "soldier";
             default:
                 return "none";
         }
