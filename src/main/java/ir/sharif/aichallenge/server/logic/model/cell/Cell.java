@@ -73,8 +73,12 @@ public class Cell {
         resourceAmount += amount;
     }
 
-    public void decreaseResource(int amount) {
+    private void decreaseResource(int amount) {
         resourceAmount -= amount;
+        if(resourceAmount == 0)
+            resourceType = ResourceType.NONE;
+        if(resourceAmount < 0)
+            throw new RuntimeException("negative resource type !!!");
     }
 
     public boolean isBase() {
