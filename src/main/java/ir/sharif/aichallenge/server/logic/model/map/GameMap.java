@@ -102,16 +102,16 @@ public class GameMap {
         }
         newX = newX % getHeight();
         newY = newY % getWidth();
-
-        if (getCell(newX, newY).cellType == CellType.WALL)
+        Cell targetCell = getCell(newX, newY);
+        if (targetCell.cellType == CellType.WALL)
             return;
 
-        changeAntCurrentCell(ant, newX, newY);
+        changeAntCurrentCell(ant, targetCell);
     }
 
-    private void changeAntCurrentCell(Ant ant, int newX, int newY) {
+    private void changeAntCurrentCell(Ant ant, Cell targetCell) {
         getCell(ant.getXPosition(), ant.getYPosition()).removeAnt(ant);
-        ant.moveTo(newX, newY);
-        getCell(newX, newY).addAnt(ant);
+        ant.moveTo(targetCell.getX(), targetCell.getY());
+        targetCell.addAnt(ant);
     }
 }
