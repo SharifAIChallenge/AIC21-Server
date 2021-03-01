@@ -60,7 +60,14 @@ public class GameMap {
                 for (int k = yPos - i; k <= yPos + i; k++) {
                     if (getManhattanDistance(j, k, xPos, yPos) > i)
                         continue;
-                    if (resourceType == getCell(j, k).getResourceType()) {
+                    Cell cell = getCell(j, k);
+
+                    if(cell.getResourceType() == ResourceType.NONE){
+                        cell.setResourceType(resourceType);
+                        cell.setResourceAmount(0);
+                    }
+
+                    if (resourceType == cell.getResourceType()) {
                         cells[k][j].increaseResource(resourceAmount);
                         return;
                     }

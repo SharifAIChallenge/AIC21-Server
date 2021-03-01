@@ -5,6 +5,7 @@ import ir.sharif.aichallenge.server.logic.handlers.exceptions.GameActionExceptio
 import ir.sharif.aichallenge.server.logic.handlers.exceptions.InvalidAntForColonyException;
 import ir.sharif.aichallenge.server.logic.model.ant.Ant;
 import ir.sharif.aichallenge.server.logic.model.ant.AntType;
+import ir.sharif.aichallenge.server.logic.model.cell.BaseCell;
 import ir.sharif.aichallenge.server.logic.model.cell.Cell;
 import ir.sharif.aichallenge.server.logic.model.cell.ResourceType;
 import ir.sharif.aichallenge.server.logic.model.chatbox.ChatBox;
@@ -27,7 +28,7 @@ public class Colony {
     private int allWorkerAntsGeneratedCount;
     private int allSoldierAntsGeneratedCount;
 
-    public Colony(int id, Cell base, int baseHealth) {
+    public Colony(int id, BaseCell base, int baseHealth) {
         this.id = id;
         addBread(ConstConfigs.COLONY_INITIAL_BREAD);
         addGrass(ConstConfigs.COLONY_INITIAL_GRASS);
@@ -142,7 +143,9 @@ public class Colony {
         return allSoldierAntsGeneratedCount + allWorkerAntsGeneratedCount;
     }
 
-    public int getAllResources() {
+    public int getAllResourcesAmount() {
         return gainedBread + gainedGrass;
     }
+
+
 }

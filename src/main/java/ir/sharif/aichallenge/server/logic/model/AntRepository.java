@@ -39,7 +39,7 @@ public class AntRepository {
     }
 
     public List<Colony> getColonies() {
-        return new ArrayList<Colony>(colonyHashMap.values());
+        return new ArrayList<>(colonyHashMap.values());
     }
 
     public boolean doesAntExists(int antId) {

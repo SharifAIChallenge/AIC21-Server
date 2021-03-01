@@ -45,7 +45,7 @@ public class Game {
         antRepository = new AntRepository(colonyHashMap);
         attackHandler = new AttackHandler(map, antRepository);
         messageAdapter = new MessageAdapter();
-        gameJudge = new GameJudge(this);
+        gameJudge = new GameJudge(antRepository);
     }
 
     public void passTurn(Map<String, List<ClientMessageInfo>> messages) {
