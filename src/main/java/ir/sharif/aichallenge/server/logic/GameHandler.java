@@ -28,6 +28,7 @@ public class GameHandler implements GameLogic {
     private Game game;
     private Integer antsNum;
     private boolean showConsoleLog;
+    private ArrayList<Integer> deads = new ArrayList<>();
 
     public GameHandler(boolean showConsoleLog) {
         this.antsNum = 0;
@@ -69,21 +70,21 @@ public class GameHandler implements GameLogic {
         // add initial ants to game (for test)
         // antId, colonyId, x, y
         // one soldier for each
-        antsNum = 2;
-        Ant ant11 = new Ant(0, 0, 7, 0, AntType.WORKER);
-        // Ant ant21 = new Ant(1, 0, 6, 0, AntType.SOLDIER);
+        antsNum = 4;
+        Ant ant11 = new Ant(0, 0, 6, 6, AntType.WORKER);
+        Ant ant21 = new Ant(1, 0, 0, 0, AntType.SOLDIER);
         // Ant ant31 = new Ant(2, 0, 2, 0, AntType.WORKER);
 
-        Ant ant211 = new Ant(1, 1, 7, 0, AntType.WORKER);
-        // Ant ant22 = new Ant(3, 1, 6, 5, AntType.WORKER);
+        Ant ant211 = new Ant(2, 1, 6, 6, AntType.SOLDIER);
+        Ant ant22 = new Ant(3, 1, 0, 0, AntType.WORKER);
         // Ant ant23 = new Ant(5, 1, 7, 5, AntType.WORKER);
 
         try {
             game.addAntToGame(ant11, 0);
-            // game.addAntToGame(ant21, 0);
+            game.addAntToGame(ant21, 0);
             // game.addAntToGame(ant31, 0);
             game.addAntToGame(ant211, 1);
-            // game.addAntToGame(ant22, 1);
+            game.addAntToGame(ant22, 1);
             // game.addAntToGame(ant23, 1);
         } catch (GameActionException e) {
             System.out.println("Can't add ants to game!");
@@ -112,6 +113,10 @@ public class GameHandler implements GameLogic {
 
     @Override
     public void simulateEvents(Map<String, List<ClientMessageInfo>> messages) {
+        // if (game.getTurn() == 5) {
+        // System.out.println("no increase ants!");
+        // antsNum++;
+        // }
         if (game.getTurn() == 10) {
             System.exit(4);
         }
@@ -176,9 +181,11 @@ public class GameHandler implements GameLogic {
         for (int i = 0; i < antsNum; i++) {
             if (deadAnts != null && deadAnts.keySet().contains(i)) {
                 messages[i] = new Message(MessageTypes.KILL, new JsonObject());
+                deads.add(i);
             } else {
-                messages[i] = new Message(MessageTypes.GAME_STATUS,
-                        Json.GSON.toJsonTree(new GameStatusDTO(this.game, i), GameStatusDTO.class).getAsJsonObject());
+                if (!deads.contains(i))
+                    messages[i] = new Message(MessageTypes.GAME_STATUS, Json.GSON
+                            .toJsonTree(new GameStatusDTO(this.game, i), GameStatusDTO.class).getAsJsonObject());
             }
         }
         return messages;

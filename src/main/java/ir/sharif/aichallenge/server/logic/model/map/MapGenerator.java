@@ -13,12 +13,13 @@ public class MapGenerator {
         Cell[][] cells = new Cell[height][width];
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                // TODO: add resourceTypes and cellTypes
                 cells[i][j] = new Cell(j, i, CellType.EMPTY, ResourceType.NONE, 0);
             }
         }
+        // add resources here (Type, Value)
         cells[0][6].setResourceType(ResourceType.GRASS);
         cells[0][6].setResourceAmount(1);
+
         GameMap map = new GameMap(cells, width, height);
         cells[0][0] = new BaseCell(0, 0);
         cells[5][5] = new BaseCell(5, 5);

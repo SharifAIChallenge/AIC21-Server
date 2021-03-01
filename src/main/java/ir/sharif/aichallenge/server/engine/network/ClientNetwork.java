@@ -188,12 +188,12 @@ public class ClientNetwork extends NetServer {
             if (!client.isConnected()) {
                 continue;
             }
-            
+
             // added in AIC 2021
             // if (!isActiveFlags.get(client.getId()).get()) {
-            //     continue;
+            // continue;
             // }
-            
+
             sendExecutor.submit(() -> {
                 try {
                     sendBarrier.await();
@@ -244,6 +244,10 @@ public class ClientNetwork extends NetServer {
     public void setIsActiveFlags(boolean[] isActives) {
         for (int i = 0; i < isActives.length; i++) {
             isActiveFlags.get(i).set(isActives[i]);
+            // added AIC 2021
+            if (!isActives[i] && mClients.get(i).isConnected()) {
+                mClients.get(i).terminate();
+            }
         }
     }
 
