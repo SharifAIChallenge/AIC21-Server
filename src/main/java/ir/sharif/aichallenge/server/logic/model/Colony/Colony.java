@@ -47,6 +47,14 @@ public class Colony {
         return gainedGrass;
     }
 
+    public void setToBeGeneratedSoldiersCount(int toBeGeneratedSoldiersCount) {
+        this.toBeGeneratedSoldiersCount = toBeGeneratedSoldiersCount;
+    }
+
+    public void setToBeGeneratedWorkersCount(int toBeGeneratedWorkersCount) {
+        this.toBeGeneratedWorkersCount = toBeGeneratedWorkersCount;
+    }
+
     public void addNewAnt(Ant ant) throws GameActionException {
         if (ant.getColonyId() != this.id) {
             throw new InvalidAntForColonyException("");

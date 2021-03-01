@@ -37,7 +37,7 @@ public class GameHandler implements GameLogic {
     private boolean showConsoleLog;
     private ArrayList<Integer> deads = new ArrayList<>();
     private boolean newAntsCreated = false;
-    private List<Integer> newAntIDs;
+    private List<Integer> newAntIDs = new ArrayList<>();
 
     public GameHandler(boolean showConsoleLog) {
         this.antsNum = 0;
@@ -126,22 +126,33 @@ public class GameHandler implements GameLogic {
     @Override
     public ArrayList<Integer> simulateEvents(Map<String, List<ClientMessageInfo>> messages) {
         ArrayList<Integer> result = new ArrayList<>();
-        if (game.getTurn() == 10) {
+        if (game.getTurn() == 30) {
             System.exit(4);
         }
         game.passTurn(messages);
-        if (game.getTurn() == 5) {
-            System.out.println("Adding new ants...");
-            newAntIDs = new ArrayList<>();
-            result.add(addNewAnt(2, 2, 0, AntType.WORKER));
-        }
+        result = handleAntGeneration();
         showMap(true);
         return result;
     }
 
-    // private ArrayList<Integer> handleAntGeneration() {
+    private ArrayList<Integer> handleAntGeneration() {
+        ArrayList<Integer> result = new ArrayList<>();
+        for (Colony colony : game.getColonies()) {
+            int soldiers = colony.getToBeGeneratedSoldiersCount();
+            for (int i = 0; i < soldiers; i++) {
+                result.add(
+                        addNewAnt(colony.getBase().getX(), colony.getBase().getY(), colony.getId(), AntType.SOLDIER));
+            }
+            int workers = colony.getToBeGeneratedWorkersCount();
+            for (int i = 0; i < workers; i++) {
+                result.add(addNewAnt(colony.getBase().getX(), colony.getBase().getY(), colony.getId(), AntType.WORKER));
+            }
+            colony.setToBeGeneratedSoldiersCount(0);
+            colony.setToBeGeneratedWorkersCount(0);
+        }
 
-    // }
+        return result;
+    }
 
     private int addNewAnt(int x, int y, int colonyID, AntType type) {
         antsNum++;
@@ -150,7 +161,7 @@ public class GameHandler implements GameLogic {
         newAntIDs.add(id);
         Ant ant = new Ant(id, colonyID, x, y, type);
         try {
-            game.addAntToGame(ant, 0);
+            game.addAntToGame(ant, colonyID);
         } catch (GameActionException e) {
             e.printStackTrace();
         }
