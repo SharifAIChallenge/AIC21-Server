@@ -171,6 +171,7 @@ public class ClientHandler {
                         return;
                     if (msg == null)
                         continue;
+                    // System.out.println("client id: " + id + " msg: " + Json.GSON.toJson(msg));
                     client.send(msg);
                 } catch (Exception e) {
                     Log.i(logTag, "Message sending failure", e);
