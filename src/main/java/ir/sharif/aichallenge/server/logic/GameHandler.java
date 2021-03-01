@@ -74,7 +74,7 @@ public class GameHandler implements GameLogic {
         // Ant ant21 = new Ant(1, 0, 6, 0, AntType.SOLDIER);
         // Ant ant31 = new Ant(2, 0, 2, 0, AntType.WORKER);
 
-        Ant ant211 = new Ant(1, 1, 5, 5, AntType.SOLDIER);
+        Ant ant211 = new Ant(1, 1, 7, 0, AntType.WORKER);
         // Ant ant22 = new Ant(3, 1, 6, 5, AntType.WORKER);
         // Ant ant23 = new Ant(5, 1, 7, 5, AntType.WORKER);
 
