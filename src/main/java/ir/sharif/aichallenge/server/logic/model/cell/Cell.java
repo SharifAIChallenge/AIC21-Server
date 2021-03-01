@@ -96,11 +96,11 @@ public class Cell {
                 .filter(x -> x.getCarryingResourceType() == ResourceType.NONE)
                 .collect(Collectors.toList());
         if (freeWorkerAnts.size() <= getResourceAmount()) {
-            decreaseResource(freeWorkerAnts.size());
             for (Ant ant : freeWorkerAnts) {
                 ant.setCarryingResourceAmount(1);
                 ant.setCarryingResourceType(getResourceType());
             }
+            decreaseResource(freeWorkerAnts.size());
         } else {
             for (int i = 0; i < getResourceAmount(); i++) {
                 int randomIndex = random.nextInt(freeWorkerAnts.size());
@@ -109,6 +109,7 @@ public class Cell {
                 ant.setCarryingResourceAmount(1);
                 ant.setCarryingResourceType(getResourceType());
             }
+            decreaseResource(resourceAmount);
         }
     }
 }
