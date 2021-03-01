@@ -29,26 +29,30 @@ public class AttackHandler {
 
     public void handleAttacks() {
         for (Colony colony : antRepository.getColonies()) {
+            runAttack(colony.getId(), colony.getBase().getX(), colony.getBase().getY());
+        }
+
+        for (Colony colony : antRepository.getColonies()) {
             for (Ant ant : colony.getAnts()) {
                 if (ant.getAntType().equals(AntType.SOLDIER))
-                    runAttack(ant);
+                    runAttack(colony.getId(), ant.getXPosition(), ant.getYPosition());
             }
         }
         handleDeadAnts();
     }
 
-    private void runAttack(Ant ant) {
-        Cell[] cells = map.getAttackableCells(ant.getXPosition(), ant.getYPosition());
+    private void runAttack(int colonyId, int fromXPosition, int fromYPosition) {
+        Cell[] cells = map.getAttackableCells(fromXPosition, fromYPosition);
         List<Ant> workers = new ArrayList<>();
         List<Ant> soldiers = new ArrayList<>();
 
         for (Cell cell : cells) {
-            if (cell.isBase() && ant.getColonyId() != ((BaseCell) cell).getColony().getId()) {
+            if (cell.isBase() && colonyId != ((BaseCell) cell).getColony().getId()) {
                 ((BaseCell) cell).getColony().decreaseBaseHealth(1);
                 return;
             }
             for (Ant cellAnt : cell.getAnts()) {
-                if (cellAnt.getColonyId() != ant.getColonyId() && cellAnt.getHealth() > 0) {
+                if (cellAnt.getColonyId() != colonyId && cellAnt.getHealth() > 0) {
                     if (cellAnt.getAntType() == AntType.SOLDIER)
                         soldiers.add(cellAnt);
                     else
