@@ -10,6 +10,7 @@ import ir.sharif.aichallenge.server.engine.config.Configs;
 import ir.sharif.aichallenge.server.engine.network.ClientNetwork;
 import ir.sharif.aichallenge.server.engine.network.UINetwork;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -20,49 +21,49 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- * Core controller of the framework, controls the {@link GameLogic GameLogic}, Swarm.main loop of the game and
- * does the output controlling operations.
+ * Core controller of the framework, controls the {@link GameLogic GameLogic},
+ * Swarm.main loop of the game and does the output controlling operations.
  * <p>
- * This class runs the Swarm.main running thread of the framework. Class interacts with the clients, UI, and the
- * GameLogic itself.
- * Threads in this class, will gather the clients' events
- * (See also {@link ClientNetwork ClientNetwork}), send them to the Swarm.main Game
- * (See also {@link GameLogic GameLogic})
- * The output will be manipulated and sent to the appropriate controller within a inner module of the class
- * (OutputController).
- * The sequence of the creation and running the operations of this class will be through the call of the following
- * methods.
- * {@link GameServer#start() start()} and then at the
- * moment the external terminal user wants to shut down the games loop (except than waiting for the
- * {@link GameLogic GameLogic} to flag the end of the game), the
- * {@link GameServer#shutdown() shutdown()} method would be called.
- * Note that shutting down the {@link GameServer GameServer} will not immediately stop the threads,
- * actually it will set a shut down request flag in the class, which will closes the thread in the aspect of
- * accepting more inputs, and the terminate the threads as soon as the operation queue got empty.
+ * This class runs the Swarm.main running thread of the framework. Class
+ * interacts with the clients, UI, and the GameLogic itself. Threads in this
+ * class, will gather the clients' events (See also {@link ClientNetwork
+ * ClientNetwork}), send them to the Swarm.main Game (See also {@link GameLogic
+ * GameLogic}) The output will be manipulated and sent to the appropriate
+ * controller within a inner module of the class (OutputController). The
+ * sequence of the creation and running the operations of this class will be
+ * through the call of the following methods. {@link GameServer#start() start()}
+ * and then at the moment the external terminal user wants to shut down the
+ * games loop (except than waiting for the {@link GameLogic GameLogic} to flag
+ * the end of the game), the {@link GameServer#shutdown() shutdown()} method
+ * would be called. Note that shutting down the {@link GameServer GameServer}
+ * will not immediately stop the threads, actually it will set a shut down
+ * request flag in the class, which will closes the thread in the aspect of
+ * accepting more inputs, and the terminate the threads as soon as the operation
+ * queue got empty.
  * </p>
  */
 public class GameServer {
-    private final int mClientsNum;
+    private int mClientsNum;
     private ClientNetwork mClientNetwork;
     private UINetwork mUINetwork;
     private GameLogic mGameLogic;
     private OutputController mOutputController;
-    private ClientConfig[] mClientConfigs;
+    private List<ClientConfig> mClientConfigs;
 
     private Loop mLoop;
 
     private Semaphore serverSemaphore;
     private Semaphore simulationSemaphore;
 
-
     /**
-     * Constructor of the {@link GameServer GameServer}, connects the handler to the Clients through
-     * {@link ClientNetwork ClientNetwork} and to the UI through
+     * Constructor of the {@link GameServer GameServer}, connects the handler to the
+     * Clients through {@link ClientNetwork ClientNetwork} and to the UI through
      * {@link UINetwork UINetwork}.
      * <p>
      * The constructor accepts the instances of {@link GameServer GameServer} and
-     * {@link ClientNetwork ClientNetwork} classes. Then sets some configurations of the loops
-     * within the "turn_timeout.conf" file ({@see https://github.com/JavaChallenge/JGFramework/wiki wiki}).
+     * {@link ClientNetwork ClientNetwork} classes. Then sets some configurations of
+     * the loops within the "turn_timeout.conf" file
+     * ({@see https://github.com/JavaChallenge/JGFramework/wiki wiki}).
      * </p>
      */
     public GameServer(GameLogic gameLogic, String[] cmdArgs) {
@@ -96,20 +97,20 @@ public class GameServer {
     }
 
     private void setClientConfigs() {
-        mClientConfigs = new ClientConfig[mClientsNum];
+        mClientConfigs = new ArrayList<>();
         for (int i = 0; i < mClientsNum; i++) {
-            mClientConfigs[i] = new ClientConfig();
-            Configs.CLIENT_CONFIGS.add(mClientConfigs[i]);
+            mClientConfigs.add(new ClientConfig());
+            Configs.CLIENT_CONFIGS.add(mClientConfigs.get(i));
         }
     }
 
     private void initGame() {
         for (int i = 0; i < mClientsNum; ++i) {
-            int id = mClientNetwork.defineClient(mClientConfigs[i].getToken());
+            int id = mClientNetwork.defineClient(mClientConfigs.get(i).getToken());
             if (id != i) {
                 throw new RuntimeException("Client ID and client order does not match");
             }
-            mClientConfigs[i].setID(id);
+            mClientConfigs.get(i).setID(id);
         }
 
         if (Configs.PARAM_UI_ENABLE.getValue() == Boolean.TRUE) {
@@ -139,12 +140,13 @@ public class GameServer {
                 throw new RuntimeException("Waiting for ui interrupted");
             }
 
-            // Uncomment this if you want to send init and first turn message at the same time
-//            Message[] initialMessages = mGameLogic.getClientInitialMessages();
-//            for (int i = 0; i < initialMessages.length; ++i) {
-//                mClientNetwork.queue(i, initialMessages[i]);
-//            }
-//            mClientNetwork.sendAllBlocking();
+            // Uncomment this if you want to send init and first turn message at the same
+            // time
+            // Message[] initialMessages = mGameLogic.getClientInitialMessages();
+            // for (int i = 0; i < initialMessages.length; ++i) {
+            // mClientNetwork.queue(i, initialMessages[i]);
+            // }
+            // mClientNetwork.sendAllBlocking();
         } else {
             mClientNetwork.listen(Configs.PARAM_CLIENTS_PORT.getValue());
 
@@ -154,12 +156,13 @@ public class GameServer {
                 throw new RuntimeException("Waiting for clients interrupted");
             }
 
-            // Uncomment this if you want to send init and first turn message at the same time
-//            Message[] initialMessages = mGameLogic.getClientInitialMessages();
-//            for (int i = 0; i < initialMessages.length; ++i) {
-//                mClientNetwork.queue(i, initialMessages[i]);
-//            }
-//            mClientNetwork.sendAllBlocking();
+            // Uncomment this if you want to send init and first turn message at the same
+            // time
+            // Message[] initialMessages = mGameLogic.getClientInitialMessages();
+            // for (int i = 0; i < initialMessages.length; ++i) {
+            // mClientNetwork.queue(i, initialMessages[i]);
+            // }
+            // mClientNetwork.sendAllBlocking();
         }
     }
 
@@ -169,7 +172,8 @@ public class GameServer {
 
     /**
      * Starts the Swarm.main game ({@link GameLogic GameLogic}) loop and the
-     * {@link OutputController OutputController} operations in two new {@link Thread Thread}.
+     * {@link OutputController OutputController} operations in two new {@link Thread
+     * Thread}.
      */
     public void start() {
         mLoop = new Loop();
@@ -177,9 +181,11 @@ public class GameServer {
     }
 
     /**
-     * Registers a shutdown request into the Swarm.main loop and {@link OutputController OutputController} class
+     * Registers a shutdown request into the Swarm.main loop and
+     * {@link OutputController OutputController} class
      * <p>
-     * Note that the shutdown requests, will be responded as soon as the current queue of operations got freed.
+     * Note that the shutdown requests, will be responded as soon as the current
+     * queue of operations got freed.
      * </p>
      */
     public void shutdown() {
@@ -198,18 +204,20 @@ public class GameServer {
     }
 
     private void err(String title, Throwable exception) {
-        System.err.println(title + " failed with message " + exception.getMessage() + ", stack: " + Arrays.toString(exception.getStackTrace()));
+        System.err.println(title + " failed with message " + exception.getMessage() + ", stack: "
+                + Arrays.toString(exception.getStackTrace()));
     }
 
     /**
      * In order to give the loop a thread to be ran beside of the Swarm.main loop.
      * <p>
-     * This inner class has a {@link java.util.concurrent.Callable Callable} part, which is wrote down as a
-     * runnable code template. This template is composed by the multiple steps in every turn of the game.
+     * This inner class has a {@link java.util.concurrent.Callable Callable} part,
+     * which is wrote down as a runnable code template. This template is composed by
+     * the multiple steps in every turn of the game.
      * </p>
      */
     /*
-    this is main
+     * this is main
      */
     private class Loop implements Runnable {
 
@@ -218,93 +226,128 @@ public class GameServer {
         private Map<String, List<ClientMessageInfo>> clientEvents;
 
         /**
-         * The run method of the {@link Runnable Run    nable} interface which will create a
-         * {@link java.util.concurrent.Callable Callable} instance and call it in a while until the finish flag if the
-         * game had been raised or the shutdown request sent to the class (through
-         * {@link Loop#shutdown() shutdown()} method)
+         * The run method of the {@link Runnable Run nable} interface which will create
+         * a {@link java.util.concurrent.Callable Callable} instance and call it in a
+         * while until the finish flag if the game had been raised or the shutdown
+         * request sent to the class (through {@link Loop#shutdown() shutdown()} method)
          */
         @Override
         public void run() {
 
-            Runnable simulate = () -> {
-                long start, end;
-                start = System.currentTimeMillis();
-                Message[] output = mGameLogic.getClientMessages();
-                for (int i = 0; i < output.length; ++i) {
-                    mClientNetwork.queue(i, output[i]);
-                }
+            Runnable simulate = new Runnable() {
+                ArrayList<Integer> newIDs;
+                boolean newToAdd = false;
 
-                mClientNetwork.startReceivingAll();
-                mClientNetwork.sendAllBlocking();
-                mClientNetwork.setIsActiveFlags(mGameLogic.getActiveClients());
-                end = System.currentTimeMillis();
-                System.err.println((end - start) + " time spent to send the message.");
-                long timeout = mGameLogic.getClientResponseTimeout();
-                start = System.currentTimeMillis();
-                try {
-                    if (mClientNetwork.getNumberOfConnected() != 0) {
-                        serverSemaphore.tryAcquire(mClientNetwork.getNumberOfConnected(), timeout, TimeUnit.MILLISECONDS);
+                @Override
+                public void run() {
+
+                    if (newToAdd) {
+                        mClientsNum += newIDs.size();
+                        for (int id : newIDs) {
+                            ClientConfig config = new ClientConfig();
+                            mClientConfigs.add(config);
+                            Configs.CLIENT_CONFIGS.add(config);
+
+                            int newId = mClientNetwork.defineClient(config.getToken());
+                            if (id != newId) {
+                                throw new RuntimeException("Client ID and client order does not match" + " new id: "
+                                        + newId + " id: " + id);
+                            }
+                            config.setID(id);
+                            try {
+                                mClientNetwork.waitForClient(id);
+                            } catch (InterruptedException e) {
+                                // TODO Auto-generated catch block
+                                e.printStackTrace();
+                            }
+                        }
+                        newIDs = null;
+                        newToAdd = false;
                     }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                end = System.currentTimeMillis();
-                System.err.println(end - start + " time spent to receive client messages with timeout " + timeout);
-                mClientNetwork.stopReceivingAll();
-                if (mClientNetwork.getNumberOfConnected() != 0) {
-                    serverSemaphore.drainPermits();
-                }
 
-                clientEvents = IntStream.range(0, mClientsNum).boxed()
-                        .flatMap(i -> mClientNetwork.getReceivedEvents(i).stream().peek(info -> info.setPlayerId(i)))
-                        .collect(Collectors.groupingBy(ClientMessageInfo::getType));
-
-                try {
-                    Thread.sleep(10);
+                    long start, end;
                     start = System.currentTimeMillis();
-                    mGameLogic.simulateEvents(clientEvents);
-                    end = System.currentTimeMillis();
-                    System.err.println(end - start + " time spent to simulate events.");
-                } catch (Exception e) {
-                    err("Simulation", e);
-                    e.printStackTrace();
-                }
-
-                if (mGameLogic.isGameFinished()) {
-                    try {
-                        mGameLogic.generateOutputs(); // added at AIC 2019
-                        mGameLogic.terminate();
-                        Message[] endMessages = mGameLogic.getClientEndMessages(); // added at AIC 2020
-                        mClientNetwork.shutdownAll(endMessages);
-                        Thread.sleep(1000); // wait for clients to shutdown
-                        mClientNetwork.terminate();
-                        Message uiShutdown = new Message(MessageTypes.SHUTDOWN, new JsonObject());
-                        mOutputController.putMessage(uiShutdown);
-                        mOutputController.waitToSend();
-                        mLoop.shutdown();
-                        mOutputController.shutdown();
-                        mUINetwork.terminate();
-                    } catch (Exception e) {
-                        err("Finishing game", e);
+                    Message[] output = mGameLogic.getClientMessages();
+                    for (int i = 0; i < output.length; ++i) {
+                        mClientNetwork.queue(i, output[i]);
                     }
+
+                    mClientNetwork.startReceivingAll();
+                    mClientNetwork.sendAllBlocking();
+                    mClientNetwork.setIsActiveFlags(mGameLogic.getActiveClients());
+                    end = System.currentTimeMillis();
+                    System.err.println((end - start) + " time spent to send the message.");
+                    long timeout = mGameLogic.getClientResponseTimeout();
+                    start = System.currentTimeMillis();
                     try {
-                        Thread.sleep(300);
+                        if (mClientNetwork.getNumberOfConnected() != 0) {
+                            serverSemaphore.tryAcquire(mClientNetwork.getNumberOfConnected(), timeout,
+                                    TimeUnit.MILLISECONDS);
+                        }
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    System.exit(0);
-                    return;
+                    end = System.currentTimeMillis();
+                    System.err.println(end - start + " time spent to receive client messages with timeout " + timeout);
+                    mClientNetwork.stopReceivingAll();
+                    if (mClientNetwork.getNumberOfConnected() != 0) {
+                        serverSemaphore.drainPermits();
+                    }
+
+                    clientEvents = IntStream.range(0, mClientsNum).boxed()
+                            .flatMap(
+                                    i -> mClientNetwork.getReceivedEvents(i).stream().peek(info -> info.setPlayerId(i)))
+                            .collect(Collectors.groupingBy(ClientMessageInfo::getType));
+
+                    try {
+                        Thread.sleep(10);
+                        start = System.currentTimeMillis();
+                        newIDs = mGameLogic.simulateEvents(clientEvents);
+                        if (newIDs.size() > 0)
+                            newToAdd = true;
+                        end = System.currentTimeMillis();
+                        System.err.println(end - start + " time spent to simulate events.");
+                    } catch (Exception e) {
+                        err("Simulation", e);
+                        e.printStackTrace();
+                    }
+
+                    if (mGameLogic.isGameFinished()) {
+                        try {
+                            mGameLogic.generateOutputs(); // added at AIC 2019
+                            mGameLogic.terminate();
+                            Message[] endMessages = mGameLogic.getClientEndMessages(); // added at AIC 2020
+                            mClientNetwork.shutdownAll(endMessages);
+                            Thread.sleep(1000); // wait for clients to shutdown
+                            mClientNetwork.terminate();
+                            Message uiShutdown = new Message(MessageTypes.SHUTDOWN, new JsonObject());
+                            mOutputController.putMessage(uiShutdown);
+                            mOutputController.waitToSend();
+                            mLoop.shutdown();
+                            mOutputController.shutdown();
+                            mUINetwork.terminate();
+                        } catch (Exception e) {
+                            err("Finishing game", e);
+                        }
+                        try {
+                            Thread.sleep(300);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        System.exit(0);
+                        return;
+                    }
+                    simulationSemaphore.release();
                 }
-                simulationSemaphore.release();
             };
 
             while (!shutdownRequest) {
                 long start = System.currentTimeMillis();
                 try {
                     simulate.run();
-//                    System.err.println("Before Acquire() function");
+                    // System.err.println("Before Acquire() function");
                     simulationSemaphore.acquire();
-//                    System.err.println("After Acquire() function");
+                    // System.err.println("After Acquire() function");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -312,14 +355,10 @@ public class GameServer {
                 long remaining = mGameLogic.getTurnTimeout() - (end - start);
                 if (remaining <= 0) {
                     Log.i("GameServer", "Simulation timeout passed by spending " + (end - start) + " time!");
-                } /*else {
-                    try {
-                        Thread.sleep(remaining);
-                    } catch (InterruptedException e) {
-                        Log.i("GameServer", "Loop interrupted!");
-                        break;
-                    }
-                }*/
+                } /*
+                   * else { try { Thread.sleep(remaining); } catch (InterruptedException e) {
+                   * Log.i("GameServer", "Loop interrupted!"); break; } }
+                   */
             }
 
             synchronized (this) {
@@ -328,8 +367,8 @@ public class GameServer {
         }
 
         /**
-         * Will set the shutdown request flag in order to finish the Swarm.main {@link Loop Loop} at
-         * the first possible turn
+         * Will set the shutdown request flag in order to finish the Swarm.main
+         * {@link Loop Loop} at the first possible turn
          */
         public void shutdown() {
             this.shutdownRequest = true;

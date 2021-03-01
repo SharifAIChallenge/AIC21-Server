@@ -103,8 +103,8 @@ public class ClientNetwork extends NetServer {
      * @see {@link #omitAllClients}
      */
     public int defineClient(String token) {
-        if (isListening())
-            throw new RuntimeException("Server is not terminated when defineClient() is called.");
+        // if (isListening())
+        //     throw new RuntimeException("Server is not terminated when defineClient() is called.");
         int id = mClients.size();
         if (Configs.PARAM_AIC_DEPLOY.getValue()) {
             if (mTokens.containsKey(token))
@@ -188,12 +188,12 @@ public class ClientNetwork extends NetServer {
             if (!client.isConnected()) {
                 continue;
             }
-            
+
             // added in AIC 2021
             // if (!isActiveFlags.get(client.getId()).get()) {
-            //     continue;
+            // continue;
             // }
-            
+
             sendExecutor.submit(() -> {
                 try {
                     sendBarrier.await();
@@ -244,6 +244,10 @@ public class ClientNetwork extends NetServer {
     public void setIsActiveFlags(boolean[] isActives) {
         for (int i = 0; i < isActives.length; i++) {
             isActiveFlags.get(i).set(isActives[i]);
+            // added AIC 2021
+            if (!isActives[i] && mClients.get(i).isConnected()) {
+                mClients.get(i).terminate();
+            }
         }
     }
 

@@ -19,6 +19,10 @@ import ir.sharif.aichallenge.server.logic.model.chatbox.ChatMessage;
 import ir.sharif.aichallenge.server.logic.model.map.MapGenerator;
 import ir.sharif.aichallenge.server.logic.model.map.MapGenerator.MapGeneratorResult;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStreamReader;
 import java.util.*;
 
 import com.google.gson.JsonObject;
@@ -28,6 +32,9 @@ public class GameHandler implements GameLogic {
     private Game game;
     private Integer antsNum;
     private boolean showConsoleLog;
+    private ArrayList<Integer> deads = new ArrayList<>();
+    private boolean newAntsCreated = false;
+    private List<Integer> newAntIDs;
 
     public GameHandler(boolean showConsoleLog) {
         this.antsNum = 0;
@@ -70,12 +77,12 @@ public class GameHandler implements GameLogic {
         // antId, colonyId, x, y
         // one soldier for each
         antsNum = 2;
-        Ant ant11 = new Ant(0, 0, 7, 0, AntType.WORKER);
-        // Ant ant21 = new Ant(1, 0, 6, 0, AntType.SOLDIER);
+        Ant ant11 = new Ant(0, 0, 0, 0, AntType.WORKER);
+        // Ant ant21 = new Ant(1, 0, 0, 0, AntType.SOLDIER);
         // Ant ant31 = new Ant(2, 0, 2, 0, AntType.WORKER);
 
-        Ant ant211 = new Ant(1, 1, 5, 5, AntType.SOLDIER);
-        // Ant ant22 = new Ant(3, 1, 6, 5, AntType.WORKER);
+        Ant ant211 = new Ant(1, 1, 5, 5, AntType.WORKER);
+        // Ant ant22 = new Ant(3, 1, 0, 0, AntType.WORKER);
         // Ant ant23 = new Ant(5, 1, 7, 5, AntType.WORKER);
 
         try {
@@ -89,6 +96,38 @@ public class GameHandler implements GameLogic {
             System.out.println("Can't add ants to game!");
             e.printStackTrace();
         }
+
+        /**
+         * Runing process for test
+         */
+
+        // for (int i = 0; i < antsNum; i++) {
+        // final int id = i;
+        // new Thread(new Runnable() {
+        // @Override
+        // public void run() {
+        // try {
+        // // enter code here
+        // Process p = Runtime.getRuntime().exec("java -jar
+        // client/AIC21-Client-Java.jar");
+
+        // // enter code here
+        // try (BufferedReader input = new BufferedReader(new
+        // InputStreamReader(p.getInputStream()))) {
+        // String line;
+
+        // while ((line = input.readLine()) != null) {
+        // System.out.println(id + ":" + line);
+        // }
+        // }
+
+        // } catch (Exception err) {
+        // err.printStackTrace();
+        // }
+        // }
+        // }).start();
+        // }
+
     }
 
     @Override
@@ -111,12 +150,29 @@ public class GameHandler implements GameLogic {
     }
 
     @Override
-    public void simulateEvents(Map<String, List<ClientMessageInfo>> messages) {
+    public ArrayList<Integer> simulateEvents(Map<String, List<ClientMessageInfo>> messages) {
+        ArrayList<Integer> result = new ArrayList<>();
+        if (game.getTurn() == 5) {
+            System.out.println("now increase ants!");
+            antsNum++;
+            newAntsCreated = true;
+            newAntIDs = new ArrayList<>();
+            newAntIDs.add(antsNum - 1);
+            Ant ant31 = new Ant(2, 0, 2, 0, AntType.WORKER);
+            try {
+                game.addAntToGame(ant31, 0);
+            } catch (GameActionException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            result.add(antsNum - 1);
+        }
         if (game.getTurn() == 10) {
             System.exit(4);
         }
         game.passTurn(messages);
         showMap(true);
+        return result;
     }
 
     private void showMap(boolean showChatbox) {
@@ -176,11 +232,19 @@ public class GameHandler implements GameLogic {
         for (int i = 0; i < antsNum; i++) {
             if (deadAnts != null && deadAnts.keySet().contains(i)) {
                 messages[i] = new Message(MessageTypes.KILL, new JsonObject());
+                deads.add(i);
             } else {
-                messages[i] = new Message(MessageTypes.GAME_STATUS,
-                        Json.GSON.toJsonTree(new GameStatusDTO(this.game, i), GameStatusDTO.class).getAsJsonObject());
+                if (!deads.contains(i)) {
+                    if (newAntsCreated && newAntIDs.contains(i)) {
+                        messages[i] = new Message(MessageTypes.INIT, Json.GSON
+                                .toJsonTree(new GameConfigDTO(this.game, i), GameConfigDTO.class).getAsJsonObject());
+                    } else
+                        messages[i] = new Message(MessageTypes.GAME_STATUS, Json.GSON
+                                .toJsonTree(new GameStatusDTO(this.game, i), GameStatusDTO.class).getAsJsonObject());
+                }
             }
         }
+        newAntsCreated = false;
         return messages;
     }
 

@@ -1,5 +1,6 @@
 package ir.sharif.aichallenge.server.engine.network;
 
+import ir.sharif.aichallenge.server.common.network.Json;
 import ir.sharif.aichallenge.server.common.network.JsonSocket;
 import ir.sharif.aichallenge.server.common.network.data.ClientMessage;
 import ir.sharif.aichallenge.server.common.network.data.Message;
@@ -16,8 +17,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
 /**
- * {@link ClientHandler} handles a client, i.e. it is responsible
- * for sending/receiving messages to/from the client.
+ * {@link ClientHandler} handles a client, i.e. it is responsible for
+ * sending/receiving messages to/from the client.
  * <p>
  * After that a client is verified by the engine, engine assigns a
  * {@link ClientHandler} to that client.
@@ -113,8 +114,8 @@ public class ClientHandler {
      */
     private AtomicBoolean isActive;
 
-    public ClientHandler(int id, Semaphore simulationSemaphore, AtomicInteger currentTurn,
-                         AtomicBoolean endReceived, AtomicBoolean isActive) {
+    public ClientHandler(int id, Semaphore simulationSemaphore, AtomicInteger currentTurn, AtomicBoolean endReceived,
+            AtomicBoolean isActive) {
         this.id = id;
         messagesToSend = new LinkedBlockingDeque<>();
         receivedMessages = new ArrayList<>();
@@ -131,8 +132,8 @@ public class ClientHandler {
     }
 
     /**
-     * Queues a message for the client. Message is not sent until {@link #send}
-     * is called.
+     * Queues a message for the client. Message is not sent until {@link #send} is
+     * called.
      *
      * @param msg message to send.
      */
@@ -170,6 +171,7 @@ public class ClientHandler {
                         return;
                     if (msg == null)
                         continue;
+                    // System.out.println("client id: " + id + " msg: " + Json.GSON.toJson(msg));
                     client.send(msg);
                 } catch (Exception e) {
                     Log.i(logTag, "Message sending failure", e);
@@ -179,8 +181,8 @@ public class ClientHandler {
     }
 
     /**
-     * A message is valid if it is arrived in a valid time, which is determined
-     * by the engine.
+     * A message is valid if it is arrived in a valid time, which is determined by
+     * the engine.
      *
      * @return last validated message.
      * @see #getReceiver
@@ -216,16 +218,15 @@ public class ClientHandler {
     }
 
     /**
-     * The result of method is a {@link Runnable} object. When this
-     * runnable is called it receives a new message from the client and if it
-     * arrives in a valid time (which is checked using <code>timeValidator</code>)
-     * stores it in {@link #receivedMessages}.
+     * The result of method is a {@link Runnable} object. When this runnable is
+     * called it receives a new message from the client and if it arrives in a valid
+     * time (which is checked using <code>timeValidator</code>) stores it in
+     * {@link #receivedMessages}.
      *
-     * @param timeValidator <code>get</code> method of this object returns
-     *                      true if and only if it is called in a valid time.
-     *                      (valid time is the time when messages can be
-     *                      arrived from clients, e.g. half a second after
-     *                      each turn)
+     * @param timeValidator <code>get</code> method of this object returns true if
+     *                      and only if it is called in a valid time. (valid time is
+     *                      the time when messages can be arrived from clients, e.g.
+     *                      half a second after each turn)
      * @return a runnable which is used by engine to receive new messages of client
      */
     public Runnable getReceiver(Supplier<Boolean> timeValidator) {
@@ -243,7 +244,7 @@ public class ClientHandler {
                     if (!timeValidator.get() || lastReceivedMessage == null)
                         continue;
 
-                    if (lastReceivedMessage.getTurn() != currentTurn.get())  //Invalid message
+                    if (lastReceivedMessage.getTurn() != currentTurn.get()) // Invalid message
                     {
                         Log.i(logTag, "Message received late.");
                         continue;
@@ -254,7 +255,7 @@ public class ClientHandler {
                             simulationSemaphore.release();
                             endReceived.set(true);
                         }
-                        continue;   //skipping end message
+                        continue; // skipping end message
                     }
 
                     synchronized (receivedMessages) {
@@ -311,8 +312,8 @@ public class ClientHandler {
     }
 
     /**
-     * Blocks caller method at most <code>timeout</code> milliseconds until
-     * the client send a message.
+     * Blocks caller method at most <code>timeout</code> milliseconds until the
+     * client send a message.
      *
      * @throws InterruptedException if current thread is interrupted.
      */
@@ -335,8 +336,8 @@ public class ClientHandler {
     }
 
     /**
-     * Blocks caller method at most <code>timeout</code> milliseconds until a
-     * client is connected to this handler.
+     * Blocks caller method at most <code>timeout</code> milliseconds until a client
+     * is connected to this handler.
      *
      * @param timeout timeout in milliseconds
      * @throws InterruptedException if current thread is interrupted.

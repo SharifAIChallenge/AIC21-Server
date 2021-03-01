@@ -4,6 +4,7 @@ import ir.sharif.aichallenge.server.common.network.data.ClientMessageInfo;
 import ir.sharif.aichallenge.server.common.network.data.Message;
 import ir.sharif.aichallenge.server.engine.config.IntegerParam;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -46,11 +47,16 @@ public interface GameLogic {
     public Message[] getClientInitialMessages();
 
     /**
-     * Simulate events based on the current turn event and calculate the changes in game.
+     * Simulate events based on the current turn event and calculate the changes in
+     * game.
      *
-     * @param events Events that is happened in the game. It is a map from type of event to event itself
+     * @param events Events that is happened in the game. It is a map from type of
+     *               event to event itself
+     * 
+     * @return Added in AIC 2021: returns clientIDs that are added dynamically in
+     *         this turn
      */
-    public void simulateEvents(Map<String, List<ClientMessageInfo>> events);
+    public ArrayList<Integer> simulateEvents(Map<String, List<ClientMessageInfo>> events);
 
     /**
      * This method generates the output based on the changes that were calculated in
@@ -64,7 +70,7 @@ public interface GameLogic {
 
     public Message[] getClientMessages();
 
-    public Message[] getClientEndMessages();   //Added at AIC20
+    public Message[] getClientEndMessages(); // Added at AIC20
 
     public boolean isGameFinished();
 
