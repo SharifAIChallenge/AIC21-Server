@@ -59,7 +59,7 @@ public class GameMap {
             for (int j = xPos - i; j <= xPos + i; j++) {
                 for (int k = yPos - i; k <= yPos + i; k++) {
                     if (getManhattanDistance(j, k, xPos, yPos) > i)
-                        return;
+                        continue;
                     if (resourceType == getCell(j, k).getResourceType()) {
                         cells[k][j].increaseResource(resourceAmount);
                         return;
