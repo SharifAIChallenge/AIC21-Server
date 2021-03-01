@@ -22,7 +22,7 @@ class CellTest {
 
     @BeforeEach
     void setUp() {
-        baseCell = new Cell(0, 0, CellType.BASE, ResourceType.NONE, -1);
+        baseCell = new BaseCell(0, 0);
         wallCell = new Cell(0, 1, CellType.WALL, ResourceType.NONE, -1);
         emptyCell = new Cell(0, 2, CellType.EMPTY, ResourceType.NONE, -1);
         breadEmptyCell = new Cell(0, 3, CellType.EMPTY, ResourceType.BREAD, 1);

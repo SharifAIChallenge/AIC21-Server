@@ -17,27 +17,7 @@ class AntRepositoryTest {
     }
 
     @Test
-    void getColony() {
-    }
-
-    @Test
-    void getAnt() {
-    }
-
-    @Test
-    void getColonies() {
-    }
-
-    @Test
-    void doesAntExists() {
-    }
-
-    @Test
     void addAnt() {
-    }
-
-    @Test
-    void getAllAnts() {
     }
 
     @Test

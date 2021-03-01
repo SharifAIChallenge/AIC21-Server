@@ -7,17 +7,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class GameJudge {
-    private final Game game;
+    private final AntRepository antRepository;
 
-    public GameJudge(Game game) {
-        this.game = game;
+    public GameJudge(AntRepository antRepository) {
+        this.antRepository = antRepository;
     }
 
     public Colony getWinner() {
-        List<Colony> aliveColonies = getAliveColonies(game.getColonies());
+        List<Colony> aliveColonies = getAliveColonies(antRepository.getColonies());
         switch (aliveColonies.size()) {
             case 0:
-                return getWinnerByAssets(game.getColonies());
+                return getWinnerByAssets(antRepository.getColonies());
             case 1:
                 return aliveColonies.get(0);
             default:
@@ -39,14 +39,14 @@ class ColonyComparator implements Comparator<Colony> {
 
     @Override
     public int compare(Colony o1, Colony o2) {
-        if(o1.getBaseHealth() != o2.getBaseHealth())
+        if (o1.getBaseHealth() != o2.getBaseHealth())
             return o1.getBaseHealth() - o2.getBaseHealth();
-        if(o1.getAllAntsGeneratedCount() != o2.getAllAntsGeneratedCount())
+        if (o1.getAllAntsGeneratedCount() != o2.getAllAntsGeneratedCount())
             return o1.getAllAntsGeneratedCount() - o2.getAllAntsGeneratedCount();
-        if(o1.getAllSoldierAntsGeneratedCount() != o2.getAllSoldierAntsGeneratedCount())
+        if (o1.getAllSoldierAntsGeneratedCount() != o2.getAllSoldierAntsGeneratedCount())
             return o1.getAllSoldierAntsGeneratedCount() - o2.getAllSoldierAntsGeneratedCount();
-        if(o1.getAllResources() != o2.getAllResources())
-            return o1.getAllResources() - o2.getAllResources();
+        if (o1.getAllResourcesAmount() != o2.getAllResourcesAmount())
+            return o1.getAllResourcesAmount() - o2.getAllResourcesAmount();
         return 0;
     }
 }

@@ -8,8 +8,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GameMapTest {
 
+    private GameMap gameMap;
     @BeforeEach
     void setUp() {
+        MapGenerator.MapGeneratorResult generatedMap = MapGenerator.generateRandomMap(10, 10);
+        gameMap = generatedMap.map;
     }
 
     @AfterEach
@@ -26,14 +29,6 @@ class GameMapTest {
 
     @Test
     void getAttackableCells() {
-    }
-
-    @Test
-    void getWidth() {
-    }
-
-    @Test
-    void getHeight() {
     }
 
     @Test
