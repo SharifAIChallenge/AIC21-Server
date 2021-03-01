@@ -18,12 +18,15 @@ import ir.sharif.aichallenge.server.logic.model.cell.CellType;
 import ir.sharif.aichallenge.server.logic.model.chatbox.ChatMessage;
 import ir.sharif.aichallenge.server.logic.model.map.MapGenerator;
 import ir.sharif.aichallenge.server.logic.model.map.MapGenerator.MapGeneratorResult;
+import ir.sharif.aichallenge.server.logic.utility.AntGenerator;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.util.*;
+
+import javax.naming.spi.DirStateFactory.Result;
 
 import com.google.gson.JsonObject;
 
@@ -97,37 +100,8 @@ public class GameHandler implements GameLogic {
             e.printStackTrace();
         }
 
-        /**
-         * Runing process for test
-         */
-
-        // for (int i = 0; i < antsNum; i++) {
-        // final int id = i;
-        // new Thread(new Runnable() {
-        // @Override
-        // public void run() {
-        // try {
-        // // enter code here
-        // Process p = Runtime.getRuntime().exec("java -jar
-        // client/AIC21-Client-Java.jar");
-
-        // // enter code here
-        // try (BufferedReader input = new BufferedReader(new
-        // InputStreamReader(p.getInputStream()))) {
-        // String line;
-
-        // while ((line = input.readLine()) != null) {
-        // System.out.println(id + ":" + line);
-        // }
-        // }
-
-        // } catch (Exception err) {
-        // err.printStackTrace();
-        // }
-        // }
-        // }).start();
-        // }
-
+        AntGenerator.runNewAnt(AntType.WORKER, 0);
+        AntGenerator.runNewAnt(AntType.WORKER, 1);
     }
 
     @Override
@@ -152,27 +126,36 @@ public class GameHandler implements GameLogic {
     @Override
     public ArrayList<Integer> simulateEvents(Map<String, List<ClientMessageInfo>> messages) {
         ArrayList<Integer> result = new ArrayList<>();
-        if (game.getTurn() == 5) {
-            System.out.println("now increase ants!");
-            antsNum++;
-            newAntsCreated = true;
-            newAntIDs = new ArrayList<>();
-            newAntIDs.add(antsNum - 1);
-            Ant ant31 = new Ant(2, 0, 2, 0, AntType.WORKER);
-            try {
-                game.addAntToGame(ant31, 0);
-            } catch (GameActionException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            result.add(antsNum - 1);
-        }
         if (game.getTurn() == 10) {
             System.exit(4);
         }
         game.passTurn(messages);
+        if (game.getTurn() == 5) {
+            System.out.println("Adding new ants...");
+            newAntIDs = new ArrayList<>();
+            result.add(addNewAnt(2, 2, 0, AntType.WORKER));
+        }
         showMap(true);
         return result;
+    }
+
+    // private ArrayList<Integer> handleAntGeneration() {
+
+    // }
+
+    private int addNewAnt(int x, int y, int colonyID, AntType type) {
+        antsNum++;
+        int id = antsNum - 1;
+        newAntsCreated = true;
+        newAntIDs.add(id);
+        Ant ant = new Ant(id, colonyID, x, y, type);
+        try {
+            game.addAntToGame(ant, 0);
+        } catch (GameActionException e) {
+            e.printStackTrace();
+        }
+        AntGenerator.runNewAnt(type, id);
+        return id;
     }
 
     private void showMap(boolean showChatbox) {
