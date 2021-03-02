@@ -20,6 +20,7 @@ public class AttackHandler {
     private GameMap map;
     private Random rand;
     private HashMap<Integer, Ant> newDeadAnts;
+    private List<AttackSummary> attackSummaries;
 
     public AttackHandler(GameMap map, AntRepository antRepository) {
         this.map = map;
@@ -28,22 +29,24 @@ public class AttackHandler {
     }
 
     public void handleAttacks() {
+        attackSummaries = new ArrayList<>();
+
         for (Colony colony : antRepository.getColonies()) {
             runAttack(colony.getId(), colony.getBase().getX(), colony.getBase().getY(),
-                    ConstConfigs.BASE_ATTACK_DAMAGE, ConstConfigs.BASE_MAX_ATTACK_DISTANCE);
+                    ConstConfigs.BASE_ATTACK_DAMAGE, ConstConfigs.BASE_MAX_ATTACK_DISTANCE, -1);
         }
 
         for (Colony colony : antRepository.getColonies()) {
             for (Ant ant : colony.getAnts()) {
                 if (ant.getAntType().equals(AntType.SOLDIER))
                     runAttack(colony.getId(), ant.getXPosition(), ant.getYPosition(),
-                            ConstConfigs.ANT_ATTACK_DAMAGE, ConstConfigs.ANT_MAX_ATTACK_DISTANCE);
+                            ConstConfigs.ANT_ATTACK_DAMAGE, ConstConfigs.ANT_MAX_ATTACK_DISTANCE, ant.getId());
             }
         }
         handleDeadAnts();
     }
 
-    private void runAttack(int colonyId, int fromXPosition, int fromYPosition, int damage, int maxDistance) {
+    private void runAttack(int colonyId, int fromXPosition, int fromYPosition, int damage, int maxDistance, int attackerId) {
         Cell[] cells = map.getAttackableCells(fromXPosition, fromYPosition, maxDistance);
         List<Ant> workers = new ArrayList<>();
         List<Ant> soldiers = new ArrayList<>();
@@ -64,14 +67,22 @@ public class AttackHandler {
         }
 
         if (soldiers.size() > 0) {
-            int index = rand.nextInt(soldiers.size());
-            soldiers.get(index).decreaseHealth(damage);
+            runAttack(fromXPosition, fromYPosition, damage, attackerId, soldiers);
             return;
         }
 
         if (workers.size() > 0) {
-            int index = rand.nextInt(workers.size());
-            workers.get(index).decreaseHealth(damage);
+            runAttack(fromXPosition, fromYPosition, damage, attackerId, workers);
+        }
+    }
+
+    private void runAttack(int fromXPosition, int fromYPosition, int damage, int attackerId, List<Ant> ants) {
+        int index = rand.nextInt(ants.size());
+        Ant defender = ants.get(index);
+        defender.decreaseHealth(damage);
+        if (attackerId != -1) {
+            AttackSummary attackSummary = new AttackSummary(attackerId, defender.getId(), fromYPosition, fromXPosition, defender.getYPosition(), defender.getXPosition());
+            attackSummaries.add(attackSummary);
         }
     }
 
@@ -117,5 +128,9 @@ public class AttackHandler {
 
     public HashMap<Integer, Ant> getNewDeadAnts() {
         return newDeadAnts;
+    }
+
+    public List<AttackSummary> getAttackSummaries() {
+        return attackSummaries;
     }
 }

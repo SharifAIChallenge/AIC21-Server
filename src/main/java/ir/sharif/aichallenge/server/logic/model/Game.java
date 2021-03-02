@@ -4,6 +4,7 @@ import ir.sharif.aichallenge.server.common.network.data.*;
 import ir.sharif.aichallenge.server.common.util.Log;
 import ir.sharif.aichallenge.server.logic.config.ConstConfigs;
 import ir.sharif.aichallenge.server.logic.handlers.AttackHandler;
+import ir.sharif.aichallenge.server.logic.handlers.AttackSummary;
 import ir.sharif.aichallenge.server.logic.handlers.exceptions.GameActionException;
 import ir.sharif.aichallenge.server.logic.model.Colony.Colony;
 import ir.sharif.aichallenge.server.logic.model.ant.Ant;
@@ -88,10 +89,13 @@ public class Game {
             cells.add(new CellDTO(cell));
         }
         turnLog.cells = cells;
-        List<AttackDTO> attacks = new ArrayList<>();
+        List<AttackSummary> attackSummaries = attackHandler.getAttackSummaries();
+        List<AttackDTO> attacks = attackSummaries.stream()
+                .map(x -> new AttackDTO(x.attacker_id, x.defender_id, x.src_row, x.src_col, x.dst_row, x.dst_col))
+                .collect(Collectors.toList());
+        turnLog.attacks = attacks;
 
-
-        // TODO: turnLog.attacks
+        graphicLogDTO.turns.add(turnLog);
     }
 
     public GameJudge getGameJudge() {
@@ -102,7 +106,7 @@ public class Game {
     private Map<String, List<ClientMessageInfo>> filterMessages(Map<String, List<ClientMessageInfo>> messages) {
         Map<String, List<ClientMessageInfo>> filteredMessages = new HashMap<>();
         for (String key : messages.keySet()) {
-            filteredMessages.put(key, new ArrayList<ClientMessageInfo>());
+            filteredMessages.put(key, new ArrayList<>());
             for (ClientMessageInfo info : messages.get(key)) {
                 if (antRepository.getAnt(info.getPlayerId()) != null) {
                     List<ClientMessageInfo> list = filteredMessages.get(key);
