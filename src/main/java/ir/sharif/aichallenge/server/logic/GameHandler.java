@@ -79,7 +79,7 @@ public class GameHandler implements GameLogic {
         // add initial ants to game (for test)
         // antId, colonyId, x, y
         // one soldier for each
-        antsNum = 8;
+        antsNum = 2;
         ArrayList<Ant> initialAnts = new ArrayList<>();
         for (int i = 0; i < antsNum; i++) {
             int colonyID = (i < 4) ? 0 : 1;
@@ -97,7 +97,7 @@ public class GameHandler implements GameLogic {
         }
 
         for (Ant ant : initialAnts) {
-            AntGenerator.runNewAnt(ant.getAntType(), ant.getId());
+            // AntGenerator.runNewAnt(ant.getAntType(), ant.getId());
         }
 
     }
@@ -233,10 +233,6 @@ public class GameHandler implements GameLogic {
                     } else {
                         messages[i] = new Message(MessageTypes.GAME_STATUS, Json.GSON
                                 .toJsonTree(new GameStatusDTO(this.game, i), GameStatusDTO.class).getAsJsonObject());
-                        if (i == 0) {
-                            System.out.println("message to ant " + i + ": "
-                                    + Json.GSON.toJson(new GameStatusDTO(this.game, i), GameStatusDTO.class));
-                        }
                     }
                 }
             }

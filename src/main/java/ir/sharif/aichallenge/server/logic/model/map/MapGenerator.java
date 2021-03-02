@@ -19,8 +19,8 @@ public class MapGenerator {
 
     // cells[width][height]
     public static MapGeneratorResult generateRandomMap() {
-        int width = ConstConfigs.MAP_WIDTH;
         int height = ConstConfigs.MAP_HEIGHT;
+        int width = ConstConfigs.MAP_WIDTH;
         Cell[][] cells = new Cell[height][width];
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
@@ -43,8 +43,8 @@ public class MapGenerator {
         GameMap map = new GameMap(cells, width, height);
         int base1x = 0;
         int base1y = 0;
-        int base2x = 6;
-        int base2y = 6;
+        int base2x = width - 1;
+        int base2y = height - 1;
         cells[base1y][base1x] = new BaseCell(base1x, base1y);
         cells[base2y][base2x] = new BaseCell(base2x, base2y);
         Colony firstColony = new Colony(0, (BaseCell) cells[base1y][base1x], 100);

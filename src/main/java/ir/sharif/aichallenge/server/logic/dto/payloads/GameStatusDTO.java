@@ -21,7 +21,7 @@ public class GameStatusDTO {
             this.current_y = currentAnt.getYPosition();
             this.current_resource_value = currentAnt.getCarryingResourceAmount();
             this.current_resource_type = currentAnt.getAntType().getValue();
-            this.health = currentAnt.getHealth();
+            this.health = currentAnt.getHealth();            
             this.around_cells = Arrays.stream(game.getMap().getAntViewableCells(current_x, current_y))
                     .map(x -> new AroundCell(x, currentAnt)).toArray(AroundCell[]::new);
             this.chat_box = game.getColony(currentAnt.getColonyId()).getChatBox().getChatMessages().stream()
