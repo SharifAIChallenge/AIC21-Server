@@ -10,6 +10,6 @@ public class CellTypeDTO {
     public CellTypeDTO(int row, int col, CellType cell_type) {
         this.row = row;
         this.col = col;
-        this.cell_type = cell_type.getValue();
+        this.cell_type = (cell_type == CellType.BASE) ? 0 : cell_type.getValue() + 1;
     }
 }

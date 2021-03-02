@@ -22,6 +22,7 @@ import ir.sharif.aichallenge.server.logic.model.chatbox.ChatMessage;
 import ir.sharif.aichallenge.server.logic.model.map.MapGenerator;
 import ir.sharif.aichallenge.server.logic.model.map.MapGenerator.MapGeneratorResult;
 import ir.sharif.aichallenge.server.logic.utility.AntGenerator;
+import ir.sharif.aichallenge.server.logic.utility.GraphicUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -257,6 +258,7 @@ public class GameHandler implements GameLogic {
             Log.i("Game Finished", "Winner Colony ID: " + winner.getId());
             Log.i("Killer!", "Killing ants... [if not worked, kill them by hand :)]");
             AntGenerator.killAnts();
+            GraphicUtils.generateLogFile(game.graphicLogDTO);
         }
         return game.isFinished();
     }

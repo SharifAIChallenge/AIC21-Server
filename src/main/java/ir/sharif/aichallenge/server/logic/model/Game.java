@@ -94,7 +94,6 @@ public class Game {
                 .map(x -> new AttackDTO(x.attacker_id, x.defender_id, x.src_row, x.src_col, x.dst_row, x.dst_col))
                 .collect(Collectors.toList());
         turnLog.attacks = attacks;
-
         graphicLogDTO.turns.add(turnLog);
     }
 
