@@ -3,6 +3,8 @@ package ir.sharif.aichallenge.server.logic.dto.payloads;
 import ir.sharif.aichallenge.server.logic.model.Game;
 import ir.sharif.aichallenge.server.logic.model.ant.Ant;
 
+import java.util.Arrays;
+
 public class GameStatusDTO {
     AroundCell[] around_cells;
     ChatBoxMessageDTO[] chat_box;
@@ -20,10 +22,16 @@ public class GameStatusDTO {
             this.current_resource_value = currentAnt.getCarryingResourceAmount();
             this.current_resource_type = currentAnt.getAntType().getValue();
             this.health = currentAnt.getHealth();
+            // TODO: around cells
+            this.around_cells = Arrays.stream(game.getMap()
+                    .getAntViewableCells(current_x, current_y))
+                    .map(x -> new AroundCell(x, currentAnt))
+                    .toArray(AroundCell[]::new);
+            // TODO: chat box
+            this.chat_box = game.getColony(currentAnt.getColonyId())
+                    .getChatBox().getChatMessages().stream()
+                    .map(ChatBoxMessageDTO::new)
+                    .toArray(ChatBoxMessageDTO[]::new);
         }
-        // TODO: around cells
-        this.around_cells = null;
-        // TODO: chat box
-        this.chat_box = null;
     }
 }

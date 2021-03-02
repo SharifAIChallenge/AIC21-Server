@@ -26,12 +26,12 @@ public class GameMap {
         return cells[((yPosition % width) + width) % width][((xPosition % height) + height) % height];
     }
 
-    public Cell[] getViewableCells(int xPosition, int yPosition) {
-        return getAroundCells(xPosition, yPosition, ConstConfigs.MAX_VIEW_DISTANCE);
+    public Cell[] getAntViewableCells(int xPosition, int yPosition) {
+        return getAroundCells(xPosition, yPosition, ConstConfigs.ANT_MAX_VIEW_DISTANCE);
     }
 
-    public Cell[] getAttackableCells(int xPosition, int yPosition) {
-        return getAroundCells(xPosition, yPosition, ConstConfigs.MAX_ATTACK_DISTANCE);
+    public Cell[] getAttackableCells(int xPosition, int yPosition, int maxDistance) {
+        return getAroundCells(xPosition, yPosition, maxDistance);
     }
 
     private Cell[] getAroundCells(int xPosition, int yPosition, int maxDistance) {

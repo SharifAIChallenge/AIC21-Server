@@ -29,26 +29,28 @@ public class AttackHandler {
 
     public void handleAttacks() {
         for (Colony colony : antRepository.getColonies()) {
-            runAttack(colony.getId(), colony.getBase().getX(), colony.getBase().getY());
+            runAttack(colony.getId(), colony.getBase().getX(), colony.getBase().getY(),
+                    ConstConfigs.BASE_ATTACK_DAMAGE, ConstConfigs.BASE_MAX_ATTACK_DISTANCE);
         }
 
         for (Colony colony : antRepository.getColonies()) {
             for (Ant ant : colony.getAnts()) {
                 if (ant.getAntType().equals(AntType.SOLDIER))
-                    runAttack(colony.getId(), ant.getXPosition(), ant.getYPosition());
+                    runAttack(colony.getId(), ant.getXPosition(), ant.getYPosition(),
+                            ConstConfigs.ANT_ATTACK_DAMAGE, ConstConfigs.ANT_MAX_ATTACK_DISTANCE);
             }
         }
         handleDeadAnts();
     }
 
-    private void runAttack(int colonyId, int fromXPosition, int fromYPosition) {
-        Cell[] cells = map.getAttackableCells(fromXPosition, fromYPosition);
+    private void runAttack(int colonyId, int fromXPosition, int fromYPosition, int damage, int maxDistance) {
+        Cell[] cells = map.getAttackableCells(fromXPosition, fromYPosition, maxDistance);
         List<Ant> workers = new ArrayList<>();
         List<Ant> soldiers = new ArrayList<>();
 
         for (Cell cell : cells) {
             if (cell.isBase() && colonyId != ((BaseCell) cell).getColony().getId()) {
-                ((BaseCell) cell).getColony().decreaseBaseHealth(1);
+                ((BaseCell) cell).getColony().decreaseBaseHealth(damage);
                 return;
             }
             for (Ant cellAnt : cell.getAnts()) {
@@ -63,13 +65,13 @@ public class AttackHandler {
 
         if (soldiers.size() > 0) {
             int index = rand.nextInt(soldiers.size());
-            soldiers.get(index).decreaseHealth(1);
+            soldiers.get(index).decreaseHealth(damage);
             return;
         }
 
         if (workers.size() > 0) {
             int index = rand.nextInt(workers.size());
-            workers.get(index).decreaseHealth(1);
+            workers.get(index).decreaseHealth(damage);
         }
     }
 

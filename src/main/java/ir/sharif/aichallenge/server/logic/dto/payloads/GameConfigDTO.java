@@ -27,7 +27,7 @@ public class GameConfigDTO {
         this.base_y = game.getColony(ant.getColonyId()).getBase().getY();
         this.health_kargar = ConstConfigs.WORKER_ANT_INITIAL_HEALTH;
         this.health_sarbaaz = ConstConfigs.SOLDIER_ANT_INITIAL_HEALTH;
-        this.attack_distance = ConstConfigs.MAX_ATTACK_DISTANCE;
+        this.attack_distance = ConstConfigs.ANT_MAX_ATTACK_DISTANCE;
         this.generate_kargar = ConstConfigs.GENERATE_WORKER_BREAD_AMOUNT;
         this.generate_sarbaaz = ConstConfigs.GENERATE_SOLDIER_GRASS_AMOUNT;
         this.rate_death_resource = ConstConfigs.RATE_DEATH_RESOURCE;
