@@ -10,3 +10,4 @@ To run locally follow these instructions
 - create a `client/` directory besides jar file
 - put java client's (soon other cilents!) jar files in these locations: `client/soldier.jar` and `client/worker.jar`
 - run server: `java -jar server.jar` (or `java -jar AIC21-Server-1.0-SNAPSHOT-jar-with-dependencies.jar`)
+- output graphics log: `test1.json`
