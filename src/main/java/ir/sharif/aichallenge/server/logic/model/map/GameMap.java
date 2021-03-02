@@ -10,6 +10,7 @@ import ir.sharif.aichallenge.server.logic.model.cell.ResourceType;
 import java.util.*;
 
 public class GameMap {
+    //cells[width][height]
     private Cell[][] cells;
     // y axis
     private int width;
@@ -62,7 +63,7 @@ public class GameMap {
                         continue;
                     Cell cell = getCell(j, k);
 
-                    if(cell.getResourceType() == ResourceType.NONE){
+                    if (cell.getResourceType() == ResourceType.NONE) {
                         cell.setResourceType(resourceType);
                         cell.setResourceAmount(0);
                     }

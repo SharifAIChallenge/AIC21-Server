@@ -1,7 +1,9 @@
 package ir.sharif.aichallenge.server.logic.model.map;
 
 import java.util.HashMap;
+import java.util.Random;
 
+import ir.sharif.aichallenge.server.logic.config.ConstConfigs;
 import ir.sharif.aichallenge.server.logic.model.Colony.Colony;
 import ir.sharif.aichallenge.server.logic.model.cell.BaseCell;
 import ir.sharif.aichallenge.server.logic.model.cell.Cell;
@@ -9,11 +11,30 @@ import ir.sharif.aichallenge.server.logic.model.cell.CellType;
 import ir.sharif.aichallenge.server.logic.model.cell.ResourceType;
 
 public class MapGenerator {
+    private static final double breadCellProb = 0.2;
+    private static final double grassCellProb = 0.2;
+    private static final double wallCellProb = 0.2;
+    private static Random random = new Random();
+    private static int playersCount;
+
+    //cells[width][height]
     public static MapGeneratorResult generateRandomMap(int width, int height) {
-        Cell[][] cells = new Cell[height][width];
+        Cell[][] cells = new Cell[width][height];
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                cells[i][j] = new Cell(j, i, CellType.EMPTY, ResourceType.NONE, 0);
+                int cellTypeSelector = random.nextInt();
+                Cell newCell;
+
+                if (cellTypeSelector < breadCellProb)
+                    newCell = new Cell(i, j, CellType.EMPTY, ResourceType.BREAD, 1);
+                else if (cellTypeSelector < breadCellProb + grassCellProb)
+                    newCell = new Cell(i, j, CellType.EMPTY, ResourceType.GRASS, 1);
+                else if (cellTypeSelector < breadCellProb + grassCellProb + wallCellProb)
+                    newCell = new Cell(i, j, CellType.WALL, ResourceType.NONE, 0);
+                else
+                    newCell = new Cell(i, j, CellType.EMPTY, ResourceType.NONE, 0);
+
+                cells[j][i] = newCell;
             }
         }
         // add resources here (Type, Value)
