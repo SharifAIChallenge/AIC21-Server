@@ -9,5 +9,8 @@
         <module name="AIC21-Server" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="AIC21-Server" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>
