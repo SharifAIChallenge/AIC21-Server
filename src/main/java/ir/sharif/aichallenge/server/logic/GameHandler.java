@@ -5,7 +5,9 @@ import ir.sharif.aichallenge.server.common.network.data.ActionInfo;
 import ir.sharif.aichallenge.server.common.network.data.ClientMessageInfo;
 import ir.sharif.aichallenge.server.common.network.data.Message;
 import ir.sharif.aichallenge.server.common.network.data.MessageTypes;
+import ir.sharif.aichallenge.server.common.util.Log;
 import ir.sharif.aichallenge.server.engine.core.GameLogic;
+import ir.sharif.aichallenge.server.logic.config.ConfigReader;
 import ir.sharif.aichallenge.server.logic.dto.payloads.GameConfigDTO;
 import ir.sharif.aichallenge.server.logic.dto.payloads.GameStatusDTO;
 import ir.sharif.aichallenge.server.logic.handlers.exceptions.GameActionException;
@@ -22,7 +24,10 @@ import ir.sharif.aichallenge.server.logic.utility.AntGenerator;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
 
@@ -71,7 +76,8 @@ public class GameHandler implements GameLogic {
 
     @Override
     public void init() {
-        // TODO: map generation
+        // read config file
+        ConfigReader.readConfigFile();
         // generate map
         MapGeneratorResult generatedMap = MapGenerator.generateRandomMap();
         // create Game
@@ -79,7 +85,7 @@ public class GameHandler implements GameLogic {
         // add initial ants to game (for test)
         // antId, colonyId, x, y
         // one soldier for each
-        antsNum = 2;
+        antsNum = 8;
         ArrayList<Ant> initialAnts = new ArrayList<>();
         for (int i = 0; i < antsNum; i++) {
             int colonyID = (i < 4) ? 0 : 1;
@@ -97,7 +103,7 @@ public class GameHandler implements GameLogic {
         }
 
         for (Ant ant : initialAnts) {
-            // AntGenerator.runNewAnt(ant.getAntType(), ant.getId());
+            AntGenerator.runNewAnt(ant.getAntType(), ant.getId());
         }
 
     }
@@ -124,9 +130,6 @@ public class GameHandler implements GameLogic {
     @Override
     public ArrayList<Integer> simulateEvents(Map<String, List<ClientMessageInfo>> messages) {
         ArrayList<Integer> result = new ArrayList<>();
-        if (game.getTurn() == 5) {
-            System.exit(4);
-        }
         game.passTurn(messages);
         result = handleAntGeneration();
         showMap(true);
@@ -249,6 +252,12 @@ public class GameHandler implements GameLogic {
 
     @Override
     public boolean isGameFinished() {
+        if (game.isFinished()) {
+            Colony winner = game.getGameJudge().getWinner();
+            Log.i("Game Finished", "Winner Colony ID: " + winner.getId());
+            Log.i("Killer!", "Killing ants... [if not worked, kill them by hand :)]");
+            AntGenerator.killAnts();
+        }
         return game.isFinished();
     }
 

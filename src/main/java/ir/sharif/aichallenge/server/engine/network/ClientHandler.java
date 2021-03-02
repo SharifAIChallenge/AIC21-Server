@@ -385,8 +385,9 @@ public class ClientHandler {
      */
     private void handleIOE(IOException e) {
         numOfExceptions++;
-        if (numOfExceptions > MAX_NUM_EXCEPTIONS)
+        if (numOfExceptions > MAX_NUM_EXCEPTIONS) {
             terminate();
+        }
     }
 
     public int getId() {

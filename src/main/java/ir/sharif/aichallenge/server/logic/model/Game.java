@@ -58,11 +58,16 @@ public class Game {
         handleAntsMove(messages);
         map.getAllCells().forEach(Cell::manageResources);
         if (isFinished()) {
+            System.out.println("salam salam");
             Colony winnerColony = gameJudge.getWinner();
             Log.i("Game", "Game finished, winner colony id: " + winnerColony.getId());
             System.exit(0);
         }
         currentTurn++;
+    }
+
+    public GameJudge getGameJudge() {
+        return gameJudge;
     }
 
     // remove dead ants messages (if client is alive!)

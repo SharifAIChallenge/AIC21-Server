@@ -42,8 +42,8 @@ public class MapGenerator {
         GameMap map = new GameMap(cells, height, width);
         int base1x = 0;
         int base1y = 0;
-        int base2x = width - 1;
-        int base2y = height - 1;
+        int base2x = (width - 1) / 2;
+        int base2y = (height - 1) / 2;
         cells[base1y][base1x] = new BaseCell(base1x, base1y);
         cells[base2y][base2x] = new BaseCell(base2x, base2y);
         Colony firstColony = new Colony(0, (BaseCell) cells[base1y][base1x], 100);
