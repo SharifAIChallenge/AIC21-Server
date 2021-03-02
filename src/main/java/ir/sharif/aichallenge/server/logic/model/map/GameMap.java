@@ -10,21 +10,19 @@ import ir.sharif.aichallenge.server.logic.model.cell.ResourceType;
 import java.util.*;
 
 public class GameMap {
-    //cells[width][height]
+    //cells[yAxisLength][xAxisLength]
     private Cell[][] cells;
-    // y axis
-    private int width;
-    // x axis
-    private int height;
+    private int yAxisLength;
+    private int xAxisLength;
 
-    public GameMap(Cell[][] cells, int width, int height) {
+    public GameMap(Cell[][] cells, int yAxisLength, int xAxisLength) {
         this.cells = cells;
-        this.width = width;
-        this.height = height;
+        this.yAxisLength = yAxisLength;
+        this.xAxisLength = xAxisLength;
     }
 
     public Cell getCell(int xPosition, int yPosition) {
-        return cells[((yPosition % width) + width) % width][((xPosition % height) + height) % height];
+        return cells[((yPosition % yAxisLength) + yAxisLength) % yAxisLength][((xPosition % xAxisLength) + xAxisLength) % xAxisLength];
     }
 
     public Cell[] getAntViewableCells(int xPosition, int yPosition) {
@@ -37,31 +35,31 @@ public class GameMap {
 
     private Cell[] getAroundCells(int xPosition, int yPosition, int maxDistance) {
         List<Cell> aroundCells = new ArrayList<>();
-        for (int i = xPosition - maxDistance; i <= xPosition + maxDistance; i++) {
-            for (int j = yPosition - maxDistance; j <= yPosition + maxDistance; j++) {
-                if (getManhattanDistance(i, j, xPosition, yPosition) > maxDistance)
+        for (int x = xPosition - maxDistance; x <= xPosition + maxDistance; x++) {
+            for (int y = yPosition - maxDistance; y <= yPosition + maxDistance; y++) {
+                if (getManhattanDistance(x, y, xPosition, yPosition) > maxDistance)
                     continue;
-                aroundCells.add(getCell(i, j));
+                aroundCells.add(getCell(x, y));
             }
         }
         return aroundCells.toArray(new Cell[0]);
     }
 
-    public int getWidth() {
-        return width;
+    public int getYAxisLength() {
+        return yAxisLength;
     }
 
-    public int getHeight() {
-        return height;
+    public int getXAxisLength() {
+        return xAxisLength;
     }
 
     public void addResource(ResourceType resourceType, int resourceAmount, int xPos, int yPos) {
-        for (int i = 0; i <= Math.min(width, height) / 2; i++) {
-            for (int j = xPos - i; j <= xPos + i; j++) {
-                for (int k = yPos - i; k <= yPos + i; k++) {
-                    if (getManhattanDistance(j, k, xPos, yPos) > i)
+        for (int i = 0; i <= Math.min(yAxisLength, xAxisLength) / 2; i++) {
+            for (int x = xPos - i; x <= xPos + i; x++) {
+                for (int y = yPos - i; y <= yPos + i; y++) {
+                    if (getManhattanDistance(x, y, xPos, yPos) > i)
                         continue;
-                    Cell cell = getCell(j, k);
+                    Cell cell = getCell(x, y);
 
                     if (cell.getResourceType() == ResourceType.NONE) {
                         cell.setResourceType(resourceType);
@@ -69,7 +67,7 @@ public class GameMap {
                     }
 
                     if (resourceType == cell.getResourceType()) {
-                        cells[k][j].increaseResource(resourceAmount);
+                        cell.increaseResource(resourceAmount);
                         return;
                     }
                 }
@@ -108,8 +106,8 @@ public class GameMap {
             default:
                 return;
         }
-        newX = newX % getHeight();
-        newY = newY % getWidth();
+        newX = newX % getXAxisLength();
+        newY = newY % getYAxisLength();
         Cell targetCell = getCell(newX, newY);
         if (targetCell.cellType == CellType.WALL)
             return;
