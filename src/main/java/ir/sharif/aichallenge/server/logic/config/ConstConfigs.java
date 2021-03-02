@@ -10,7 +10,7 @@ public class ConstConfigs {
     public static int GENERATE_WORKER_BREAD_AMOUNT = 2;
     public static int GENERATE_SOLDIER_GRASS_AMOUNT = 50;
 
-    public static int ANT_MAX_VIEW_DISTANCE = 50;
+    public static int ANT_MAX_VIEW_DISTANCE = 2;
     public static int ANT_MAX_ATTACK_DISTANCE = 2;
     public static int ANT_ATTACK_DAMAGE = 2;
 

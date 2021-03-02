@@ -1,6 +1,7 @@
 package ir.sharif.aichallenge.server.logic.model;
 
 import ir.sharif.aichallenge.server.common.network.data.*;
+import ir.sharif.aichallenge.server.common.util.Log;
 import ir.sharif.aichallenge.server.logic.config.ConstConfigs;
 import ir.sharif.aichallenge.server.logic.handlers.AttackHandler;
 import ir.sharif.aichallenge.server.logic.handlers.exceptions.GameActionException;
@@ -58,6 +59,8 @@ public class Game {
         map.getAllCells().forEach(Cell::manageResources);
         if (isFinished()) {
             Colony winnerColony = gameJudge.getWinner();
+            Log.i("Game", "Game finished, winner colony id: " + winnerColony.getId());
+            System.exit(0);
         }
         currentTurn++;
     }

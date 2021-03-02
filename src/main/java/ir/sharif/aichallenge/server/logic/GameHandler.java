@@ -73,7 +73,7 @@ public class GameHandler implements GameLogic {
     public void init() {
         // TODO: map generation
         // generate map
-        MapGeneratorResult generatedMap = MapGenerator.generateRandomMap(10, 10);
+        MapGeneratorResult generatedMap = MapGenerator.generateRandomMap();
         // create Game
         this.game = new Game(generatedMap.map, generatedMap.colonies);
         // add initial ants to game (for test)
@@ -124,7 +124,7 @@ public class GameHandler implements GameLogic {
     @Override
     public ArrayList<Integer> simulateEvents(Map<String, List<ClientMessageInfo>> messages) {
         ArrayList<Integer> result = new ArrayList<>();
-        if (game.getTurn() == 30) {
+        if (game.getTurn() == 5) {
             System.exit(4);
         }
         game.passTurn(messages);
@@ -230,9 +230,14 @@ public class GameHandler implements GameLogic {
                     if (newAntsCreated && newAntIDs.contains(i)) {
                         messages[i] = new Message(MessageTypes.INIT, Json.GSON
                                 .toJsonTree(new GameConfigDTO(this.game, i), GameConfigDTO.class).getAsJsonObject());
-                    } else
+                    } else {
                         messages[i] = new Message(MessageTypes.GAME_STATUS, Json.GSON
                                 .toJsonTree(new GameStatusDTO(this.game, i), GameStatusDTO.class).getAsJsonObject());
+                        if (i == 0) {
+                            System.out.println("message to ant " + i + ": "
+                                    + Json.GSON.toJson(new GameStatusDTO(this.game, i), GameStatusDTO.class));
+                        }
+                    }
                 }
             }
         }
