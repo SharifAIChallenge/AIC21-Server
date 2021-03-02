@@ -52,7 +52,7 @@ public class AntGenerator {
             Process p = Runtime.getRuntime().exec("pkill -f \"java -jar\"");
         } catch (IOException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            // e.printStackTrace();
         }
     }
 }
