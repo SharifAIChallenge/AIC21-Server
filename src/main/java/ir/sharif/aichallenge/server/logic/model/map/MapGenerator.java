@@ -17,7 +17,6 @@ public class MapGenerator {
     private static Random random = new Random();
     private static int playersCount;
 
-    // cells[width][height]
     public static MapGeneratorResult generateRandomMap() {
         int height = ConstConfigs.MAP_HEIGHT;
         int width = ConstConfigs.MAP_WIDTH;
@@ -40,7 +39,7 @@ public class MapGenerator {
             }
         }
 
-        GameMap map = new GameMap(cells, width, height);
+        GameMap map = new GameMap(cells, height, width);
         int base1x = 0;
         int base1y = 0;
         int base2x = width - 1;

@@ -26,6 +26,4 @@ public class ConstConfigs {
 
     public static int BASE_MAX_ATTACK_DISTANCE = 2;
     public static int BASE_ATTACK_DAMAGE = 2;
-
-
 }

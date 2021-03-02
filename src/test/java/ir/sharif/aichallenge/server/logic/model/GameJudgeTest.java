@@ -14,7 +14,7 @@ class GameJudgeTest {
 
     @BeforeEach
     void setUp() {
-        MapGenerator.MapGeneratorResult generatedMap = MapGenerator.generateRandomMap(10, 10);
+        MapGenerator.MapGeneratorResult generatedMap = MapGenerator.generateRandomMap();
         antRepository = new AntRepository(generatedMap.colonies);
         gameJudge = new GameJudge(antRepository);
     }

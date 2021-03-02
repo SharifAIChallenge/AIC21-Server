@@ -19,8 +19,8 @@ public class GameConfigDTO {
 
     public GameConfigDTO(Game game, int antId) {
         Ant ant = game.getAntByID(antId);
-        this.map_width = game.getMap().getYAxisLength();
-        this.map_height = game.getMap().getXAxisLength();
+        this.map_width = game.getMap().getXAxisLength();
+        this.map_height = game.getMap().getYAxisLength();
         this.ant_type = ant.getAntType().getValue();
         this.base_x = game.getColony(ant.getColonyId()).getBase().getX();
         this.base_y = game.getColony(ant.getColonyId()).getBase().getY();
