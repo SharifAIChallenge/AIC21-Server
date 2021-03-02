@@ -11,6 +11,8 @@ import ir.sharif.aichallenge.server.logic.model.cell.Cell;
 import ir.sharif.aichallenge.server.logic.model.chatbox.ChatMessage;
 import ir.sharif.aichallenge.server.logic.model.map.GameMap;
 import ir.sharif.aichallenge.server.logic.utility.MessageAdapter;
+import ir.sharif.aichallenge.server.logic.dto.graphics.AttackDTO;
+import ir.sharif.aichallenge.server.logic.dto.graphics.CellDTO;
 import ir.sharif.aichallenge.server.logic.dto.graphics.GraphicLogDTO;
 import ir.sharif.aichallenge.server.logic.dto.graphics.TurnDTO;
 
@@ -81,6 +83,14 @@ public class Game {
         this.getColonies().get(1).getChatBox().getChatMessages().forEach((msg) -> chat_box_1.add(msg.getMessage()));
         turnLog.chat_box_0 = chat_box_0;
         turnLog.chat_box_1 = chat_box_1;
+        List<CellDTO> cells = new ArrayList<>();
+        for (Cell cell : map.getAllCells()) {
+            cells.add(new CellDTO(cell));
+        }
+        turnLog.cells = cells;
+        List<AttackDTO> attacks = new ArrayList<>();
+
+
         // TODO: turnLog.attacks
     }
 
