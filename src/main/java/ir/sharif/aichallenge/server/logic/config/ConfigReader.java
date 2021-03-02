@@ -46,6 +46,7 @@ public class ConfigReader {
             ConstConfigs.MAP_HEIGHT = Integer.parseInt(props.getProperty("MAP_HEIGHT"));
             ConstConfigs.BASE_MAX_ATTACK_DISTANCE = Integer.parseInt(props.getProperty("BASE_MAX_ATTACK_DISTANCE"));
             ConstConfigs.BASE_ATTACK_DAMAGE = Integer.parseInt(props.getProperty("BASE_ATTACK_DAMAGE"));
+            ConstConfigs.BASE_INIT_HEALTH = Integer.parseInt(props.getProperty("BASE_INIT_HEALTH"));
 
         } catch (Exception e) {
             e.printStackTrace();

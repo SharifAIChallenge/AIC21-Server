@@ -11,8 +11,11 @@ import ir.sharif.aichallenge.server.logic.model.cell.Cell;
 import ir.sharif.aichallenge.server.logic.model.chatbox.ChatMessage;
 import ir.sharif.aichallenge.server.logic.model.map.GameMap;
 import ir.sharif.aichallenge.server.logic.utility.MessageAdapter;
+import ir.sharif.aichallenge.server.logic.dto.graphics.GraphicLogDTO;
+import ir.sharif.aichallenge.server.logic.dto.graphics.TurnDTO;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +32,7 @@ public class Game {
     private AttackHandler attackHandler;
     private MessageAdapter messageAdapter;
     private GameJudge gameJudge;
+    public GraphicLogDTO graphicLogDTO = new GraphicLogDTO();
 
     // messages to be sent to clients in this turn
     private Message[] clientTurnMessages;
@@ -58,12 +62,26 @@ public class Game {
         handleAntsMove(messages);
         map.getAllCells().forEach(Cell::manageResources);
         if (isFinished()) {
-            System.out.println("salam salam");
             Colony winnerColony = gameJudge.getWinner();
             Log.i("Game", "Game finished, winner colony id: " + winnerColony.getId());
             System.exit(0);
         }
+        generateTurnGraphicLog();
         currentTurn++;
+    }
+
+    private void generateTurnGraphicLog() {
+        TurnDTO turnLog = new TurnDTO();
+        turnLog.turn_num = currentTurn;
+        turnLog.base0_health = this.getColonies().get(0).getBaseHealth();
+        turnLog.base1_health = this.getColonies().get(1).getBaseHealth();
+        List<String> chat_box_0 = new ArrayList<>();
+        this.getColonies().get(0).getChatBox().getChatMessages().forEach((msg) -> chat_box_0.add(msg.getMessage()));
+        List<String> chat_box_1 = new ArrayList<>();
+        this.getColonies().get(1).getChatBox().getChatMessages().forEach((msg) -> chat_box_1.add(msg.getMessage()));
+        turnLog.chat_box_0 = chat_box_0;
+        turnLog.chat_box_1 = chat_box_1;
+        // TODO: turnLog.attacks
     }
 
     public GameJudge getGameJudge() {

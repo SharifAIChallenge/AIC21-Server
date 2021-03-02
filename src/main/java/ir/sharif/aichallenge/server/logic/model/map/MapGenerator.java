@@ -46,8 +46,8 @@ public class MapGenerator {
         int base2y = (height - 1) / 2;
         cells[base1y][base1x] = new BaseCell(base1x, base1y);
         cells[base2y][base2x] = new BaseCell(base2x, base2y);
-        Colony firstColony = new Colony(0, (BaseCell) cells[base1y][base1x], 100);
-        Colony secondColony = new Colony(1, (BaseCell) cells[base2y][base2x], 100);
+        Colony firstColony = new Colony(0, (BaseCell) cells[base1y][base1x], ConstConfigs.BASE_INIT_HEALTH);
+        Colony secondColony = new Colony(1, (BaseCell) cells[base2y][base2x], ConstConfigs.BASE_INIT_HEALTH);
         ((BaseCell) (cells[base1y][base1x])).setColony(firstColony);
         ((BaseCell) (cells[base2y][base2x])).setColony(secondColony);
         HashMap<Integer, Colony> colonies = new HashMap<>();

@@ -8,6 +8,7 @@ import ir.sharif.aichallenge.server.common.network.data.MessageTypes;
 import ir.sharif.aichallenge.server.common.util.Log;
 import ir.sharif.aichallenge.server.engine.core.GameLogic;
 import ir.sharif.aichallenge.server.logic.config.ConfigReader;
+import ir.sharif.aichallenge.server.logic.dto.graphics.GraphicGameConfigDTO;
 import ir.sharif.aichallenge.server.logic.dto.payloads.GameConfigDTO;
 import ir.sharif.aichallenge.server.logic.dto.payloads.GameStatusDTO;
 import ir.sharif.aichallenge.server.logic.handlers.exceptions.GameActionException;
@@ -82,9 +83,8 @@ public class GameHandler implements GameLogic {
         MapGeneratorResult generatedMap = MapGenerator.generateRandomMap();
         // create Game
         this.game = new Game(generatedMap.map, generatedMap.colonies);
-        // add initial ants to game (for test)
-        // antId, colonyId, x, y
-        // one soldier for each
+        this.game.graphicLogDTO.game_config = new GraphicGameConfigDTO(generatedMap.map);
+
         antsNum = 8;
         ArrayList<Ant> initialAnts = new ArrayList<>();
         for (int i = 0; i < antsNum; i++) {
