@@ -79,29 +79,27 @@ public class GameHandler implements GameLogic {
         // add initial ants to game (for test)
         // antId, colonyId, x, y
         // one soldier for each
-        antsNum = 2;
-        Ant ant11 = new Ant(0, 0, 0, 0, AntType.WORKER);
-        // Ant ant21 = new Ant(1, 0, 0, 0, AntType.SOLDIER);
-        // Ant ant31 = new Ant(2, 0, 2, 0, AntType.WORKER);
-
-        Ant ant211 = new Ant(1, 1, 5, 5, AntType.WORKER);
-        // Ant ant22 = new Ant(3, 1, 0, 0, AntType.WORKER);
-        // Ant ant23 = new Ant(5, 1, 7, 5, AntType.WORKER);
-
+        antsNum = 8;
+        ArrayList<Ant> initialAnts = new ArrayList<>();
+        for (int i = 0; i < antsNum; i++) {
+            int colonyID = (i < 4) ? 0 : 1;
+            initialAnts.add(new Ant(i, colonyID, generatedMap.colonies.get(colonyID).getBase().getX(),
+                    generatedMap.colonies.get(colonyID).getBase().getY(),
+                    ((i % 2) == 1) ? AntType.WORKER : AntType.SOLDIER));
+        }
         try {
-            game.addAntToGame(ant11, 0);
-            // game.addAntToGame(ant21, 0);
-            // game.addAntToGame(ant31, 0);
-            game.addAntToGame(ant211, 1);
-            // game.addAntToGame(ant22, 1);
-            // game.addAntToGame(ant23, 1);
+            for (Ant ant : initialAnts) {
+                game.addAntToGame(ant, ant.getColonyId());
+            }
         } catch (GameActionException e) {
             System.out.println("Can't add ants to game!");
             e.printStackTrace();
         }
 
-        AntGenerator.runNewAnt(AntType.WORKER, 0);
-        AntGenerator.runNewAnt(AntType.WORKER, 1);
+        for (Ant ant : initialAnts) {
+            AntGenerator.runNewAnt(ant.getAntType(), ant.getId());
+        }
+
     }
 
     @Override
