@@ -16,9 +16,8 @@ public class Main {
         new File("Log/server").mkdirs();
         Log.outputFile = new PrintStream(new FileOutputStream("Log/server/server.log", false));
         // int extraTime = extractExtraTime(args);
-        boolean showConsoleGameLog = true;
 
-        GameServer gameServer = new GameServer(new GameHandler(showConsoleGameLog), args, currentTurn);
+        GameServer gameServer = new GameServer(new GameHandler(), args, currentTurn);
         gameServer.start();
         gameServer.waitForFinish();
     }

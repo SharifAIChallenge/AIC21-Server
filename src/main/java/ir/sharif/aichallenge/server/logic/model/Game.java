@@ -173,7 +173,6 @@ public class Game {
     }
 
     public boolean isAntAlive(int antId) {
-        System.out.println("ant id : " + antId + " exists: " + antRepository.doesAntExists(antId));
         return antRepository.doesAntExists(antId);
     }
 

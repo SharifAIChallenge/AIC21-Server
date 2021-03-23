@@ -41,14 +41,14 @@ public class GameHandler implements GameLogic {
 
     private Game game;
     private Integer antsNum;
-    private boolean showConsoleLog;
     private ArrayList<Integer> deads = new ArrayList<>();
     private boolean newAntsCreated = false;
     private List<Integer> newAntIDs = new ArrayList<>();
+    public static int initialAntsNum;
+    public static boolean showGameLog = false;
 
-    public GameHandler(boolean showConsoleLog) {
+    public GameHandler() {
         this.antsNum = 0;
-        this.showConsoleLog = showConsoleLog;
     }
 
     @Override
@@ -86,10 +86,10 @@ public class GameHandler implements GameLogic {
         this.game = new Game(generatedMap.map, generatedMap.colonies);
         this.game.graphicLogDTO.game_config = new GraphicGameConfigDTO(generatedMap.map);
 
-        antsNum = 8;
+        antsNum = initialAntsNum;
         ArrayList<Ant> initialAnts = new ArrayList<>();
         for (int i = 0; i < antsNum; i++) {
-            int colonyID = (i < 4) ? 0 : 1;
+            int colonyID = (i < (antsNum / 2)) ? 0 : 1;
             initialAnts.add(new Ant(i, colonyID, generatedMap.colonies.get(colonyID).getBase().getX(),
                     generatedMap.colonies.get(colonyID).getBase().getY(),
                     ((i % 2) == 1) ? AntType.WORKER : AntType.SOLDIER));
@@ -104,7 +104,7 @@ public class GameHandler implements GameLogic {
         }
 
         for (Ant ant : initialAnts) {
-            AntGenerator.runNewAnt(ant.getAntType(), ant.getId());
+            AntGenerator.runNewAnt(ant.getAntType(), ant.getId(), ant.getColonyId());
         }
 
     }
@@ -133,7 +133,10 @@ public class GameHandler implements GameLogic {
         ArrayList<Integer> result = new ArrayList<>();
         game.passTurn(messages);
         result = handleAntGeneration();
-        showMap(true);
+        if (showGameLog)
+            showMap(true);
+        else
+            System.out.println("turn passed");
         return result;
     }
 
@@ -167,7 +170,7 @@ public class GameHandler implements GameLogic {
         } catch (GameActionException e) {
             e.printStackTrace();
         }
-        AntGenerator.runNewAnt(type, id);
+        AntGenerator.runNewAnt(type, id, colonyID);
         return id;
     }
 
