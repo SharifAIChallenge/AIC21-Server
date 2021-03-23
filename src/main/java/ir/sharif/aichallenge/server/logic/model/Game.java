@@ -1,5 +1,6 @@
 package ir.sharif.aichallenge.server.logic.model;
 
+import ir.sharif.aichallenge.server.common.network.Json;
 import ir.sharif.aichallenge.server.common.network.data.*;
 import ir.sharif.aichallenge.server.common.util.Log;
 import ir.sharif.aichallenge.server.logic.config.ConstConfigs;
@@ -134,6 +135,7 @@ public class Game {
     private void addMessage(Colony colony, List<ClientMessageInfo> messages) {
         List<ChatMessage> chatMessages = messageAdapter.convertToChatMessage(messages, currentTurn);
         colony.getChatBox().addMessage(chatMessages);
+        System.out.println("chat message: " + Json.GSON.toJson(chatMessages));
     }
 
     private void handleAntsMove(Map<String, List<ClientMessageInfo>> messages) {

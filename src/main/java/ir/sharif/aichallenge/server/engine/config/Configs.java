@@ -66,13 +66,10 @@ public class Configs {
     private static void handleArg(String arg) {
         String[] split = arg.split("=");
         if (split[0].equals("--show-log")) {
-            System.out.println("show logsss");
             GameHandler.showGameLog = true;
         } else if (split[0].equals("--first-team")) {
-            System.out.println("first team");
             FIRST_TEAM_PATH = split[1];
         } else if (split[0].equals("--second-team")) {
-            System.out.println("second team");
             SECOND_TEAM_PATH = split[1];
         }
     }

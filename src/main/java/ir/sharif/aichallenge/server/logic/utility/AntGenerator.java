@@ -34,7 +34,7 @@ public class AntGenerator {
                         if (GameHandler.showGameLog) {
                             while ((line = input.readLine()) != null) {
                                 // Log.i("AntID: " + antID, line);
-                                System.out.println(antID + ":" + line);
+                                // System.out.println(antID + ":" + line);
                             }
                         }
                     }

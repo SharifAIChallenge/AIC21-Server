@@ -1,5 +1,6 @@
 package ir.sharif.aichallenge.server.logic.model.chatbox;
 
+import ir.sharif.aichallenge.server.common.network.Json;
 import ir.sharif.aichallenge.server.logic.config.ConstConfigs;
 
 import java.util.ArrayList;
@@ -20,6 +21,8 @@ public class ChatBox {
                                     .sorted(Comparator.comparingInt(ChatMessage::getValue).reversed())
                                     .limit(ConstConfigs.CHAT_LIMIT).collect(Collectors.toList());
         chatMessages.addAll(selectedMessages);
+        System.out.println(Json.GSON.toJson(messages));
+        System.out.println("the chataaa: " + getChatMessages() + ConstConfigs.MAX_MESSAGE_LENGTH + " " + ConstConfigs.CHAT_LIMIT);
     }
 
     public List<ChatMessage> getChatMessages() {
