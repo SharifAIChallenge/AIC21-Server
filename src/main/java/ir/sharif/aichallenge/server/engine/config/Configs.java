@@ -2,6 +2,7 @@ package ir.sharif.aichallenge.server.engine.config;
 
 import com.google.gson.JsonObject;
 import ir.sharif.aichallenge.server.common.network.Json;
+import ir.sharif.aichallenge.server.common.util.Log;
 import ir.sharif.aichallenge.server.logic.GameHandler;
 
 import java.io.File;
@@ -59,15 +60,33 @@ public class Configs {
         return configFile;
     }
 
+    public static String FIRST_TEAM_PATH = null;
+    public static String SECOND_TEAM_PATH = null;
+
+    private static void handleArg(String arg) {
+        String[] split = arg.split("=");
+        if (split[0].equals("--show-log")) {
+            System.out.println("show logsss");
+            GameHandler.showGameLog = true;
+        } else if (split[0].equals("--first-team")) {
+            System.out.println("first team");
+            FIRST_TEAM_PATH = split[1];
+        } else if (split[0].equals("--second-team")) {
+            System.out.println("second team");
+            SECOND_TEAM_PATH = split[1];
+        }
+    }
+
     public static void handleCMDArgs(String[] args) {
+        for (String arg : args) {
+            handleArg(arg);
+        }
+        if (FIRST_TEAM_PATH == null || SECOND_TEAM_PATH == null) {
+            Log.e("Config", "--first-team or --second-team args not found!");
+            System.exit(-1);
+        }
         if (args.length == 0)
             return;
-        try {
-            if (args[0].equals("--show-log")) {
-                GameHandler.showGameLog = true;
-            }
-        } catch (Exception e) {
-        }
         String[] split = args[0].split("=");
         if (split.length != 2)
             return;

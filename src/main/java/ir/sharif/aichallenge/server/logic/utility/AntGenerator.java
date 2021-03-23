@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 import ir.sharif.aichallenge.server.common.util.Log;
+import ir.sharif.aichallenge.server.engine.config.Configs;
 import ir.sharif.aichallenge.server.logic.GameHandler;
 import ir.sharif.aichallenge.server.logic.model.ant.AntType;
 
@@ -15,7 +16,7 @@ public class AntGenerator {
     static final String TEAM_2_DIR = "2/";
     static final String WORKER_JAR = "worker.jar";
     static final String SOLDIER_JAR = "soldier.jar";
-    static final String EXEC_CMD = "java -jar";
+    static final String JAVA_EXEC_CMD = "java -jar";
 
     static ConcurrentLinkedDeque<Process> processes = new ConcurrentLinkedDeque();
 
@@ -24,12 +25,9 @@ public class AntGenerator {
             @Override
             public void run() {
                 try {
-                    String teamDir = (colonyID == 0) ? TEAM_1_DIR : TEAM_2_DIR;
-                    Process p = Runtime.getRuntime().exec(
-                            EXEC_CMD + " " + CLIENT_BASE_DIR + ((type == AntType.SOLDIER) ? SOLDIER_JAR : WORKER_JAR));
+                    Process p = Runtime.getRuntime().exec(getRunCMD(colonyID));
                     AntGenerator.processes.add(p);
-                    Log.i("AntGenerator",
-                            EXEC_CMD + " " + CLIENT_BASE_DIR + ((type == AntType.SOLDIER) ? SOLDIER_JAR : WORKER_JAR));
+                    Log.i("AntGenerator", getRunCMD(colonyID));
                     try (BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
                         String line;
 
@@ -46,6 +44,19 @@ public class AntGenerator {
                 }
             }
         }).start();
+    }
+
+    private static String getRunCMD(int colonyID) {
+        String path = colonyID == 0 ? Configs.FIRST_TEAM_PATH : Configs.SECOND_TEAM_PATH;
+        if (path.contains(".jar")) {
+            return JAVA_EXEC_CMD + " " + path;
+        } else {
+            if (path.charAt(0) == '/') {
+                return path;
+            } else {
+                return "./" + path;
+            }
+        }
     }
 
     // works in linux
