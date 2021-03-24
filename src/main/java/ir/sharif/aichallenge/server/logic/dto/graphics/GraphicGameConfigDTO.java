@@ -1,5 +1,6 @@
 package ir.sharif.aichallenge.server.logic.dto.graphics;
 
+import ir.sharif.aichallenge.server.engine.config.Configs;
 import ir.sharif.aichallenge.server.logic.config.ConstConfigs;
 import ir.sharif.aichallenge.server.logic.model.map.GameMap;
 
@@ -10,6 +11,8 @@ public class GraphicGameConfigDTO {
     public int base_health;
     public int worker_health;
     public int soldier_health;
+    public String team0_name = Configs.FIRST_TEAM_NAME;
+    public String team1_name = Configs.SECOND_TEAM_NAME;
 
     public GraphicGameConfigDTO(GameMap map) {
         this.map_height = map.getYAxisLength();

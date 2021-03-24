@@ -9,7 +9,7 @@ import ir.sharif.aichallenge.server.common.network.Json;
 import ir.sharif.aichallenge.server.logic.dto.graphics.GraphicLogDTO;
 
 public class GraphicUtils {
-    static final String outputFileName = "test1.json";
+    static final String outputFileName = "log.json";
 
     public static void generateLogFile(GraphicLogDTO log) {
         try {

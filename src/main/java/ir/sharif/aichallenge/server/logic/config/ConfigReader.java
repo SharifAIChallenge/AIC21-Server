@@ -7,12 +7,13 @@ import java.io.InputStream;
 import java.util.Properties;
 
 import ir.sharif.aichallenge.server.common.util.Log;
+import ir.sharif.aichallenge.server.logic.GameHandler;
 
 public class ConfigReader {
     public static void readConfigFile() {
         // app config
         Properties props = new Properties();
-        String configFile = "server.config";
+        String configFile = "map.config";
         InputStream is = null;
         try {
             is = new FileInputStream(configFile);
@@ -47,7 +48,7 @@ public class ConfigReader {
             ConstConfigs.BASE_MAX_ATTACK_DISTANCE = Integer.parseInt(props.getProperty("BASE_MAX_ATTACK_DISTANCE"));
             ConstConfigs.BASE_ATTACK_DAMAGE = Integer.parseInt(props.getProperty("BASE_ATTACK_DAMAGE"));
             ConstConfigs.BASE_INIT_HEALTH = Integer.parseInt(props.getProperty("BASE_INIT_HEALTH"));
-
+            GameHandler.initialAntsNum = Integer.parseInt(props.getProperty("INIT_ANTS_NUM"));
         } catch (Exception e) {
             e.printStackTrace();
             Log.e("ConfigReader", "error in config props");

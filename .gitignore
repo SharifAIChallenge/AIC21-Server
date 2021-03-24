@@ -106,7 +106,7 @@ fabric.properties
 .idea/codestream.xml
 
 ### Maven ###
-target/
+target/*
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
@@ -121,3 +121,8 @@ buildNumber.properties
 # End of https://www.toptal.com/developers/gitignore/api/intellij,maven
 Log/server/server.log
 Log
+test1.json
+log.json
+.vscode/*
+.idea/*
+.settings/*

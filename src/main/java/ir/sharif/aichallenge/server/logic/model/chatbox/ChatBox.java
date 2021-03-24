@@ -1,5 +1,6 @@
 package ir.sharif.aichallenge.server.logic.model.chatbox;
 
+import ir.sharif.aichallenge.server.common.network.Json;
 import ir.sharif.aichallenge.server.logic.config.ConstConfigs;
 
 import java.util.ArrayList;

@@ -2,7 +2,7 @@ package ir.sharif.aichallenge.server.common.network;
 
 import com.google.gson.JsonObject;
 import ir.sharif.aichallenge.server.common.util.Log;
-
+import ir.sharif.aichallenge.server.logic.GameHandler;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,12 +14,12 @@ import java.nio.charset.Charset;
  * This class is a wrapper for java's <code>Socket</code> that uses json strings
  * to transmit objects.
  * <p>
- * A <code>JsonSocket</code> holds a <code>Gson</code> object to convert
- * objects to json string and vice-versa, and a <code>Socket</code> to
- * send and receive json strings.
+ * A <code>JsonSocket</code> holds a <code>Gson</code> object to convert objects
+ * to json string and vice-versa, and a <code>Socket</code> to send and receive
+ * json strings.
  * <p>
- * To create a <code>JsonSocket</code>, one can pass an existing socket
- * to the constructor of this class.
+ * To create a <code>JsonSocket</code>, one can pass an existing socket to the
+ * constructor of this class.
  * <p>
  * After a <code>JsonSocket</code> was successfully created, one can send and
  * receive objects with methods <code>send</code> and <code>get</code>.
@@ -50,13 +50,13 @@ public class JsonSocket {
     private OutputStream mOut;
 
     /**
-     * Initiates new socket with specified host and port and uses
-     * that socket to transmit json strings.
+     * Initiates new socket with specified host and port and uses that socket to
+     * transmit json strings.
      *
      * @param host the host name.
      * @param port the port number.
-     * @throws IOException if an I/O error occurs when creating the socket or
-     *                             its input or output stream.
+     * @throws IOException if an I/O error occurs when creating the socket or its
+     *                     input or output stream.
      * @see Socket#Socket(String, int)
      * @see #JsonSocket(Socket)
      */
@@ -68,8 +68,8 @@ public class JsonSocket {
      * Uses an existing socket to transmit json strings.
      *
      * @param socket the socket object.
-     * @throws IOException if an I/O error occurs when creating the
-     *                             input or output stream of the socket.
+     * @throws IOException if an I/O error occurs when creating the input or output
+     *                     stream of the socket.
      */
     public JsonSocket(Socket socket) throws IOException {
         mSocket = socket;
@@ -100,8 +100,8 @@ public class JsonSocket {
     }
 
     /**
-     * Converts <code>obj</code> to json string and sends it via the socket's
-     * output stream.
+     * Converts <code>obj</code> to json string and sends it via the socket's output
+     * stream.
      *
      * @param obj the object to send.
      * @throws IOException if an I/O error occurs, e.g. when the socket is closed.
@@ -110,15 +110,16 @@ public class JsonSocket {
     public void send(Object obj) throws IOException {
         String json = Json.GSON.toJson(obj);
         byte buffer[] = json.getBytes(ENCODING);
-//        Log.i(TAG, "Sending message: " + json);
+        // Log.i(TAG, "Sending message: " + json);
         mOut.write(buffer, 0, buffer.length);
         mOut.write('\0');
-        Log.i(TAG, "Message sent.");
+        if (GameHandler.showGameLog)
+            Log.i(TAG, "Message sent.");
     }
 
     /**
-     * Reads a json string from socket's input stream, and converts it to
-     * a <code>JsonObject</code>.
+     * Reads a json string from socket's input stream, and converts it to a
+     * <code>JsonObject</code>.
      *
      * @return the received <code>JsonObject</code>
      * @throws IOException if an I/O error occurs, e.g. when the socket is closed.
@@ -130,8 +131,8 @@ public class JsonSocket {
     }
 
     /**
-     * Reads a json string from socket's input stream, and converts it to
-     * a an object of the specified class.
+     * Reads a json string from socket's input stream, and converts it to a an
+     * object of the specified class.
      *
      * @param classOfInput object's class
      * @param <T>          type
@@ -161,7 +162,8 @@ public class JsonSocket {
             buffer[total++] = (byte) current;
         }
         String json = new String(buffer, 0, total, ENCODING);
-        Log.i(TAG, "Message received: " + json);
+        if (GameHandler.showGameLog)
+            Log.i(TAG, "Message received: " + json);
         T result = null;
         try {
             result = Json.GSON.fromJson(json, classOfInput);

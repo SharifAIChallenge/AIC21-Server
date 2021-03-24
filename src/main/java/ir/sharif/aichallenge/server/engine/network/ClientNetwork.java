@@ -104,7 +104,8 @@ public class ClientNetwork extends NetServer {
      */
     public int defineClient(String token) {
         // if (isListening())
-        //     throw new RuntimeException("Server is not terminated when defineClient() is called.");
+        // throw new RuntimeException("Server is not terminated when defineClient() is
+        // called.");
         int id = mClients.size();
         if (Configs.PARAM_AIC_DEPLOY.getValue()) {
             if (mTokens.containsKey(token))

@@ -276,7 +276,7 @@ public class GameServer {
                     mClientNetwork.sendAllBlocking();
                     mClientNetwork.setIsActiveFlags(mGameLogic.getActiveClients());
                     end = System.currentTimeMillis();
-                    System.err.println((end - start) + " time spent to send the message.");
+                    Log.i("GameServer", (end - start) + " time spent to send the message.");
                     long timeout = mGameLogic.getClientResponseTimeout();
                     start = System.currentTimeMillis();
                     try {
@@ -288,7 +288,7 @@ public class GameServer {
                         e.printStackTrace();
                     }
                     end = System.currentTimeMillis();
-                    System.err.println(end - start + " time spent to receive client messages with timeout " + timeout);
+                    Log.i("GameServer", end - start + " time spent to receive client messages with timeout " + timeout);
                     mClientNetwork.stopReceivingAll();
                     if (mClientNetwork.getNumberOfConnected() != 0) {
                         serverSemaphore.drainPermits();
@@ -306,7 +306,7 @@ public class GameServer {
                         if (newIDs.size() > 0)
                             newToAdd = true;
                         end = System.currentTimeMillis();
-                        System.err.println(end - start + " time spent to simulate events.");
+                        Log.i("GameServer", end - start + " time spent to simulate events.");
                     } catch (Exception e) {
                         err("Simulation", e);
                         e.printStackTrace();

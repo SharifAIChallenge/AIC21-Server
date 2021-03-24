@@ -9,14 +9,14 @@ import java.net.SocketException;
 import java.util.function.Consumer;
 
 /**
- * This thread is used by {@link NetServer} to listen on
- * some port for the new clients.
+ * This thread is used by {@link NetServer} to listen on some port for the new
+ * clients.
  * <p>
  * The actual work of the {@link NetServerThread} is done by a
- * {@link ServerSocket}. When a <code>NetServerThread</code> is ran,
- * it creates a new engine socket to listen on that port. When a new client is
- * connected to that port, it passes the client's
- * {@link JsonSocket} to the specified consumer.
+ * {@link ServerSocket}. When a <code>NetServerThread</code> is ran, it creates
+ * a new engine socket to listen on that port. When a new client is connected to
+ * that port, it passes the client's {@link JsonSocket} to the specified
+ * consumer.
  * <p>
  * The consumer should accept the client and perform necessary operations.
  * <p>
@@ -24,8 +24,8 @@ import java.util.function.Consumer;
  * {@link NetServer#accept}.
  * <p>
  * When the engine socket is disconnected from the port, e.g. when it is closed
- * due to an unknown reason, a new engine socket will be created.
- * So it is guaranteed that engine is always listening on the port.
+ * due to an unknown reason, a new engine socket will be created. So it is
+ * guaranteed that engine is always listening on the port.
  *
  * @see NetServer
  * @see ServerSocket
@@ -51,9 +51,8 @@ public class NetServerThread extends Thread {
     private ServerSocket serverSocket;
     /**
      * This consumer specifies the behavior of the engine when a new client is
-     * connected.
-     * Actually, <code>clientAcceptor.accept(JsonSocket)</code> is called when
-     * a client is connected to the port.
+     * connected. Actually, <code>clientAcceptor.accept(JsonSocket)</code> is called
+     * when a client is connected to the port.
      */
     private final Consumer<JsonSocket> clientAcceptor;
 
@@ -91,21 +90,22 @@ public class NetServerThread extends Thread {
      * Runs the engine and handles new clients. The method can not be completed
      * without throwing an exception.
      *
-     * @throws IOException if an I/O error occurs,
-     *                     e.g. when the engine socket is closed.
+     * @throws IOException if an I/O error occurs, e.g. when the engine socket is
+     *                     closed.
      * @see #terminate
      */
     private void runServer() throws IOException {
         if (serverSocket != null && !serverSocket.isClosed())
             serverSocket.close();
         serverSocket = new ServerSocket(port);
-        while (!terminateFlag)
+        while (!terminateFlag) {
             clientAcceptor.accept(new JsonSocket(serverSocket.accept()));
+        }
     }
 
     /**
-     * Terminates operations of the current thread. Sets the terminate flag
-     * to <code>true</code> and closes the engine socket.
+     * Terminates operations of the current thread. Sets the terminate flag to
+     * <code>true</code> and closes the engine socket.
      */
     public synchronized void terminate() {
         terminateFlag = true;
