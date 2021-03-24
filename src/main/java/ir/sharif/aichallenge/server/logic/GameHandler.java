@@ -241,6 +241,7 @@ public class GameHandler implements GameLogic {
         } catch (GameActionException e) {
             e.printStackTrace();
         }
+        // if (game.getTurn() < 5)
         AntGenerator.runNewAnt(type, id, colonyID);
         return id;
     }
@@ -300,7 +301,7 @@ public class GameHandler implements GameLogic {
         // Send game status to each ant
         Message[] messages = new Message[antsNum];
         if (thereIsQueuedColony) {
-            return messages;
+            return new Message[]{};
         }
         for (int i = 0; i < antsNum; i++) {
             if (deadAnts != null && deadAnts.keySet().contains(i)) {
