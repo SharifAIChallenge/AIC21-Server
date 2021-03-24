@@ -41,7 +41,6 @@ public class AntGenerator {
                                 // System.out.println(antID + ":" + line);
                                 line = input.readLine();
                             }
-                            System.out.println("closed.............");
                         }
                     }
                 } catch (IOException e) {
