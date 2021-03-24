@@ -61,11 +61,12 @@ public class AntGenerator {
         if (path.contains(".jar")) {
             return JAVA_EXEC_CMD + " " + path;
         } else {
-            if (path.charAt(0) == '/') {
+            /* if (path.charAt(0) == '/') {
                 return path;
             } else {
                 return "./" + path;
-            }
+            } */
+            return path;
         }
     }
 
