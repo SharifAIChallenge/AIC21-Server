@@ -3,6 +3,7 @@ package ir.sharif.aichallenge.server.engine.core;
 import ir.sharif.aichallenge.server.common.network.data.ClientMessageInfo;
 import ir.sharif.aichallenge.server.common.network.data.Message;
 import ir.sharif.aichallenge.server.engine.config.IntegerParam;
+import ir.sharif.aichallenge.server.logic.GameHandler.AntInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +57,7 @@ public interface GameLogic {
      * @return Added in AIC 2021: returns clientIDs that are added dynamically in
      *         this turn
      */
-    public ArrayList<Integer> simulateEvents(Map<String, List<ClientMessageInfo>> events);
+    public ArrayList<AntInfo> simulateEvents(Map<String, List<ClientMessageInfo>> events);
 
     /**
      * This method generates the output based on the changes that were calculated in

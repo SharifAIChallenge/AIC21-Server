@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 
 import ir.sharif.aichallenge.server.common.util.Log;
 import ir.sharif.aichallenge.server.engine.config.Configs;
+import ir.sharif.aichallenge.server.engine.network.ClientNetwork;
 import ir.sharif.aichallenge.server.logic.GameHandler;
 import ir.sharif.aichallenge.server.logic.model.Game;
 import ir.sharif.aichallenge.server.logic.model.ant.AntType;
@@ -33,15 +34,27 @@ public class AntGenerator {
                     Process p = Runtime.getRuntime().exec(getRunCMD(colonyID));
                     AntGenerator.processes.add(p);
                     Log.i("AntGenerator", getRunCMD(colonyID));
-                    try (BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
+                    try (BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                            BufferedReader error = new BufferedReader(new InputStreamReader(p.getErrorStream()))) {
                         if (GameHandler.showGameLog) {
+                            String line1 = error.readLine();
                             String line = input.readLine();
-                            while (line != null) {
-                                Log.i("Client Output[" + antID + "]", line);
+                            while (line != null || line1 != null) {
+                                if (line != null)
+                                    Log.i("Client Output[" + antID + "]", line);
+                                if (line1 != null)
+                                    // Log.i("Client Output[" + antID + "]", line1);
                                 // System.out.println(antID + ":" + line);
-                                line = input.readLine();
+                                try {
+                                    line = input.readLine();
+                                    line1 = error.readLine();
+                                } catch (Exception e) {
+
+                                }
                             }
                         }
+                    } catch (Exception e) {
+                        // e.printStackTrace();
                     }
                 } catch (IOException e) {
                     // TODO Auto-generated catch block
@@ -53,6 +66,7 @@ public class AntGenerator {
 
     private static String getRunCMD(int colonyID) {
         String path = colonyID == 0 ? Configs.FIRST_TEAM_PATH : Configs.SECOND_TEAM_PATH;
+        path = path.strip();
         if (path.contains(".jar")) {
             return JAVA_EXEC_CMD + " " + path;
         } else {
