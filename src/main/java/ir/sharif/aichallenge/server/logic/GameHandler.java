@@ -13,6 +13,7 @@ import ir.sharif.aichallenge.server.logic.dto.graphics.GraphicGameConfigDTO;
 import ir.sharif.aichallenge.server.logic.dto.payloads.GameConfigDTO;
 import ir.sharif.aichallenge.server.logic.dto.payloads.GameStatusDTO;
 import ir.sharif.aichallenge.server.logic.handlers.exceptions.GameActionException;
+import ir.sharif.aichallenge.server.logic.model.AntRepository;
 import ir.sharif.aichallenge.server.logic.model.Game;
 import ir.sharif.aichallenge.server.logic.model.Colony.Colony;
 import ir.sharif.aichallenge.server.logic.model.ant.Ant;
@@ -88,7 +89,8 @@ public class GameHandler implements GameLogic {
         // generate map
         MapGeneratorResult generatedMap = MapGenerator.generateRandomMap();
         // create Game
-        this.game = new Game(generatedMap.map, generatedMap.colonies);
+        AntRepository antRepository = new AntRepository(generatedMap.colonies);
+        this.game = new Game(generatedMap.map, antRepository);
         this.game.graphicLogDTO.game_config = new GraphicGameConfigDTO(generatedMap.map);
 
         /*

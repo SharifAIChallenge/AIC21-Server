@@ -1,8 +1,11 @@
 package ir.sharif.aichallenge.server.logic.model.map;
 
 import ir.sharif.aichallenge.server.logic.config.ConstConfigs;
+import ir.sharif.aichallenge.server.logic.model.Colony.Colony;
+import ir.sharif.aichallenge.server.logic.model.Colony.ColonyBuilder;
 import ir.sharif.aichallenge.server.logic.model.ant.Ant;
 import ir.sharif.aichallenge.server.logic.model.ant.MoveType;
+import ir.sharif.aichallenge.server.logic.model.cell.BaseCell;
 import ir.sharif.aichallenge.server.logic.model.cell.Cell;
 import ir.sharif.aichallenge.server.logic.model.cell.CellType;
 import ir.sharif.aichallenge.server.logic.model.cell.ResourceType;
@@ -19,6 +22,20 @@ public class GameMap {
         this.cells = cells;
         this.yAxisLength = yAxisLength;
         this.xAxisLength = xAxisLength;
+    }
+
+    GameMap() {
+
+    }
+
+    void setCells(Cell[][] cells, int yAxisLength, int xAxisLength) {
+        this.yAxisLength = yAxisLength;
+        this.xAxisLength = xAxisLength;
+        this.cells = cells;
+    }
+
+    void setCell(int xPosition, int yPosition, Cell cell){
+        cells[yPosition][xPosition] = cell;
     }
 
     public Cell getCell(int xPosition, int yPosition) {

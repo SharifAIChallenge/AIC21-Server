@@ -51,7 +51,7 @@ class ColonyTest {
 
         colony.addResource(ResourceType.BREAD, ConstConfigs.GENERATE_WORKER_BREAD_AMOUNT - 1);
         assertEquals(ConstConfigs.GENERATE_WORKER_BREAD_AMOUNT - 1, colony.getGainedBread());
-        assertEquals(1, colony.getToBeGeneratedWorkersCount());
+        assertEquals(0, colony.getToBeGeneratedWorkersCount());
     }
 
     @Test
@@ -60,7 +60,7 @@ class ColonyTest {
 
         colony.addResource(ResourceType.BREAD, ConstConfigs.GENERATE_WORKER_BREAD_AMOUNT);
         assertEquals(0, colony.getGainedBread());
-        assertEquals(2, colony.getToBeGeneratedWorkersCount());
+        assertEquals(1, colony.getToBeGeneratedWorkersCount());
     }
 
     @Test
@@ -69,7 +69,7 @@ class ColonyTest {
 
         colony.addResource(ResourceType.BREAD, ConstConfigs.GENERATE_WORKER_BREAD_AMOUNT * 3 + 1);
         assertEquals(1, colony.getGainedBread());
-        assertEquals(4, colony.getToBeGeneratedWorkersCount());
+        assertEquals(3, colony.getToBeGeneratedWorkersCount());
     }
 
 }
