@@ -34,13 +34,14 @@ public class AntGenerator {
                     AntGenerator.processes.add(p);
                     Log.i("AntGenerator", getRunCMD(colonyID));
                     try (BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
-                        String line;
-
                         if (GameHandler.showGameLog) {
-                            while ((line = input.readLine()) != null) {
+                            String line = input.readLine();
+                            while (line != null) {
                                 Log.i("Client Output[" + antID + "]", line);
                                 // System.out.println(antID + ":" + line);
+                                line = input.readLine();
                             }
+                            System.out.println("closed.............");
                         }
                     }
                 } catch (IOException e) {

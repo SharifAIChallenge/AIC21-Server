@@ -122,3 +122,4 @@ buildNumber.properties
 Log/server/server.log
 Log
 test1.json
+log.json
