@@ -243,9 +243,7 @@ public class GameServer {
 
                     if (newToAdd) {
                         mClientsNum += newIDs.size();
-                        System.out.println("new to add numL " + mClientsNum + " " + newIDs.size());
                         for (int id : newIDs) {
-                            System.out.println("wait for client");
                             ClientConfig config = new ClientConfig();
                             mClientConfigs.add(config);
                             Configs.CLIENT_CONFIGS.add(config);
@@ -257,7 +255,6 @@ public class GameServer {
                             }
                             config.setID(id);
                             try {
-                                System.out.println("waiting for clientnnnn");
                                 mClientNetwork.waitForClient(id);
                             } catch (InterruptedException e) {
                                 // TODO Auto-generated catch block

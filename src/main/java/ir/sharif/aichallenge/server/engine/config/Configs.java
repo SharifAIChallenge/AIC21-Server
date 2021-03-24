@@ -62,6 +62,7 @@ public class Configs {
 
     public static String FIRST_TEAM_PATH = null;
     public static String SECOND_TEAM_PATH = null;
+    public static int MAX_ANTS = 200;
 
     private static void handleArg(String arg) {
         String[] split = arg.split("=");
@@ -71,6 +72,8 @@ public class Configs {
             FIRST_TEAM_PATH = split[1];
         } else if (split[0].equals("--second-team")) {
             SECOND_TEAM_PATH = split[1];
+        } else if (split[0].equals("--max-agent")) {
+            MAX_ANTS = Integer.parseInt(split[1]);
         }
     }
 

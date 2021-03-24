@@ -6,6 +6,7 @@ import ir.sharif.aichallenge.server.common.network.data.ClientMessageInfo;
 import ir.sharif.aichallenge.server.common.network.data.Message;
 import ir.sharif.aichallenge.server.common.network.data.MessageTypes;
 import ir.sharif.aichallenge.server.common.util.Log;
+import ir.sharif.aichallenge.server.engine.config.Configs;
 import ir.sharif.aichallenge.server.engine.core.GameLogic;
 import ir.sharif.aichallenge.server.logic.config.ConfigReader;
 import ir.sharif.aichallenge.server.logic.dto.graphics.GraphicGameConfigDTO;
@@ -138,24 +139,23 @@ public class GameHandler implements GameLogic {
         oneColonyGeneratedAnt = false;
         ArrayList<Integer> result = new ArrayList<>();
         if (thereIsQueuedColony) {
-            // System.out.println("1000");
             result = handleAntGeneration();
-            // System.out.println("result: " + Json.GSON.toJson(result));
             return result;
         } else {
-            // System.out.println("1001");
             game.passTurn(messages);
             result = handleAntGeneration();
             if (showGameLog)
                 showMap(true);
             else
                 System.out.println("turn passed");
-            // System.out.println("result: " + Json.GSON.toJson(result));
             return result;
         }
     }
 
     private ArrayList<Integer> handleAntGeneration() {
+        if (antsNum > Configs.MAX_ANTS) {
+            return new ArrayList<>();
+        }
         ArrayList<Integer> result = new ArrayList<>();
         Colony firstCol = game.getColony(0);
         Colony secondCol = game.getColony(1);
@@ -301,7 +301,7 @@ public class GameHandler implements GameLogic {
         // Send game status to each ant
         Message[] messages = new Message[antsNum];
         if (thereIsQueuedColony) {
-            return new Message[]{};
+            return new Message[] {};
         }
         for (int i = 0; i < antsNum; i++) {
             if (deadAnts != null && deadAnts.keySet().contains(i)) {
