@@ -159,6 +159,11 @@ public class Game {
             log.team0_alive_workers = workers_alive;
             log.team0_total_soldiers = soldiers;
             log.team0_total_workers = workers;
+        } else {
+            log.team1_alive_soldiers = soldier_alive;
+            log.team1_alive_workers = workers_alive;
+            log.team1_total_soldiers = soldiers;
+            log.team1_total_workers = workers;
         }
         return log;
     }

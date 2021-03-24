@@ -126,3 +126,4 @@ log.json
 .vscode/*
 .idea/*
 .settings/*
+.factorypath

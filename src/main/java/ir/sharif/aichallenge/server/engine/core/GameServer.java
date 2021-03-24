@@ -9,6 +9,8 @@ import ir.sharif.aichallenge.server.engine.config.ClientConfig;
 import ir.sharif.aichallenge.server.engine.config.Configs;
 import ir.sharif.aichallenge.server.engine.network.ClientNetwork;
 import ir.sharif.aichallenge.server.engine.network.UINetwork;
+import ir.sharif.aichallenge.server.logic.GameHandler.AntInfo;
+import ir.sharif.aichallenge.server.logic.utility.AntGenerator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -235,7 +237,7 @@ public class GameServer {
         public void run() {
 
             Runnable simulate = new Runnable() {
-                ArrayList<Integer> newIDs;
+                ArrayList<AntInfo> newIDs;
                 boolean newToAdd = false;
 
                 @Override
@@ -243,19 +245,20 @@ public class GameServer {
 
                     if (newToAdd) {
                         mClientsNum += newIDs.size();
-                        for (int id : newIDs) {
+                        for (AntInfo id : newIDs) {
                             ClientConfig config = new ClientConfig();
                             mClientConfigs.add(config);
                             Configs.CLIENT_CONFIGS.add(config);
 
                             int newId = mClientNetwork.defineClient(config.getToken());
-                            if (id != newId) {
+                            if (id.id != newId) {
                                 throw new RuntimeException("Client ID and client order does not match" + " new id: "
                                         + newId + " id: " + id);
                             }
-                            config.setID(id);
+                            config.setID(id.id);
+                            AntGenerator.runNewAnt(id.type, id.id, id.colonyID);
                             try {
-                                mClientNetwork.waitForClient(id);
+                                mClientNetwork.waitForClient(id.id);
                             } catch (InterruptedException e) {
                                 // TODO Auto-generated catch block
                                 e.printStackTrace();
