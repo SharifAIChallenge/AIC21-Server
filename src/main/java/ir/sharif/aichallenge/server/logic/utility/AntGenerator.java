@@ -21,6 +21,7 @@ public class AntGenerator {
     static final String JAVA_EXEC_CMD = "java -jar";
 
     static ConcurrentLinkedDeque<Process> processes = new ConcurrentLinkedDeque();
+    static boolean finished = false;
 
     public static void runNewAnt(AntType type, int antID, int colonyID) {
         if (GameHandler.runManually) {
@@ -34,28 +35,18 @@ public class AntGenerator {
                     Process p = Runtime.getRuntime().exec(getRunCMD(colonyID));
                     AntGenerator.processes.add(p);
                     Log.i("AntGenerator", getRunCMD(colonyID));
-                    try (BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
-                            BufferedReader error = new BufferedReader(new InputStreamReader(p.getErrorStream()))) {
-                        if (GameHandler.showGameLog) {
-                            String line1 = error.readLine();
-                            String line = input.readLine();
-                            while (line != null || line1 != null) {
-                                if (line != null)
-                                    Log.i("Client Output[" + antID + "]", line);
-                                if (line1 != null)
-                                    // Log.i("Client Output[" + antID + "]", line1);
-                                // System.out.println(antID + ":" + line);
-                                try {
-                                    line = input.readLine();
-                                    line1 = error.readLine();
-                                } catch (Exception e) {
-
-                                }
-                            }
-                        }
-                    } catch (Exception e) {
-                        // e.printStackTrace();
-                    }
+                    /*
+                     * try (BufferedReader input = new BufferedReader(new
+                     * InputStreamReader(p.getInputStream()))) { if (GameHandler.showGameLog) {
+                     * System.out.println("sla"); // String line1 = error.readLine(); String line =
+                     * input.readLine(); while (line != null) { if (line != null)
+                     * Log.i("Client Output[" + antID + "]", line); // if (line1 != null) //
+                     * Log.i("Client Output[" + antID + "]", line1); // System.out.println(antID +
+                     * ":" + line); try { line = input.readLine(); // line1 = error.readLine(); }
+                     * catch (Exception e) {
+                     * 
+                     * } } } } catch (Exception e) { // e.printStackTrace(); }
+                     */
                 } catch (IOException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
