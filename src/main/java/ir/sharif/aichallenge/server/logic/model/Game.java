@@ -106,11 +106,13 @@ public class Game {
         turnLog = addResourceLog(turnLog);
 
         List<ChatElementDTO> trivial_chat_box_0 = new ArrayList<>();
-        getColony(0).getAllMessagesThisTurn().forEach((msg) -> trivial_chat_box_0
-                .add(new ChatElementDTO(msg.getMessage(), msg.getValue(), msg.getSender_id())));
+        if (getColony(0).getAllMessagesThisTurn() != null)
+            getColony(0).getAllMessagesThisTurn().forEach((msg) -> trivial_chat_box_0
+                    .add(new ChatElementDTO(msg.getMessage(), msg.getValue(), msg.getSender_id())));
         List<ChatElementDTO> trivial_chat_box_1 = new ArrayList<>();
-        getColony(1).getAllMessagesThisTurn().forEach((msg) -> trivial_chat_box_1
-                .add(new ChatElementDTO(msg.getMessage(), msg.getValue(), msg.getSender_id())));
+        if (getColony(1).getAllMessagesThisTurn() != null)
+            getColony(1).getAllMessagesThisTurn().forEach((msg) -> trivial_chat_box_1
+                    .add(new ChatElementDTO(msg.getMessage(), msg.getValue(), msg.getSender_id())));
         turnLog.trivial_chat_box_0 = trivial_chat_box_0;
         turnLog.trivial_chat_box_1 = trivial_chat_box_1;
         getColony(0).setAllMessagesThisTurn(new ArrayList<>());
