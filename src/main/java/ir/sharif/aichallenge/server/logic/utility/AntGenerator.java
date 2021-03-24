@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 import ir.sharif.aichallenge.server.common.util.Log;
 import ir.sharif.aichallenge.server.engine.config.Configs;
 import ir.sharif.aichallenge.server.logic.GameHandler;
+import ir.sharif.aichallenge.server.logic.model.Game;
 import ir.sharif.aichallenge.server.logic.model.ant.AntType;
 
 public class AntGenerator {
@@ -21,6 +22,10 @@ public class AntGenerator {
     static ConcurrentLinkedDeque<Process> processes = new ConcurrentLinkedDeque();
 
     public static void runNewAnt(AntType type, int antID, int colonyID) {
+        if (GameHandler.runManually) {
+            Log.i("AntGenerator", "\u001B[32m" + " Run a new instance of your client, waiting... " + "\u001B[0m");
+            return;
+        }
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -33,7 +38,7 @@ public class AntGenerator {
 
                         if (GameHandler.showGameLog) {
                             while ((line = input.readLine()) != null) {
-                                // Log.i("AntID: " + antID, line);
+                                Log.i("Client Output[" + antID + "]", line);
                                 // System.out.println(antID + ":" + line);
                             }
                         }

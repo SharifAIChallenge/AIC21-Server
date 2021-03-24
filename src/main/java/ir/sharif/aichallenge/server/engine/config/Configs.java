@@ -80,6 +80,8 @@ public class Configs {
             FIRST_TEAM_NAME = split[1];
         } else if (split[0].equals("--second-team-name")) {
             SECOND_TEAM_NAME = split[1];
+        } else if (split[0].equals("--run-manually")) {
+            GameHandler.runManually = true;
         }
     }
 

@@ -50,6 +50,7 @@ public class GameHandler implements GameLogic {
     // if one colony generated its ants
     private static boolean oneColonyGeneratedAnt = false;
     private static boolean thereIsQueuedColony = false;
+    public static boolean runManually = false;
 
     public GameHandler() {
         this.antsNum = 0;
@@ -329,7 +330,14 @@ public class GameHandler implements GameLogic {
     @Override
     public Message[] getClientEndMessages() {
         // no need to send message at end now!
-        return new Message[0];
+        if (!runManually) {
+            return new Message[]{};
+        }
+        Message[] messages = new Message[antsNum];
+        for (int i = 0; i < antsNum; i++) {
+            messages[i] = new Message(MessageTypes.KILL, new JsonObject());
+        }
+        return messages;
     }
 
     @Override
