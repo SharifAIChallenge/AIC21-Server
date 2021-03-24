@@ -3,18 +3,21 @@ package ir.sharif.aichallenge.server.logic.model;
 import ir.sharif.aichallenge.server.common.network.Json;
 import ir.sharif.aichallenge.server.common.network.data.*;
 import ir.sharif.aichallenge.server.common.util.Log;
+import ir.sharif.aichallenge.server.logic.GameHandler;
 import ir.sharif.aichallenge.server.logic.config.ConstConfigs;
 import ir.sharif.aichallenge.server.logic.handlers.AttackHandler;
 import ir.sharif.aichallenge.server.logic.handlers.AttackSummary;
 import ir.sharif.aichallenge.server.logic.handlers.exceptions.GameActionException;
 import ir.sharif.aichallenge.server.logic.model.Colony.Colony;
 import ir.sharif.aichallenge.server.logic.model.ant.Ant;
+import ir.sharif.aichallenge.server.logic.model.ant.AntType;
 import ir.sharif.aichallenge.server.logic.model.cell.Cell;
 import ir.sharif.aichallenge.server.logic.model.chatbox.ChatMessage;
 import ir.sharif.aichallenge.server.logic.model.map.GameMap;
 import ir.sharif.aichallenge.server.logic.utility.MessageAdapter;
 import ir.sharif.aichallenge.server.logic.dto.graphics.AttackDTO;
 import ir.sharif.aichallenge.server.logic.dto.graphics.CellDTO;
+import ir.sharif.aichallenge.server.logic.dto.graphics.ChatElementDTO;
 import ir.sharif.aichallenge.server.logic.dto.graphics.GraphicLogDTO;
 import ir.sharif.aichallenge.server.logic.dto.graphics.TurnDTO;
 
@@ -79,12 +82,14 @@ public class Game {
         turnLog.turn_num = currentTurn;
         turnLog.base0_health = this.getColonies().get(0).getBaseHealth();
         turnLog.base1_health = this.getColonies().get(1).getBaseHealth();
-        List<String> chat_box_0 = new ArrayList<>();
-        this.getColonies().get(0).getChatBox().getChatMessages().forEach((msg) -> chat_box_0.add(msg.getMessage()));
-        List<String> chat_box_1 = new ArrayList<>();
-        this.getColonies().get(1).getChatBox().getChatMessages().forEach((msg) -> chat_box_1.add(msg.getMessage()));
-        turnLog.chat_box_0 = chat_box_0;
-        turnLog.chat_box_1 = chat_box_1;
+        List<ChatElementDTO> chat_box_0 = new ArrayList<>();
+        this.getColonies().get(0).getChatBox().getChatMessages().forEach(
+                (msg) -> chat_box_0.add(new ChatElementDTO(msg.getMessage(), msg.getValue(), msg.getSender_id())));
+        List<ChatElementDTO> chat_box_1 = new ArrayList<>();
+        this.getColonies().get(1).getChatBox().getChatMessages().forEach(
+                (msg) -> chat_box_1.add(new ChatElementDTO(msg.getMessage(), msg.getValue(), msg.getSender_id())));
+        turnLog.important_chat_box_0 = chat_box_0;
+        turnLog.important_chat_box_1 = chat_box_1;
         List<CellDTO> cells = new ArrayList<>();
         for (Cell cell : map.getAllCells()) {
             cells.add(new CellDTO(cell));
@@ -95,7 +100,65 @@ public class Game {
                 .map(x -> new AttackDTO(x.attacker_id, x.defender_id, x.src_row, x.src_col, x.dst_row, x.dst_col))
                 .collect(Collectors.toList());
         turnLog.attacks = attacks;
+
+        turnLog = addMoreToLog(turnLog, 0);
+        turnLog = addMoreToLog(turnLog, 1);
+        turnLog = addResourceLog(turnLog);
+
+        List<ChatElementDTO> trivial_chat_box_0 = new ArrayList<>();
+        getColony(0).getAllMessagesThisTurn().forEach((msg) -> trivial_chat_box_0
+                .add(new ChatElementDTO(msg.getMessage(), msg.getValue(), msg.getSender_id())));
+        List<ChatElementDTO> trivial_chat_box_1 = new ArrayList<>();
+        getColony(1).getAllMessagesThisTurn().forEach((msg) -> trivial_chat_box_1
+                .add(new ChatElementDTO(msg.getMessage(), msg.getValue(), msg.getSender_id())));
+        turnLog.trivial_chat_box_0 = trivial_chat_box_0;
+        turnLog.trivial_chat_box_1 = trivial_chat_box_1;
+        getColony(0).setAllMessagesThisTurn(new ArrayList<>());
+        getColony(1).setAllMessagesThisTurn(new ArrayList<>());
+
         graphicLogDTO.turns.add(turnLog);
+    }
+
+    private TurnDTO addResourceLog(TurnDTO log) {
+        log.team0_current_resource0 = getColony(0).getThisTurnBread();
+        log.team0_current_resource1 = getColony(0).getThisTurnGrass();
+        log.team1_current_resource0 = getColony(1).getThisTurnBread();
+        log.team1_current_resource1 = getColony(1).getThisTurnGrass();
+        log.team0_total_resource0 = getColony(0).getGainedBread();
+        log.team0_total_resource1 = getColony(0).getGainedGrass();
+        log.team1_total_resource0 = getColony(1).getGainedBread();
+        log.team1_total_resource1 = getColony(1).getGainedGrass();
+        getColony(0).setThisTurnBread(0);
+        getColony(0).setThisTurnGrass(0);
+        getColony(1).setThisTurnBread(0);
+        getColony(1).setThisTurnGrass(0);
+        return log;
+    }
+
+    private TurnDTO addMoreToLog(TurnDTO log, int colonyID) {
+        List<Ant> ants = getColony(colonyID).getAnts();
+        int workers_alive = 0;
+        int workers = 0;
+        int soldier_alive = 0;
+        int soldiers = 0;
+        for (Ant ant : ants) {
+            if (ant.getAntType() == AntType.SOLDIER) {
+                soldiers++;
+                if (!ant.isDead())
+                    soldier_alive++;
+            } else {
+                workers++;
+                if (!ant.isDead())
+                    workers_alive++;
+            }
+        }
+        if (colonyID == 0) {
+            log.team0_alive_soldiers = soldier_alive;
+            log.team0_alive_workers = workers_alive;
+            log.team0_total_soldiers = soldiers;
+            log.team0_total_workers = workers;
+        }
+        return log;
     }
 
     public GameJudge getGameJudge() {
@@ -135,7 +198,9 @@ public class Game {
     private void addMessage(Colony colony, List<ClientMessageInfo> messages) {
         List<ChatMessage> chatMessages = messageAdapter.convertToChatMessage(messages, currentTurn);
         colony.getChatBox().addMessage(chatMessages);
-        System.out.println("chat message: " + Json.GSON.toJson(chatMessages));
+        colony.setAllMessagesThisTurn(chatMessages);
+        if (GameHandler.showGameLog)
+            System.out.println("chat message: " + Json.GSON.toJson(chatMessages));
     }
 
     private void handleAntsMove(Map<String, List<ClientMessageInfo>> messages) {

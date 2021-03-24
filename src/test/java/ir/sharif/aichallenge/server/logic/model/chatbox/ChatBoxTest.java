@@ -25,10 +25,10 @@ class ChatBoxTest {
     @Test
     void addMessage() {
         List<ChatMessage> chatMessages = new ArrayList<>();
-        chatMessages.add(new ChatMessage("1", 1, 1));
-        chatMessages.add(new ChatMessage("1", 2, 1));
-        chatMessages.add(new ChatMessage("1", 3, 1));
-        chatMessages.add(new ChatMessage("1", 3, 1));
+        chatMessages.add(new ChatMessage("1", 1, 1, 1));
+        chatMessages.add(new ChatMessage("1", 2, 1, 1));
+        chatMessages.add(new ChatMessage("1", 3, 1, 1));
+        chatMessages.add(new ChatMessage("1", 3, 1, 1));
 
         chatBox.addMessage(chatMessages);
         List<ChatMessage> expectedMessages = chatBox.getChatMessages();

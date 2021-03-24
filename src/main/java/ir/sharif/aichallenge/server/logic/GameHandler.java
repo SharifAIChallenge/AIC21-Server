@@ -130,7 +130,7 @@ public class GameHandler implements GameLogic {
                     Json.GSON.toJsonTree(new GameConfigDTO(this.game, i), GameConfigDTO.class).getAsJsonObject());
         }
 
-        System.out.println("initial messages created");
+        Log.i("GameHandler", "initial messages created");
         return initialMessages;
     }
 
@@ -153,7 +153,8 @@ public class GameHandler implements GameLogic {
     }
 
     private ArrayList<Integer> handleAntGeneration() {
-        if (antsNum > Configs.MAX_ANTS) {
+        if (antsNum >= Configs.MAX_ANTS) {
+            thereIsQueuedColony = false;
             return new ArrayList<>();
         }
         ArrayList<Integer> result = new ArrayList<>();
@@ -336,7 +337,7 @@ public class GameHandler implements GameLogic {
         if (game.isFinished()) {
             Colony winner = game.getGameJudge().getWinner();
             Log.i("Game Finished", "Winner Colony ID: " + winner.getId());
-            Log.i("Killer!", "Killing ants... [if not worked, kill them by hand :)]");
+            Log.i("Killer!", "Killing ants... [if not worked, kill them manually :)]");
             AntGenerator.killAnts();
             GraphicUtils.generateLogFile(game.graphicLogDTO);
         }

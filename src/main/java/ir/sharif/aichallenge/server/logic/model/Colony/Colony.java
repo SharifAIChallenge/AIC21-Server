@@ -9,6 +9,7 @@ import ir.sharif.aichallenge.server.logic.model.cell.BaseCell;
 import ir.sharif.aichallenge.server.logic.model.cell.Cell;
 import ir.sharif.aichallenge.server.logic.model.cell.ResourceType;
 import ir.sharif.aichallenge.server.logic.model.chatbox.ChatBox;
+import ir.sharif.aichallenge.server.logic.model.chatbox.ChatMessage;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +20,8 @@ public class Colony {
     private int id;
     private int gainedBread = 0;
     private int gainedGrass = 0;
+    private int thisTurnBread = 0;
+    private int thisTurnGrass = 0;
     private Cell base;
     private int baseHealth;
     private HashMap<Integer, Ant> ants;
@@ -27,6 +30,7 @@ public class Colony {
     private int toBeGeneratedSoldiersCount;
     private int allWorkerAntsGeneratedCount;
     private int allSoldierAntsGeneratedCount;
+    private List<ChatMessage> allMessagesThisTurn;
 
     public Colony(int id, BaseCell base, int baseHealth) {
         this.id = id;
@@ -41,6 +45,14 @@ public class Colony {
 
     public int getGainedBread() {
         return gainedBread;
+    }
+
+    public List<ChatMessage> getAllMessagesThisTurn() {
+        return allMessagesThisTurn;
+    }
+
+    public void setAllMessagesThisTurn(List<ChatMessage> allMessagesThisTurn) {
+        this.allMessagesThisTurn = allMessagesThisTurn;
     }
 
     public int getGainedGrass() {
@@ -68,13 +80,31 @@ public class Colony {
 
     private void addBread(int amount) {
         gainedBread += amount;
+        thisTurnBread += amount;
         if (gainedBread >= ConstConfigs.GENERATE_WORKER_BREAD_AMOUNT) {
             generateWorker();
         }
     }
 
+    public int getThisTurnBread() {
+        return thisTurnBread;
+    }
+
+    public int getThisTurnGrass() {
+        return thisTurnGrass;
+    }
+
+    public void setThisTurnBread(int thisTurnBread) {
+        this.thisTurnBread = thisTurnBread;
+    }
+
+    public void setThisTurnGrass(int thisTurnGrass) {
+        this.thisTurnGrass = thisTurnGrass;
+    }
+
     private void addGrass(int amount) {
         gainedGrass += amount;
+        thisTurnGrass += amount;
         if (gainedGrass >= ConstConfigs.GENERATE_SOLDIER_GRASS_AMOUNT) {
             generateSoldier();
         }
@@ -154,6 +184,5 @@ public class Colony {
     public int getAllResourcesAmount() {
         return gainedBread + gainedGrass;
     }
-
 
 }

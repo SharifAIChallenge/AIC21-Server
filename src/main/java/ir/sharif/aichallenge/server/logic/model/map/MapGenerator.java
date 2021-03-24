@@ -11,9 +11,9 @@ import ir.sharif.aichallenge.server.logic.model.cell.CellType;
 import ir.sharif.aichallenge.server.logic.model.cell.ResourceType;
 
 public class MapGenerator {
-    private static final double breadCellProb = 5;
-    private static final double grassCellProb = 5;
-    private static final double wallCellProb = 0;
+    private static final double breadCellProb = 2;
+    private static final double grassCellProb = 2;
+    private static final double wallCellProb = 1;
     private static Random random = new Random();
     private static int playersCount;
 
