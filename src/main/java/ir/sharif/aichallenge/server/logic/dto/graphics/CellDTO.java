@@ -16,7 +16,7 @@ public class CellDTO {
     public CellDTO(Cell cell) {
         this.row = cell.getY();
         this.col = cell.getX();
-        this.resource_type = cell.getCellType().getValue();
+        this.resource_type = cell.getResourceType().getValue();
         this.resource_value = cell.getResourceAmount();
         this.ants = new ArrayList<>();
         for (Ant ant : cell.getAnts()) {
