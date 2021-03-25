@@ -1,14 +1,19 @@
 package ir.sharif.aichallenge.server.logic.model.map;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
+import ir.sharif.aichallenge.server.common.util.Log;
 import ir.sharif.aichallenge.server.logic.config.ConstConfigs;
 import ir.sharif.aichallenge.server.logic.model.Colony.Colony;
 import ir.sharif.aichallenge.server.logic.model.cell.BaseCell;
 import ir.sharif.aichallenge.server.logic.model.cell.Cell;
 import ir.sharif.aichallenge.server.logic.model.cell.CellType;
 import ir.sharif.aichallenge.server.logic.model.cell.ResourceType;
+import ir.sharif.aichallenge.server.logic.utility.JsonUtility;
+import org.json.simple.parser.ParseException;
 
 public class MapGenerator {
     private static final double breadCellProb = 2;
@@ -56,8 +61,29 @@ public class MapGenerator {
         return new MapGeneratorResult(map, colonies);
     }
 
-    public static GameMap generateFromFile(String fileName) {
-        // TODO
+    public static MapGeneratorResult generateFromFile(String fileName) {
+        int height = ConstConfigs.MAP_HEIGHT;
+        int width = ConstConfigs.MAP_WIDTH;
+        try {
+            ExternalMap externalMap = JsonUtility.readMapFromFile(fileName, height, width);
+            GameMap gameMap = new GameMap(externalMap.getCells(), height, width);
+            List<BaseCell> baseCells = externalMap.getUnAllocatedBaseCells();
+            if (baseCells.size() < 2) {
+                Log.e("MapGenerator", "There should be two base cells in map.json!");
+                System.exit(-1);
+            }
+            Colony firstColony = new Colony(0, baseCells.get(0), ConstConfigs.BASE_INIT_HEALTH);
+            Colony secondColony = new Colony(1, baseCells.get(1), ConstConfigs.BASE_INIT_HEALTH);
+            baseCells.get(0).setColony(firstColony);
+            baseCells.get(1).setColony(secondColony);
+
+            HashMap<Integer, Colony> colonies = new HashMap<>();
+            colonies.put(0, firstColony);
+            colonies.put(1, secondColony);
+            return new MapGeneratorResult(gameMap, colonies);
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
