@@ -1,7 +1,7 @@
 package ir.sharif.aichallenge.server.logic;
 
+import com.google.gson.JsonObject;
 import ir.sharif.aichallenge.server.common.network.Json;
-import ir.sharif.aichallenge.server.common.network.data.ActionInfo;
 import ir.sharif.aichallenge.server.common.network.data.ClientMessageInfo;
 import ir.sharif.aichallenge.server.common.network.data.Message;
 import ir.sharif.aichallenge.server.common.network.data.MessageTypes;
@@ -9,34 +9,26 @@ import ir.sharif.aichallenge.server.common.util.Log;
 import ir.sharif.aichallenge.server.engine.config.Configs;
 import ir.sharif.aichallenge.server.engine.core.GameLogic;
 import ir.sharif.aichallenge.server.logic.config.ConfigReader;
+import ir.sharif.aichallenge.server.logic.config.ConstConfigs;
 import ir.sharif.aichallenge.server.logic.dto.graphics.GraphicGameConfigDTO;
 import ir.sharif.aichallenge.server.logic.dto.payloads.GameConfigDTO;
 import ir.sharif.aichallenge.server.logic.dto.payloads.GameStatusDTO;
 import ir.sharif.aichallenge.server.logic.handlers.exceptions.GameActionException;
-import ir.sharif.aichallenge.server.logic.model.Game;
 import ir.sharif.aichallenge.server.logic.model.Colony.Colony;
+import ir.sharif.aichallenge.server.logic.model.Game;
 import ir.sharif.aichallenge.server.logic.model.ant.Ant;
 import ir.sharif.aichallenge.server.logic.model.ant.AntType;
 import ir.sharif.aichallenge.server.logic.model.cell.Cell;
-import ir.sharif.aichallenge.server.logic.model.cell.CellType;
 import ir.sharif.aichallenge.server.logic.model.chatbox.ChatMessage;
 import ir.sharif.aichallenge.server.logic.model.map.MapGenerator;
 import ir.sharif.aichallenge.server.logic.model.map.MapGenerator.MapGeneratorResult;
 import ir.sharif.aichallenge.server.logic.utility.AntGenerator;
 import ir.sharif.aichallenge.server.logic.utility.GraphicUtils;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.*;
-
-import javax.naming.spi.DirStateFactory.Result;
-
-import com.google.gson.JsonObject;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class GameHandler implements GameLogic {
 
@@ -86,7 +78,10 @@ public class GameHandler implements GameLogic {
         // read config file
         ConfigReader.readConfigFile();
         // generate map
-        MapGeneratorResult generatedMap = MapGenerator.generateRandomMap();
+        MapGeneratorResult generatedMap = ConstConfigs.READ_MAP_FROM_FILE ?
+                MapGenerator.generateFromFile("map.json") :
+                MapGenerator.generateRandomMap();
+        generatedMap = generatedMap == null ? MapGenerator.generateRandomMap() : generatedMap;
         // create Game
         this.game = new Game(generatedMap.map, generatedMap.colonies);
         this.game.graphicLogDTO.game_config = new GraphicGameConfigDTO(generatedMap.map);
@@ -210,21 +205,21 @@ public class GameHandler implements GameLogic {
          * (!oneColonyGeneratedAnt) { System.out.println("1004"); workers =
          * colony.getToBeGeneratedWorkersCount(); if (workers > 0) {
          * System.out.println("1005");
-         * 
+         *
          * result.add(addNewAnt(colony.getBase().getX(), colony.getBase().getY(),
          * colony.getId(), AntType.WORKER)); colony.setToBeGeneratedWorkersCount(workers
          * - 1); oneColonyGeneratedAnt = true; } } soldiers =
          * colony.getToBeGeneratedSoldiersCount(); workers =
          * colony.getToBeGeneratedWorkersCount(); if (soldiers == 0 && workers == 0) {
          * thereIsQueuedColony = false; System.out.println("1006");
-         * 
+         *
          * } else { thereIsQueuedColony = true; System.out.println("1007");
-         * 
+         *
          * } } else { int soldiers = colony.getToBeGeneratedSoldiersCount(); int workers
          * = colony.getToBeGeneratedWorkersCount(); if ((soldiers > 0) || (workers > 0))
          * { System.out.println("1008"); thereIsQueuedColony = true; } if (soldiers == 0
          * && workers == 0) { thereIsQueuedColony = false; System.out.println("1009");
-         * 
+         *
          * } }
          */
         // }
@@ -315,7 +310,7 @@ public class GameHandler implements GameLogic {
         // Send game status to each ant
         Message[] messages = new Message[antsNum];
         if (thereIsQueuedColony) {
-            return new Message[] {};
+            return new Message[]{};
         }
         for (int i = 0; i < antsNum; i++) {
             if (deadAnts != null && deadAnts.keySet().contains(i)) {
@@ -343,7 +338,7 @@ public class GameHandler implements GameLogic {
     public Message[] getClientEndMessages() {
         // no need to send message at end now!
         if (!runManually) {
-            return new Message[] {};
+            return new Message[]{};
         }
         Message[] messages = new Message[antsNum];
         for (int i = 0; i < antsNum; i++) {

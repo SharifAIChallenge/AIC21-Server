@@ -27,4 +27,6 @@ public class ConstConfigs {
     public static int BASE_MAX_ATTACK_DISTANCE = 2;
     public static int BASE_ATTACK_DAMAGE = 2;
     public static int BASE_INIT_HEALTH = 100;
+
+    public static boolean READ_MAP_FROM_FILE = false;
 }

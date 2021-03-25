@@ -18,6 +18,19 @@ public enum CellType {
         }
     }
 
+    public static CellType getCellType(int value) {
+        switch (value) {
+            case 0:
+                return BASE;
+            case 1:
+                return EMPTY;
+            case 2:
+                return WALL;
+            default:
+                return EMPTY;
+        }
+    }
+
     @Override
     public String toString() {
         switch (this) {
