@@ -79,7 +79,7 @@ public class GameHandler implements GameLogic {
         ConfigReader.readConfigFile();
         // generate map
         MapGeneratorResult generatedMap = ConstConfigs.READ_MAP_FROM_FILE ?
-                MapGenerator.generateFromFile("map.json") :
+                MapGenerator.generateFromFile(Configs.MAP_PATH) :
                 MapGenerator.generateRandomMap();
         generatedMap = generatedMap == null ? MapGenerator.generateRandomMap() : generatedMap;
         // create Game

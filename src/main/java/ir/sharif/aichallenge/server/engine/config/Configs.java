@@ -65,6 +65,7 @@ public class Configs {
     public static int MAX_ANTS = 200;
     public static String FIRST_TEAM_NAME = "first_team";
     public static String SECOND_TEAM_NAME = "second_team";
+    public static String MAP_PATH = "map.json";
 
     private static void handleArg(String arg) {
         String[] split = arg.split("=");
@@ -82,6 +83,8 @@ public class Configs {
             SECOND_TEAM_NAME = split[1];
         } else if (split[0].equals("--run-manually")) {
             GameHandler.runManually = true;
+        } else if (split[0].equals("--read-map")) {
+            MAP_PATH = split[1];
         }
     }
 

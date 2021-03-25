@@ -1,5 +1,7 @@
 package ir.sharif.aichallenge.server.logic.utility;
 
+import ir.sharif.aichallenge.server.common.util.Log;
+import ir.sharif.aichallenge.server.logic.config.ConstConfigs;
 import ir.sharif.aichallenge.server.logic.model.cell.BaseCell;
 import ir.sharif.aichallenge.server.logic.model.cell.Cell;
 import ir.sharif.aichallenge.server.logic.model.cell.CellType;
@@ -15,19 +17,29 @@ import java.io.IOException;
 
 public class JsonUtility {
 
-    public static ExternalMap readMapFromFile(String fileName, int height, int width) throws IOException, ParseException {
-        Cell[][] mapCells = new Cell[height][width];
-        ExternalMap externalMap = new ExternalMap(mapCells);
+    public static ExternalMap readMapFromFile(String fileName, int height, int width)
+            throws IOException, ParseException {
 
         JSONParser jsonParser = new JSONParser();
         try (FileReader reader = new FileReader(fileName)) {
             JSONObject map = (JSONObject) jsonParser.parse(reader);
+            try {
+                ConstConfigs.MAP_HEIGHT = ((Long) map.get("MAP_HEIGHT")).intValue();
+                ConstConfigs.MAP_WIDTH = ((Long) map.get("MAP_WIDTH")).intValue();
+            } catch (Exception e) {
+                Log.e("JsonUtility", "MAP_HEITH or MAP_WIDTH is not available in map.json!");
+                System.exit(-1);
+            }
             JSONArray cells = (JSONArray) map.get("cells_type");
-
+            height = ConstConfigs.MAP_HEIGHT;
+            width = ConstConfigs.MAP_WIDTH;
+            Cell[][] mapCells = new Cell[height][width];
+            ExternalMap externalMap = new ExternalMap(mapCells);
             for (Object o : cells) {
                 Cell cell = parseCellObject((JSONObject) o);
+                // (cell.getY() + " " + cell.getX());
                 mapCells[cell.getY()][cell.getX()] = cell;
-                if (cell.isBase()){
+                if (cell.isBase()) {
                     externalMap.addBaseCell((BaseCell) cell);
                 }
             }
@@ -39,39 +51,39 @@ public class JsonUtility {
         }
     }
 
-
     private static Cell parseCellObject(JSONObject cell) {
-        //Get cell first name
-        int yPosition = ((Long)cell.get("row")).intValue();
-        System.out.println(yPosition);
+        // Get cell first name
+        int yPosition = ((Long) cell.get("row")).intValue();
+        // (yPosition);
 
-        //Get cell last name
-        int xPosition = ((Long)cell.get("col")).intValue();
-        System.out.println(xPosition);
+        // Get cell last name
+        int xPosition = ((Long) cell.get("col")).intValue();
+        // (xPosition);
 
-        //Get cell website name
-        int cell_type_value = ((Long)cell.get("cell_type")).intValue();
+        // Get cell website name
+        int cell_type_value = ((Long) cell.get("cell_type")).intValue();
+        cell_type_value = cell_type_value >= 1 ? cell_type_value - 1 : cell_type_value;
         CellType cellType = CellType.getCellType(cell_type_value);
-        System.out.println(cellType);
+        // (cellType);
 
         ResourceType resourceType = ResourceType.NONE;
         int resourceAmount = 0;
-//        int grass = ((Long)cell.get("res1")).intValue();
-//        System.out.println(ResourceType.getResourceType(1));
-//
-//        int bread = ((Long)cell.get("res2")).intValue();
-//        System.out.println(ResourceType.getResourceType(0));
+        int grass = ((Long) cell.get("rec1")).intValue();
+        // (ResourceType.getResourceType(1));
 
-//        if (grass != 0) {
-//            resourceType = ResourceType.GRASS;
-//            resourceAmount = grass;
-//        } else if (bread != 0) {
-//            resourceType = ResourceType.BREAD;
-//            resourceAmount = bread;
-//        } else {
-//            resourceType = ResourceType.NONE;
-//            resourceAmount = 0;
-//        }
+        int bread = ((Long) cell.get("rec2")).intValue();
+        // (ResourceType.getResourceType(0));
+
+        if (grass != 0) {
+            resourceType = ResourceType.GRASS;
+            resourceAmount = grass;
+        } else if (bread != 0) {
+            resourceType = ResourceType.BREAD;
+            resourceAmount = bread;
+        } else {
+            resourceType = ResourceType.NONE;
+            resourceAmount = 0;
+        }
 
         if (cellType == CellType.BASE) {
             return new BaseCell(xPosition, yPosition);

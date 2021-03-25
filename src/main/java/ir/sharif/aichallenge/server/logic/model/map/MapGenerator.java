@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import ir.sharif.aichallenge.server.common.util.Log;
 import ir.sharif.aichallenge.server.logic.config.ConstConfigs;
 import ir.sharif.aichallenge.server.logic.model.Colony.Colony;
 import ir.sharif.aichallenge.server.logic.model.cell.BaseCell;
@@ -65,9 +66,12 @@ public class MapGenerator {
         int width = ConstConfigs.MAP_WIDTH;
         try {
             ExternalMap externalMap = JsonUtility.readMapFromFile(fileName, height, width);
-            GameMap gameMap = new GameMap(externalMap.getCells(),height, width);
+            GameMap gameMap = new GameMap(externalMap.getCells(), height, width);
             List<BaseCell> baseCells = externalMap.getUnAllocatedBaseCells();
-
+            if (baseCells.size() < 2) {
+                Log.e("MapGenerator", "There should be two base cells in map.json!");
+                System.exit(-1);
+            }
             Colony firstColony = new Colony(0, baseCells.get(0), ConstConfigs.BASE_INIT_HEALTH);
             Colony secondColony = new Colony(1, baseCells.get(1), ConstConfigs.BASE_INIT_HEALTH);
             baseCells.get(0).setColony(firstColony);
