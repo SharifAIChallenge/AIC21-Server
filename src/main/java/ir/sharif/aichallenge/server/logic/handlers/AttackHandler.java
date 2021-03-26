@@ -99,21 +99,21 @@ public class AttackHandler {
             newDeadAnts.put(ant.getId(), ant);
             if (ant.getAntType() == AntType.SOLDIER) {
                 map.addResource(ResourceType.GRASS,
-                        ConstConfigs.RATE_DEATH_RESOURCE * ConstConfigs.GENERATE_SOLDIER_GRASS_AMOUNT,
+                        (int) Math.ceil(ConstConfigs.RATE_DEATH_RESOURCE * ConstConfigs.GENERATE_SOLDIER_GRASS_AMOUNT),
                         ant.getXPosition(), ant.getYPosition());
             } else {
                 if (ant.getCarryingResourceType() == ResourceType.NONE)
                     map.addResource(ResourceType.BREAD,
-                            ConstConfigs.RATE_DEATH_RESOURCE * ConstConfigs.GENERATE_WORKER_BREAD_AMOUNT,
+                            (int) Math.ceil(ConstConfigs.RATE_DEATH_RESOURCE * ConstConfigs.GENERATE_WORKER_BREAD_AMOUNT),
                             ant.getXPosition(), ant.getYPosition());
                 else if (ant.getCarryingResourceType() == ResourceType.BREAD)
                     map.addResource(ResourceType.BREAD,
-                            ConstConfigs.RATE_DEATH_RESOURCE * ConstConfigs.GENERATE_WORKER_BREAD_AMOUNT
-                                    + ant.getCarryingResourceAmount(),
+                            (int) Math.ceil(ConstConfigs.RATE_DEATH_RESOURCE * ConstConfigs.GENERATE_WORKER_BREAD_AMOUNT
+                                    + ant.getCarryingResourceAmount()),
                             ant.getXPosition(), ant.getYPosition());
                 else {
                     map.addResource(ResourceType.BREAD,
-                            ConstConfigs.RATE_DEATH_RESOURCE * ConstConfigs.GENERATE_WORKER_BREAD_AMOUNT,
+                            (int)Math.ceil(ConstConfigs.RATE_DEATH_RESOURCE * ConstConfigs.GENERATE_WORKER_BREAD_AMOUNT),
                             ant.getXPosition(), ant.getYPosition());
                     map.addResource(ResourceType.GRASS, ant.getCarryingResourceAmount(), ant.getXPosition(),
                             ant.getYPosition());

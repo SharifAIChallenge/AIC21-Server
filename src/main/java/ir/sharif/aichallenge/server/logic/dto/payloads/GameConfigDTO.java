@@ -15,7 +15,7 @@ public class GameConfigDTO {
     int attack_distance;
     int generate_kargar;
     int generate_sarbaaz;
-    int rate_death_resource;
+    float rate_death_resource;
 
     public GameConfigDTO(Game game, int antId) {
         Ant ant = game.getAntByID(antId);

@@ -116,6 +116,6 @@ public class Cell {
             if (this.getResourceAmount() == 0){
                 break;
             }
-        }   
+        }
     }
 }
