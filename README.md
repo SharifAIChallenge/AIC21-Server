@@ -16,6 +16,7 @@ To run locally follow these instructions
 `java -jar server.jar --first-team=/path/to/first/team/client --second-team=/path/to/second/team/client`
 ## main arguments
   - `--first-team`: full path to client binary or jar file for first team
+    - use `./` if path is relative
   - `--second-team`: full path to client binary or jar file for second team
 ## optional arguments
   - `--run-manually` : run clients manually (server asks you to run a new instance when needed!)
