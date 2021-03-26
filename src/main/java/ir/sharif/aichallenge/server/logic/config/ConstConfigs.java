@@ -19,7 +19,7 @@ public class ConstConfigs {
     public static int MAX_MESSAGE_LENGTH = 10;
 
     public static int GAME_MAXIMUM_TURN_COUNT = 40;
-    public static int RATE_DEATH_RESOURCE = 1;
+    public static float RATE_DEATH_RESOURCE = 1;
 
     public static int MAP_WIDTH = 20;
     public static int MAP_HEIGHT = 10;
@@ -27,6 +27,8 @@ public class ConstConfigs {
     public static int BASE_MAX_ATTACK_DISTANCE = 2;
     public static int BASE_ATTACK_DAMAGE = 2;
     public static int BASE_INIT_HEALTH = 100;
+
+    public static int WORKER_MAX_CARRYING_RESOURCE_AMOUNT = 10;
 
     public static boolean READ_MAP_FROM_FILE = false;
 }
