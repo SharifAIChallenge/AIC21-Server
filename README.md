@@ -11,7 +11,7 @@ To run locally follow these instructions
 - Also add map details file ( `map.json` ) besides `server.jar`
   - don't rename
   - You can pass `map.json` file address using `--read-map` arg to server
-- 
+
 # Run server 
 `java -jar server.jar --first-team=/path/to/first/team/client --second-team=/path/to/second/team/client`
 ## main arguments
