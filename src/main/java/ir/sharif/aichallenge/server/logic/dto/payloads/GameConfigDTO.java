@@ -15,7 +15,7 @@ public class GameConfigDTO {
     int attack_distance;
     int generate_kargar;
     int generate_sarbaaz;
-    float rate_death_resource;
+    int rate_death_resource;
 
     public GameConfigDTO(Game game, int antId) {
         Ant ant = game.getAntByID(antId);
@@ -29,6 +29,6 @@ public class GameConfigDTO {
         this.attack_distance = ConstConfigs.ANT_MAX_ATTACK_DISTANCE;
         this.generate_kargar = ConstConfigs.GENERATE_WORKER_BREAD_AMOUNT;
         this.generate_sarbaaz = ConstConfigs.GENERATE_SOLDIER_GRASS_AMOUNT;
-        this.rate_death_resource = ConstConfigs.RATE_DEATH_RESOURCE;
+        this.rate_death_resource = 1;
     }
 }
