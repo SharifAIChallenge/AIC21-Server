@@ -7,5 +7,7 @@ To run locally follow these instructions
   - `target/AIC21-Server-1.0-SNAPSHOT-jar-with-dependencies.jar`
 - Add a game config file `map.config` besides jar file
   - Its content should be similar to `map.config` above.
+- Also add map details file ( `map.json` ) besides `server.jar`
+  - don't rename
 - run server: `java -jar server.jar` (or `java -jar AIC21-Server-1.0-SNAPSHOT-jar-with-dependencies.jar --first-team=/path/to/client --second-team=/path/to/client`)
 - output for graphics: `log.json`
