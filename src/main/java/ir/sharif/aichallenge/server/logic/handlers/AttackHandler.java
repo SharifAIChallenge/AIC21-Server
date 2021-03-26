@@ -32,8 +32,10 @@ public class AttackHandler {
         attackSummaries = new ArrayList<>();
 
         for (Colony colony : antRepository.getColonies()) {
+            // -1 is for the colony with id = 0 and -2 is for the colony with id = 1
+            int attackerId = colony.getId() == 0 ? -1 : -2;
             runAttack(colony.getId(), colony.getBase().getX(), colony.getBase().getY(),
-                    ConstConfigs.BASE_ATTACK_DAMAGE, ConstConfigs.BASE_MAX_ATTACK_DISTANCE, -1);
+                    ConstConfigs.BASE_ATTACK_DAMAGE, ConstConfigs.BASE_MAX_ATTACK_DISTANCE, attackerId);
         }
 
         for (Colony colony : antRepository.getColonies()) {
@@ -80,10 +82,8 @@ public class AttackHandler {
         int index = rand.nextInt(ants.size());
         Ant defender = ants.get(index);
         defender.decreaseHealth(damage);
-        if (attackerId != -1) {
-            AttackSummary attackSummary = new AttackSummary(attackerId, defender.getId(), fromYPosition, fromXPosition, defender.getYPosition(), defender.getXPosition());
-            attackSummaries.add(attackSummary);
-        }
+        AttackSummary attackSummary = new AttackSummary(attackerId, defender.getId(), fromYPosition, fromXPosition, defender.getYPosition(), defender.getXPosition());
+        attackSummaries.add(attackSummary);
     }
 
     private void handleDeadAnts() {
@@ -113,7 +113,7 @@ public class AttackHandler {
                             ant.getXPosition(), ant.getYPosition());
                 else {
                     map.addResource(ResourceType.BREAD,
-                            (int)Math.ceil(ConstConfigs.RATE_DEATH_RESOURCE * ConstConfigs.GENERATE_WORKER_BREAD_AMOUNT),
+                            (int) Math.ceil(ConstConfigs.RATE_DEATH_RESOURCE * ConstConfigs.GENERATE_WORKER_BREAD_AMOUNT),
                             ant.getXPosition(), ant.getYPosition());
                     map.addResource(ResourceType.GRASS, ant.getCarryingResourceAmount(), ant.getXPosition(),
                             ant.getYPosition());
