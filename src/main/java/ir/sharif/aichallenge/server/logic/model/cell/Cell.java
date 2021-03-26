@@ -1,10 +1,12 @@
 package ir.sharif.aichallenge.server.logic.model.cell;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import ir.sharif.aichallenge.server.logic.config.ConstConfigs;
 import ir.sharif.aichallenge.server.logic.model.ant.Ant;
 import ir.sharif.aichallenge.server.logic.model.ant.AntType;
 
@@ -75,9 +77,9 @@ public class Cell {
 
     private void decreaseResource(int amount) {
         resourceAmount -= amount;
-        if(resourceAmount == 0)
+        if (resourceAmount == 0)
             resourceType = ResourceType.NONE;
-        if(resourceAmount < 0)
+        if (resourceAmount < 0)
             throw new RuntimeException("negative resource type !!!");
     }
 
@@ -93,23 +95,27 @@ public class Cell {
         if (cellType == CellType.WALL)
             return;
         List<Ant> freeWorkerAnts = getWorkerAnts().stream()
-                .filter(x -> x.getCarryingResourceType() == ResourceType.NONE)
+                .filter(x -> x.getCarryingResourceType() == ResourceType.NONE ||
+                        (x.getCarryingResourceType() == this.getResourceType() &&
+                                x.getCarryingResourceAmount() < ConstConfigs.WORKER_MAX_CARRYING_RESOURCE_AMOUNT))
                 .collect(Collectors.toList());
-        if (freeWorkerAnts.size() <= getResourceAmount()) {
-            for (Ant ant : freeWorkerAnts) {
-                ant.setCarryingResourceAmount(1);
-                ant.setCarryingResourceType(getResourceType());
+
+        Collections.shuffle(freeWorkerAnts);
+        for (Ant ant : freeWorkerAnts) {
+            int wantedAmount = ConstConfigs.WORKER_MAX_CARRYING_RESOURCE_AMOUNT - ant.getCarryingResourceAmount();
+            if (wantedAmount > this.getResourceAmount()) {
+                ant.setCarryingResourceAmount(ant.getCarryingResourceAmount() + this.getResourceAmount());
+                ant.setCarryingResourceType(this.getResourceType());
+                this.decreaseResource(this.getResourceAmount());
+            } else {
+                ant.setCarryingResourceAmount(ant.getCarryingResourceAmount() + wantedAmount);
+                ant.setCarryingResourceType(this.getResourceType());
+                this.decreaseResource(wantedAmount);
             }
-            decreaseResource(freeWorkerAnts.size());
-        } else {
-            for (int i = 0; i < getResourceAmount(); i++) {
-                int randomIndex = random.nextInt(freeWorkerAnts.size());
-                Ant ant = freeWorkerAnts.get(randomIndex);
-                freeWorkerAnts.remove(randomIndex);
-                ant.setCarryingResourceAmount(1);
-                ant.setCarryingResourceType(getResourceType());
+
+            if (this.getResourceAmount() == 0){
+                break;
             }
-            decreaseResource(resourceAmount);
-        }
+        }   
     }
 }
