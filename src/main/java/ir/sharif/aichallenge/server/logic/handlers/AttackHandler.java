@@ -77,6 +77,7 @@ public class AttackHandler {
     }
 
     private void runAttack(int fromXPosition, int fromYPosition, int damage, int attackerId, List<Ant> ants) {
+        // attackerId = -1 --> base attack
         int index = rand.nextInt(ants.size());
         Ant defender = ants.get(index);
         defender.decreaseHealth(damage);

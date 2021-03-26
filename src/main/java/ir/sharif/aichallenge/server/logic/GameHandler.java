@@ -300,9 +300,9 @@ public class GameHandler implements GameLogic {
 
     @Override
     public Message[] getClientMessages() {
-        if (game.getTurn() == 0) {
+        /* if (game.getTurn() == 0) {
             return getClientInitialMessages();
-        }
+        } */
 
         // dead ants
         HashMap<Integer, Ant> deadAnts = game.getNewDeadAnts();

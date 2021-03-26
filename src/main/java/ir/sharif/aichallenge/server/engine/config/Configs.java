@@ -92,7 +92,7 @@ public class Configs {
         for (String arg : args) {
             handleArg(arg);
         }
-        if (FIRST_TEAM_PATH == null || SECOND_TEAM_PATH == null) {
+        if ((FIRST_TEAM_PATH == null || SECOND_TEAM_PATH == null) && !GameHandler.runManually) {
             Log.e("Config", "--first-team or --second-team args not found!");
             System.exit(-1);
         }
