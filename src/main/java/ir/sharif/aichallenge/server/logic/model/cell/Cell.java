@@ -92,7 +92,7 @@ public class Cell {
     }
 
     public void manageResources() {
-        if (cellType == CellType.WALL)
+        if (cellType == CellType.WALL || resourceType == ResourceType.NONE)
             return;
         List<Ant> freeWorkerAnts = getWorkerAnts().stream()
                 .filter(x -> x.getCarryingResourceType() == ResourceType.NONE ||
