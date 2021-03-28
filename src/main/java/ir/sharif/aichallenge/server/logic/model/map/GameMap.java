@@ -60,8 +60,11 @@ public class GameMap {
                     if (getManhattanDistance(x, y, xPos, yPos) > i)
                         continue;
                     Cell cell = getCell(x, y);
-
-                    if (cell.getResourceType() == ResourceType.NONE) {
+                    if(cell.cellType != CellType.EMPTY){
+                        continue;
+                    }
+                    
+                    if (cell.getResourceType() == ResourceType.NONE ) {
                         cell.setResourceType(resourceType);
                         cell.setResourceAmount(0);
                     }
