@@ -78,9 +78,9 @@ public class GameHandler implements GameLogic {
         // read config file
         ConfigReader.readConfigFile();
         // generate map
-        MapGeneratorResult generatedMap = ConstConfigs.READ_MAP_FROM_FILE ?
-                MapGenerator.generateFromFile(Configs.MAP_PATH) :
-                MapGenerator.generateRandomMap();
+        MapGeneratorResult generatedMap = ConstConfigs.READ_MAP_FROM_FILE
+                ? MapGenerator.generateFromFile(Configs.MAP_PATH)
+                : MapGenerator.generateRandomMap();
         generatedMap = generatedMap == null ? MapGenerator.generateRandomMap() : generatedMap;
         // create Game
         this.game = new Game(generatedMap.map, generatedMap.colonies);
@@ -256,23 +256,25 @@ public class GameHandler implements GameLogic {
     }
 
     private void showMap(boolean showChatbox) {
-        System.out.println("--------this turn: " + (game.getTurn() - 1) + "--------");
+        Log.i("GameHandler", "--------this turn: " + (game.getTurn() - 1) + "--------");
         for (Cell cell : game.getMap().getAllCells()) {
-            System.out.println("[" + cell.getX() + "," + cell.getY() + "]: " + cell.getCellType().toString() + " "
-                    + cell.getResourceType().toString() + ":" + cell.getResourceAmount() + " --> "
-                    + getAntsIds(cell.getAnts()));
+            Log.i("GameHandler",
+                    "[" + cell.getX() + "," + cell.getY() + "]: " + cell.getCellType().toString() + " "
+                            + cell.getResourceType().toString() + ":" + cell.getResourceAmount() + " --> "
+                            + getAntsIds(cell.getAnts()));
         }
-        System.out.println();
+        Log.i("GameHandler", "\n");
         if (showChatbox) {
             for (Colony colony : game.getColonies()) {
-                System.out.println("chatbox for colony: " + colony.getId() + " with health: " + colony.getBaseHealth()
+                Log.i("GameHandler", "chatbox for colony: " + colony.getId() + " with health: " + colony.getBaseHealth()
                         + " bread:" + colony.getGainedBread() + " grass:" + colony.getGainedGrass());
                 for (ChatMessage message : colony.getChatBox().getChatMessages()) {
-                    System.out.println(Json.GSON.toJson(message, ChatMessage.class));
+                    Log.i("GameHandler", Json.GSON.toJson(message, ChatMessage.class));
                 }
             }
         }
-        System.out.println();
+        Log.i("GameHandler", "\n");
+
     }
 
     private String getAntsIds(List<Ant> ants) {
@@ -300,9 +302,9 @@ public class GameHandler implements GameLogic {
 
     @Override
     public Message[] getClientMessages() {
-        /* if (game.getTurn() == 0) {
-            return getClientInitialMessages();
-        } */
+        /*
+         * if (game.getTurn() == 0) { return getClientInitialMessages(); }
+         */
 
         // dead ants
         HashMap<Integer, Ant> deadAnts = game.getNewDeadAnts();
@@ -310,7 +312,7 @@ public class GameHandler implements GameLogic {
         // Send game status to each ant
         Message[] messages = new Message[antsNum];
         if (thereIsQueuedColony) {
-            return new Message[]{};
+            return new Message[] {};
         }
         for (int i = 0; i < antsNum; i++) {
             if (deadAnts != null && deadAnts.keySet().contains(i)) {
@@ -338,7 +340,7 @@ public class GameHandler implements GameLogic {
     public Message[] getClientEndMessages() {
         // no need to send message at end now!
         if (!runManually) {
-            return new Message[]{};
+            return new Message[] {};
         }
         Message[] messages = new Message[antsNum];
         for (int i = 0; i < antsNum; i++) {
