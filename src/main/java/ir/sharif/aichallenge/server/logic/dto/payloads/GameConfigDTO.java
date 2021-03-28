@@ -1,5 +1,6 @@
 package ir.sharif.aichallenge.server.logic.dto.payloads;
 
+import ir.sharif.aichallenge.server.common.util.Log;
 import ir.sharif.aichallenge.server.logic.config.ConstConfigs;
 import ir.sharif.aichallenge.server.logic.model.Game;
 import ir.sharif.aichallenge.server.logic.model.ant.Ant;
