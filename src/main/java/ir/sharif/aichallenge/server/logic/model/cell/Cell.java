@@ -113,7 +113,7 @@ public class Cell {
                 this.decreaseResource(wantedAmount);
             }
 
-            if (this.getResourceAmount() == 0){
+            if (this.getResourceAmount() <= 0){
                 break;
             }
         }
