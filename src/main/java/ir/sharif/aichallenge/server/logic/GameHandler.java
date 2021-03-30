@@ -356,6 +356,7 @@ public class GameHandler implements GameLogic {
             Log.i("Game Finished", "\u001B[32m" + " Winner Colony ID: " + winner.getId() + " " + "\u001B[0m");
             Log.i("Killer!", "Killing ants... [if not worked, kill them manually :)]");
             AntGenerator.killAnts();
+            game.graphicLogDTO.game_config.winner = winner.getId();
             GraphicUtils.generateLogFile(game.graphicLogDTO);
         }
         return game.isFinished();
