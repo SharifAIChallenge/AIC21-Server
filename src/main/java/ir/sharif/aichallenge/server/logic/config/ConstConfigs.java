@@ -28,6 +28,9 @@ public class ConstConfigs {
     public static int BASE_ATTACK_DAMAGE = 2;
     public static int BASE_INIT_HEALTH = 100;
 
+    public static int MAX_INITIAL_CELL_GRASS = 5;
+    public static int MAX_INITIAL_CELL_BREAD = 5;
+
     public static int WORKER_MAX_CARRYING_RESOURCE_AMOUNT = 10;
 
     public static boolean READ_MAP_FROM_FILE = false;
