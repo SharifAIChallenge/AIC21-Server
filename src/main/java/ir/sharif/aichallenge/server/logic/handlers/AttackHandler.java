@@ -34,8 +34,7 @@ public class AttackHandler {
         attackSummaries = new ArrayList<>();
 
         for (Colony colony : antRepository.getColonies()) {
-            // -1 is for the colony with id = 0 and -2 is for the colony with id = 1
-            int attackerId = colony.getId() == 0 ? -1 : -2;
+            int attackerId = colony.getBaseAttackerId();
             runAttack(colony.getId(), colony.getBase().getX(), colony.getBase().getY(),
                     ConstConfigs.BASE_ATTACK_DAMAGE, ConstConfigs.BASE_MAX_ATTACK_DISTANCE, attackerId);
         }
@@ -81,7 +80,7 @@ public class AttackHandler {
     }
 
     private void runAttack(int fromXPosition, int fromYPosition, int damage, int attackerId, List<Ant> ants) {
-        // attackerId = -1 --> base attack
+        // attackerId = negative attacker id --> base attack
         int index = rand.nextInt(ants.size());
         Ant defender = ants.get(index);
         defender.decreaseHealth(damage);

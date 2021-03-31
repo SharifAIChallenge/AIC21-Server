@@ -18,6 +18,7 @@ public class Colony {
     private static Integer colonyUUID = 1000;
 
     private int id;
+    private int baseAttackerId;
     private int gainedBread = 0;
     private int gainedGrass = 0;
     private int thisTurnBread = 0;
@@ -32,8 +33,9 @@ public class Colony {
     private int allSoldierAntsGeneratedCount;
     private List<ChatMessage> allMessagesThisTurn;
 
-    public Colony(int id, BaseCell base, int baseHealth) {
+    public Colony(int id,int baseAttackerId, BaseCell base, int baseHealth) {
         this.id = id;
+        this.baseAttackerId = baseAttackerId;
         addBread(ConstConfigs.COLONY_INITIAL_BREAD);
         addGrass(ConstConfigs.COLONY_INITIAL_GRASS);
         this.base = base;
@@ -185,4 +187,7 @@ public class Colony {
         return gainedBread + gainedGrass;
     }
 
+    public int getBaseAttackerId() {
+        return baseAttackerId;
+    }
 }
