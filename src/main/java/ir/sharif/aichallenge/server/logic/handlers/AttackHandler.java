@@ -56,8 +56,14 @@ public class AttackHandler {
 
         for (Cell cell : cells) {
             if (cell.isBase() && colonyId != ((BaseCell) cell).getColony().getId()) {
-                ((BaseCell) cell).getColony().decreaseBaseHealth(damage);
-                return;
+                Colony colony = ((BaseCell) cell).getColony();
+                if (colony.getBaseHealth() > 0) {
+                    colony.decreaseBaseHealth(damage);
+                    int defenderId = colony.getBaseAttackerId();
+                    AttackSummary attackSummary = new AttackSummary(attackerId, defenderId, fromYPosition, fromXPosition, cell.getY(), cell.getX());
+                    attackSummaries.add(attackSummary);
+                    return;
+                }
             }
             for (Ant cellAnt : cell.getAnts()) {
                 if (cellAnt.getColonyId() != colonyId && cellAnt.getHealth() > 0) {

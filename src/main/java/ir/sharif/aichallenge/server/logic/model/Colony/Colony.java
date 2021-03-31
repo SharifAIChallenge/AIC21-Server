@@ -26,7 +26,7 @@ public class Colony {
     private Cell base;
     private int baseHealth;
     private HashMap<Integer, Ant> ants;
-    private ChatBox chatBox = new ChatBox();
+    private ChatBox chatBox;
     private int toBeGeneratedWorkersCount;
     private int toBeGeneratedSoldiersCount;
     private int allWorkerAntsGeneratedCount;
@@ -34,15 +34,25 @@ public class Colony {
     private List<ChatMessage> allMessagesThisTurn;
 
     public Colony(int id,int baseAttackerId, BaseCell base, int baseHealth) {
+        this(id,baseAttackerId);
+        this.base = base;
+        this.baseHealth = baseHealth;
+    }
+
+    Colony(int id, int baseAttackerId) {
         this.id = id;
+        chatBox = new ChatBox();
         this.baseAttackerId = baseAttackerId;
         addBread(ConstConfigs.COLONY_INITIAL_BREAD);
         addGrass(ConstConfigs.COLONY_INITIAL_GRASS);
-        this.base = base;
-        this.baseHealth = baseHealth;
         ants = new HashMap<>();
         allSoldierAntsGeneratedCount = 0;
         allWorkerAntsGeneratedCount = 0;
+    }
+
+    void setBaseCell(BaseCell baseCell, int initialBaseHealth) {
+        base = baseCell;
+        baseHealth = initialBaseHealth;
     }
 
     public int getGainedBread() {

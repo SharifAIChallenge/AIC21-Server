@@ -49,12 +49,11 @@ public class Game {
      * Create a Game with specific GameMap and Handlers.
      *
      * @param map           The gameMap of the Game.
-     * @param colonyHashMap A HashMap from colonyId to Colony and contains game
-     *                      colonies.
+     * @param antRepository Game ants and colonies can be reached from this object.
      */
-    public Game(GameMap map, HashMap<Integer, Colony> colonyHashMap) {
+    public Game(GameMap map, AntRepository antRepository) {
         this.map = map;
-        antRepository = new AntRepository(colonyHashMap);
+        this.antRepository = antRepository;
         attackHandler = new AttackHandler(map, antRepository);
         messageAdapter = new MessageAdapter();
         gameJudge = new GameJudge(antRepository);
