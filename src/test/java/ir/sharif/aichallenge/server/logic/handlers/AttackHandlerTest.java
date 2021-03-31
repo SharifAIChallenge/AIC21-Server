@@ -14,9 +14,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
-import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class AttackHandlerTest {
 
@@ -116,5 +117,26 @@ class AttackHandlerTest {
         assertEquals(ConstConfigs.SOLDIER_ANT_INITIAL_HEALTH - 2 * ConstConfigs.ANT_ATTACK_DAMAGE, ant1.getHealth());
         assertEquals(ConstConfigs.SOLDIER_ANT_INITIAL_HEALTH - 2 * ConstConfigs.ANT_ATTACK_DAMAGE, ant2.getHealth());
         assertEquals(2,attackHandler.getNewDeadAnts().size());
+    }
+
+    @Test
+    void getNearByAttacks() {
+        Ant ant1 = new Ant(0, 0, 1, 1, AntType.SOLDIER);
+        Ant ant2 = new Ant(1, 1, 1, 1, AntType.SOLDIER);
+        try {
+            colonyHashMap.get(0).addNewAnt(ant1);
+            colonyHashMap.get(1).addNewAnt(ant2);
+            gameMap.getCell(1, 1).addAnt(ant1);
+            gameMap.getCell(1, 1).addAnt(ant2);
+            antRepository.addAnt(ant1, 0);
+            antRepository.addAnt(ant2, 1);
+        } catch (GameActionException e) {
+            e.printStackTrace();
+        }
+
+        attackHandler.handleAttacks();
+        List<AttackSummary> attackSummaries = attackHandler.getAttackSummaries();
+        List<AttackSummary> attackSummaryList = attackHandler.getNearByAttacks(ant1.getId());
+        attackSummaryList.get(0);
     }
 }
