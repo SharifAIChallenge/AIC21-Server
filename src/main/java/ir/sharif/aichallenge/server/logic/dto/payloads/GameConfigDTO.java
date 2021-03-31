@@ -6,8 +6,8 @@ import ir.sharif.aichallenge.server.logic.model.Game;
 import ir.sharif.aichallenge.server.logic.model.ant.Ant;
 
 public class GameConfigDTO {
-    int map_width;
-    int map_height;
+    // int map_width;
+    // int map_height;
     int ant_type;
     int base_x;
     int base_y;
@@ -20,8 +20,8 @@ public class GameConfigDTO {
 
     public GameConfigDTO(Game game, int antId) {
         Ant ant = game.getAntByID(antId);
-        this.map_width = game.getMap().getXAxisLength();
-        this.map_height = game.getMap().getYAxisLength();
+        // this.map_width = game.getMap().getXAxisLength();
+        // this.map_height = game.getMap().getYAxisLength();
         this.ant_type = ant.getAntType().getValue();
         this.base_x = game.getColony(ant.getColonyId()).getBase().getX();
         this.base_y = game.getColony(ant.getColonyId()).getBase().getY();

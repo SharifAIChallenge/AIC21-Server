@@ -14,8 +14,8 @@ public class AroundCell {
     AntDTO[] ants;
 
     public AroundCell(Cell cell, Ant currentAnt) {
-        this.cell_x = cell.getX();
-        this.cell_y = cell.getY();
+        this.cell_x = cell.getX() - currentAnt.getXPosition();
+        this.cell_y = cell.getY() - currentAnt.getYPosition();
         this.cell_type = cell.getCellType().getValue();
         this.resource_value = cell.getResourceAmount();
         this.resource_type = cell.getResourceType().getValue();
