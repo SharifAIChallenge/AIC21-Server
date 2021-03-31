@@ -51,8 +51,8 @@ public class MapGenerator {
         int base2y = (height - 1) / 2;
         cells[base1y][base1x] = new BaseCell(base1x, base1y);
         cells[base2y][base2x] = new BaseCell(base2x, base2y);
-        Colony firstColony = new Colony(0, (BaseCell) cells[base1y][base1x], ConstConfigs.BASE_INIT_HEALTH);
-        Colony secondColony = new Colony(1, (BaseCell) cells[base2y][base2x], ConstConfigs.BASE_INIT_HEALTH);
+        Colony firstColony = new Colony(0, -1, (BaseCell) cells[base1y][base1x], ConstConfigs.BASE_INIT_HEALTH);
+        Colony secondColony = new Colony(1, -2, (BaseCell) cells[base2y][base2x], ConstConfigs.BASE_INIT_HEALTH);
         ((BaseCell) (cells[base1y][base1x])).setColony(firstColony);
         ((BaseCell) (cells[base2y][base2x])).setColony(secondColony);
         HashMap<Integer, Colony> colonies = new HashMap<>();
@@ -72,8 +72,8 @@ public class MapGenerator {
                 Log.e("MapGenerator", "There should be two base cells in map.json!");
                 System.exit(-1);
             }
-            Colony firstColony = new Colony(0, baseCells.get(0), ConstConfigs.BASE_INIT_HEALTH);
-            Colony secondColony = new Colony(1, baseCells.get(1), ConstConfigs.BASE_INIT_HEALTH);
+            Colony firstColony = new Colony(0, -1, baseCells.get(0), ConstConfigs.BASE_INIT_HEALTH);
+            Colony secondColony = new Colony(1, -2, baseCells.get(1), ConstConfigs.BASE_INIT_HEALTH);
             baseCells.get(0).setColony(firstColony);
             baseCells.get(1).setColony(secondColony);
 

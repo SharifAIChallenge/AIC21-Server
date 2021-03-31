@@ -37,17 +37,17 @@ class AttackHandlerTest {
         int colonyId;
 
         colonyId = 0;
-        colonyBuilder = new ColonyBuilder(colonyId);
+        colonyBuilder = new ColonyBuilder(colonyId, -1);
         mapBuilder.addColony(colonyBuilder, ConstConfigs.BASE_INIT_HEALTH, 0, 0);
         colonyHashMap.put(colonyId, colonyBuilder.getColony());
 
         colonyId = 1;
-        colonyBuilder = new ColonyBuilder(colonyId);
+        colonyBuilder = new ColonyBuilder(colonyId, -3);
         mapBuilder.addColony(colonyBuilder, ConstConfigs.BASE_INIT_HEALTH);
         colonyHashMap.put(colonyId, colonyBuilder.getColony());
 
         colonyId = 2;
-        colonyBuilder = new ColonyBuilder(colonyId);
+        colonyBuilder = new ColonyBuilder(colonyId, -2);
         mapBuilder.addColony(colonyBuilder, 1, 1, 1);
         colonyHashMap.put(colonyId, colonyBuilder.getColony());
 
@@ -116,7 +116,7 @@ class AttackHandlerTest {
         attackHandler.handleAttacks();
         assertEquals(ConstConfigs.SOLDIER_ANT_INITIAL_HEALTH - 2 * ConstConfigs.ANT_ATTACK_DAMAGE, ant1.getHealth());
         assertEquals(ConstConfigs.SOLDIER_ANT_INITIAL_HEALTH - 2 * ConstConfigs.ANT_ATTACK_DAMAGE, ant2.getHealth());
-        assertEquals(2,attackHandler.getNewDeadAnts().size());
+        assertEquals(2, attackHandler.getNewDeadAnts().size());
     }
 
     @Test
@@ -137,6 +137,6 @@ class AttackHandlerTest {
         attackHandler.handleAttacks();
         List<AttackSummary> attackSummaries = attackHandler.getAttackSummaries();
         List<AttackSummary> attackSummaryList = attackHandler.getNearByAttacks(ant1.getId());
-        attackSummaryList.get(0);
+        assertEquals(4, attackSummaryList.size());
     }
 }

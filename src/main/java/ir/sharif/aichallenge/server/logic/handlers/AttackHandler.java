@@ -34,8 +34,7 @@ public class AttackHandler {
         attackSummaries = new ArrayList<>();
 
         for (Colony colony : antRepository.getColonies()) {
-            // -1 is for the colony with id = 0 and -2 is for the colony with id = 1
-            int attackerId = colony.getId() == 0 ? -1 : -2;
+            int attackerId = colony.getBaseAttackerId();
             runAttack(colony.getId(), colony.getBase().getX(), colony.getBase().getY(),
                     ConstConfigs.BASE_ATTACK_DAMAGE, ConstConfigs.BASE_MAX_ATTACK_DISTANCE, attackerId);
         }
@@ -57,10 +56,14 @@ public class AttackHandler {
 
         for (Cell cell : cells) {
             if (cell.isBase() && colonyId != ((BaseCell) cell).getColony().getId()) {
-                ((BaseCell) cell).getColony().decreaseBaseHealth(damage);
-                AttackSummary attackSummary = new AttackSummary(attackerId, , fromYPosition, fromXPosition, cell.getY(), cell.getX());
-                attackSummaries.add(attackSummary);
-                return;
+                Colony colony = ((BaseCell) cell).getColony();
+                if (colony.getBaseHealth() > 0) {
+                    colony.decreaseBaseHealth(damage);
+                    int defenderId = colony.getBaseAttackerId();
+                    AttackSummary attackSummary = new AttackSummary(attackerId, defenderId, fromYPosition, fromXPosition, cell.getY(), cell.getX());
+                    attackSummaries.add(attackSummary);
+                    return;
+                }
             }
             for (Ant cellAnt : cell.getAnts()) {
                 if (cellAnt.getColonyId() != colonyId && cellAnt.getHealth() > 0) {
@@ -83,7 +86,7 @@ public class AttackHandler {
     }
 
     private void runAttack(int fromXPosition, int fromYPosition, int damage, int attackerId, List<Ant> ants) {
-        // attackerId = -1 --> base attack
+        // attackerId = negative attacker id --> base attack
         int index = rand.nextInt(ants.size());
         Ant defender = ants.get(index);
         defender.decreaseHealth(damage);
