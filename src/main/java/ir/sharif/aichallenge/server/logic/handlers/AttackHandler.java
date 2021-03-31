@@ -1,6 +1,7 @@
 package ir.sharif.aichallenge.server.logic.handlers;
 
 import ir.sharif.aichallenge.server.logic.config.ConstConfigs;
+import ir.sharif.aichallenge.server.logic.dto.payloads.AttackDTO;
 import ir.sharif.aichallenge.server.logic.model.AntRepository;
 import ir.sharif.aichallenge.server.logic.model.ant.Ant;
 import ir.sharif.aichallenge.server.logic.model.ant.AntType;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class AttackHandler {
     private AntRepository antRepository;
@@ -133,5 +135,19 @@ public class AttackHandler {
 
     public List<AttackSummary> getAttackSummaries() {
         return attackSummaries;
+    }
+
+    public List<AttackSummary> getNearByAttacks(int antId) {
+        Ant ant = antRepository.getAnt(antId);
+        int antXPosition = ant.getXPosition();
+        int antYPosition = ant.getYPosition();
+        List<AttackSummary> attackDTOs = getAttackSummaries().stream()
+                .filter(x ->
+                        map.get‌BorderlessManhattanDistance(x.src_col, x.src_row,
+                                antXPosition, antYPosition) <= ConstConfigs.ANT_MAX_VIEW_DISTANCE ||
+                                map.get‌BorderlessManhattanDistance(x.dst_col, x.dst_row,
+                                        antXPosition, antYPosition) <= ConstConfigs.ANT_MAX_VIEW_DISTANCE)
+                .collect(Collectors.toList());
+        return attackDTOs;
     }
 }

@@ -1,5 +1,6 @@
 package ir.sharif.aichallenge.server.logic.model;
 
+import ir.sharif.aichallenge.server.common.util.Log;
 import ir.sharif.aichallenge.server.logic.handlers.exceptions.ColonyNotExistsException;
 import ir.sharif.aichallenge.server.logic.handlers.exceptions.GameActionException;
 import ir.sharif.aichallenge.server.logic.model.Colony.Colony;
@@ -15,10 +16,13 @@ public class AntRepository {
     private HashMap<Integer, Colony> colonyHashMap;
     // contains alive ants and maps ant ids to ant
     private HashMap<Integer, Ant> antHashMap;
+    // contains dead ants and maps ant ids to ant
+    private HashMap<Integer, Ant> deadAntHashMap;
 
     public AntRepository(HashMap<Integer, Colony> colonyHashMap) {
         this.colonyHashMap = colonyHashMap;
         initAntHashMap();
+        deadAntHashMap = new HashMap<>();
     }
 
     private void initAntHashMap() {
@@ -60,6 +64,16 @@ public class AntRepository {
     }
 
     public void removeDeadAnt(int antId) {
+        deadAntHashMap.put(antId, antHashMap.get(antId));
         antHashMap.remove(antId);
+    }
+
+    public Ant getAliveOrDeadAnt(int antId) {
+        if (antHashMap.containsKey(antId))
+            return antHashMap.get(antId);
+        if (deadAntHashMap.containsKey(antId))
+            return deadAntHashMap.get(antId);
+        Log.e("AntRepository", "No ant exists with antId=".concat(Integer.toString(antId)));
+        return null;
     }
 }

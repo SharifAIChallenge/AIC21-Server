@@ -271,4 +271,12 @@ public class Game {
     public List<Colony> getColonies() {
         return antRepository.getColonies();
     }
+
+    public AttackHandler getAttackHandler() {
+        return attackHandler;
+    }
+
+    public AntRepository getAntRepository() {
+        return antRepository;
+    }
 }

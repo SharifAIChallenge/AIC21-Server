@@ -1,11 +1,12 @@
 package ir.sharif.aichallenge.server.logic.dto.payloads;
 
-import ir.sharif.aichallenge.server.common.util.Log;
+import ir.sharif.aichallenge.server.logic.handlers.AttackSummary;
 import ir.sharif.aichallenge.server.logic.model.Game;
 import ir.sharif.aichallenge.server.logic.model.ant.Ant;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GameStatusDTO {
     AroundCell[] around_cells;
@@ -32,6 +33,13 @@ public class GameStatusDTO {
     }
 
     private List<AttackDTO> getNearByAttacks(Game game, Integer ant_id) {
-        return null;
+        Ant ant = game.getAntByID(ant_id);
+        List<AttackSummary> attackSummaries = game.getAttackHandler().getNearByAttacks(ant_id);
+        return attackSummaries.stream()
+                .map(x -> new AttackDTO(x.src_row, x.src_col,
+                        x.dst_col, x.dst_row,
+                        game.getAntRepository().getAliveOrDeadAnt(x.attacker_id).getColonyId() ==
+                                ant.getColonyId()))
+                .collect(Collectors.toList());
     }
 }
