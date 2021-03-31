@@ -37,7 +37,8 @@ public class GameHandler implements GameLogic {
     private ArrayList<Integer> deads = new ArrayList<>();
     private boolean newAntsCreated = false;
     private List<Integer> newAntIDs = new ArrayList<>();
-    public static int initialAntsNum;
+    public static int initWorkersNum;
+    public static int initSoldiersNum;
     public static boolean showGameLog = false;
     // if one colony generated its ants
     private static boolean oneColonyGeneratedAnt = false;
@@ -90,28 +91,12 @@ public class GameHandler implements GameLogic {
         this.game = new Game(generatedMap.map, generatedMap.colonies);
         this.game.graphicLogDTO.game_config = new GraphicGameConfigDTO(generatedMap.map);
 
-        /*
-         * antsNum = initialAntsNum; ArrayList<Ant> initialAnts = new ArrayList<>(); for
-         * (int i = 0; i < antsNum; i++) { int colonyID = (i < (antsNum / 2)) ? 0 : 1;
-         * initialAnts.add(new Ant(i, colonyID,
-         * generatedMap.colonies.get(colonyID).getBase().getX(),
-         * generatedMap.colonies.get(colonyID).getBase().getY(), ((i % 2) == 1) ?
-         * AntType.WORKER : AntType.SOLDIER)); } try { for (Ant ant : initialAnts) {
-         * game.addAntToGame(ant, ant.getColonyId()); } } catch (GameActionException e)
-         * { System.out.println("Can't add ants to game!"); e.printStackTrace(); }
-         */
+        game.getColonies().get(0).setToBeGeneratedSoldiersCount(initSoldiersNum);
+        game.getColonies().get(0).setToBeGeneratedWorkersCount(initWorkersNum);
 
-        game.getColonies().get(0).setToBeGeneratedSoldiersCount(initialAntsNum / 4);
-        game.getColonies().get(0).setToBeGeneratedWorkersCount(initialAntsNum / 4);
-
-        game.getColonies().get(1).setToBeGeneratedSoldiersCount(initialAntsNum / 4);
-        game.getColonies().get(1).setToBeGeneratedWorkersCount(initialAntsNum / 4);
+        game.getColonies().get(1).setToBeGeneratedSoldiersCount(initSoldiersNum);
+        game.getColonies().get(1).setToBeGeneratedWorkersCount(initWorkersNum);
         thereIsQueuedColony = true;
-
-        /*
-         * for (Ant ant : initialAnts) { AntGenerator.runNewAnt(ant.getAntType(),
-         * ant.getId(), ant.getColonyId()); }
-         */
 
     }
 
@@ -167,9 +152,7 @@ public class GameHandler implements GameLogic {
                 result.add(addNewAnt(firstCol.getBase().getX(), firstCol.getBase().getY(), firstCol.getId(),
                         AntType.SOLDIER));
                 firstCol.setToBeGeneratedSoldiersCount(soldiers - 1);
-                // System.out.println("1003");
             } else if (workers > 0) {
-                // System.out.println("1005");
                 result.add(addNewAnt(firstCol.getBase().getX(), firstCol.getBase().getY(), firstCol.getId(),
                         AntType.WORKER));
                 firstCol.setToBeGeneratedWorkersCount(workers - 1);
@@ -182,9 +165,7 @@ public class GameHandler implements GameLogic {
                     result.add(addNewAnt(secondCol.getBase().getX(), secondCol.getBase().getY(), secondCol.getId(),
                             AntType.SOLDIER));
                     secondCol.setToBeGeneratedSoldiersCount(soldiers - 1);
-                    // System.out.println("1003");
                 } else if (workers > 0) {
-                    // System.out.println("1005");
                     result.add(addNewAnt(secondCol.getBase().getX(), secondCol.getBase().getY(), secondCol.getId(),
                             AntType.WORKER));
                     secondCol.setToBeGeneratedWorkersCount(workers - 1);
@@ -197,37 +178,6 @@ public class GameHandler implements GameLogic {
         } else {
             thereIsQueuedColony = false;
         }
-
-        /*
-         * for (Colony colony : game.getColonies()) { if (!oneColonyGeneratedAnt) {
-         * System.out.println("1002"); int soldiers =
-         * colony.getToBeGeneratedSoldiersCount(); if (soldiers > 0) {
-         * result.add(addNewAnt(colony.getBase().getX(), colony.getBase().getY(),
-         * colony.getId(), AntType.SOLDIER));
-         * colony.setToBeGeneratedSoldiersCount(soldiers - 1);
-         * System.out.println("1003"); oneColonyGeneratedAnt = true; } int workers; if
-         * (!oneColonyGeneratedAnt) { System.out.println("1004"); workers =
-         * colony.getToBeGeneratedWorkersCount(); if (workers > 0) {
-         * System.out.println("1005");
-         *
-         * result.add(addNewAnt(colony.getBase().getX(), colony.getBase().getY(),
-         * colony.getId(), AntType.WORKER)); colony.setToBeGeneratedWorkersCount(workers
-         * - 1); oneColonyGeneratedAnt = true; } } soldiers =
-         * colony.getToBeGeneratedSoldiersCount(); workers =
-         * colony.getToBeGeneratedWorkersCount(); if (soldiers == 0 && workers == 0) {
-         * thereIsQueuedColony = false; System.out.println("1006");
-         *
-         * } else { thereIsQueuedColony = true; System.out.println("1007");
-         *
-         * } } else { int soldiers = colony.getToBeGeneratedSoldiersCount(); int workers
-         * = colony.getToBeGeneratedWorkersCount(); if ((soldiers > 0) || (workers > 0))
-         * { System.out.println("1008"); thereIsQueuedColony = true; } if (soldiers == 0
-         * && workers == 0) { thereIsQueuedColony = false; System.out.println("1009");
-         *
-         * } }
-         */
-        // }
-
         return result;
     }
 
@@ -254,8 +204,6 @@ public class GameHandler implements GameLogic {
         } catch (GameActionException e) {
             e.printStackTrace();
         }
-        // if (game.getTurn() < 5)
-        // AntGenerator.runNewAnt(type, id, colonyID);
         return new AntInfo(id, colonyID, type);
     }
 
@@ -334,7 +282,6 @@ public class GameHandler implements GameLogic {
                 }
             }
         }
-        // System.out.println("1010");
 
         newAntsCreated = false;
         return messages;
