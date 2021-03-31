@@ -37,9 +37,9 @@
 # .idea/compiler.xml
 # .idea/jarRepositories.xml
 # .idea/modules.xml
-# .idea/*.iml
+.idea/*.iml
 # .idea/modules
-# *.iml
+*.iml
 # *.ipr
 
 # CMake
@@ -126,3 +126,4 @@ log.json
 .vscode/*
 .idea/*
 .settings/*
+.factorypath

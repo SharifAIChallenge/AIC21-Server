@@ -12,6 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException, FileNotFoundException {
+        Runtime.getRuntime().addShutdownHook(new ShutDownHookThread());
         AtomicInteger currentTurn = new AtomicInteger(0);
         new File("Log/server").mkdirs();
         Log.outputFile = new PrintStream(new FileOutputStream("Log/server/server.log", false));
@@ -37,5 +38,13 @@ public class Main {
         }
 
         return extraTime;
+    }
+}
+
+class ShutDownHookThread extends Thread {
+    @Override
+    public void run() {
+        System.out.println("\u001B[31m" + "Bye!" + "\u001B[0m");
+        super.run();
     }
 }

@@ -1,6 +1,7 @@
 package ir.sharif.aichallenge.server.logic.handlers;
 
 import ir.sharif.aichallenge.server.logic.config.ConstConfigs;
+import ir.sharif.aichallenge.server.logic.dto.payloads.AttackDTO;
 import ir.sharif.aichallenge.server.logic.model.AntRepository;
 import ir.sharif.aichallenge.server.logic.model.ant.Ant;
 import ir.sharif.aichallenge.server.logic.model.ant.AntType;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class AttackHandler {
     private AntRepository antRepository;
@@ -32,8 +34,10 @@ public class AttackHandler {
         attackSummaries = new ArrayList<>();
 
         for (Colony colony : antRepository.getColonies()) {
+            // -1 is for the colony with id = 0 and -2 is for the colony with id = 1
+            int attackerId = colony.getId() == 0 ? -1 : -2;
             runAttack(colony.getId(), colony.getBase().getX(), colony.getBase().getY(),
-                    ConstConfigs.BASE_ATTACK_DAMAGE, ConstConfigs.BASE_MAX_ATTACK_DISTANCE, -1);
+                    ConstConfigs.BASE_ATTACK_DAMAGE, ConstConfigs.BASE_MAX_ATTACK_DISTANCE, attackerId);
         }
 
         for (Colony colony : antRepository.getColonies()) {
@@ -77,13 +81,12 @@ public class AttackHandler {
     }
 
     private void runAttack(int fromXPosition, int fromYPosition, int damage, int attackerId, List<Ant> ants) {
+        // attackerId = -1 --> base attack
         int index = rand.nextInt(ants.size());
         Ant defender = ants.get(index);
         defender.decreaseHealth(damage);
-        if (attackerId != -1) {
-            AttackSummary attackSummary = new AttackSummary(attackerId, defender.getId(), fromYPosition, fromXPosition, defender.getYPosition(), defender.getXPosition());
-            attackSummaries.add(attackSummary);
-        }
+        AttackSummary attackSummary = new AttackSummary(attackerId, defender.getId(), fromYPosition, fromXPosition, defender.getYPosition(), defender.getXPosition());
+        attackSummaries.add(attackSummary);
     }
 
     private void handleDeadAnts() {
@@ -99,21 +102,21 @@ public class AttackHandler {
             newDeadAnts.put(ant.getId(), ant);
             if (ant.getAntType() == AntType.SOLDIER) {
                 map.addResource(ResourceType.GRASS,
-                        ConstConfigs.RATE_DEATH_RESOURCE * ConstConfigs.GENERATE_SOLDIER_GRASS_AMOUNT,
+                        (int) Math.ceil(ConstConfigs.RATE_DEATH_RESOURCE * ConstConfigs.GENERATE_SOLDIER_GRASS_AMOUNT),
                         ant.getXPosition(), ant.getYPosition());
             } else {
                 if (ant.getCarryingResourceType() == ResourceType.NONE)
                     map.addResource(ResourceType.BREAD,
-                            ConstConfigs.RATE_DEATH_RESOURCE * ConstConfigs.GENERATE_WORKER_BREAD_AMOUNT,
+                            (int) Math.ceil(ConstConfigs.RATE_DEATH_RESOURCE * ConstConfigs.GENERATE_WORKER_BREAD_AMOUNT),
                             ant.getXPosition(), ant.getYPosition());
                 else if (ant.getCarryingResourceType() == ResourceType.BREAD)
                     map.addResource(ResourceType.BREAD,
-                            ConstConfigs.RATE_DEATH_RESOURCE * ConstConfigs.GENERATE_WORKER_BREAD_AMOUNT
-                                    + ant.getCarryingResourceAmount(),
+                            (int) Math.ceil(ConstConfigs.RATE_DEATH_RESOURCE * ConstConfigs.GENERATE_WORKER_BREAD_AMOUNT
+                                    + ant.getCarryingResourceAmount()),
                             ant.getXPosition(), ant.getYPosition());
                 else {
                     map.addResource(ResourceType.BREAD,
-                            ConstConfigs.RATE_DEATH_RESOURCE * ConstConfigs.GENERATE_WORKER_BREAD_AMOUNT,
+                            (int) Math.ceil(ConstConfigs.RATE_DEATH_RESOURCE * ConstConfigs.GENERATE_WORKER_BREAD_AMOUNT),
                             ant.getXPosition(), ant.getYPosition());
                     map.addResource(ResourceType.GRASS, ant.getCarryingResourceAmount(), ant.getXPosition(),
                             ant.getYPosition());
@@ -132,5 +135,19 @@ public class AttackHandler {
 
     public List<AttackSummary> getAttackSummaries() {
         return attackSummaries;
+    }
+
+    public List<AttackSummary> getNearByAttacks(int antId) {
+        Ant ant = antRepository.getAnt(antId);
+        int antXPosition = ant.getXPosition();
+        int antYPosition = ant.getYPosition();
+        List<AttackSummary> attackDTOs = getAttackSummaries().stream()
+                .filter(x ->
+                        map.get‌BorderlessManhattanDistance(x.src_col, x.src_row,
+                                antXPosition, antYPosition) <= ConstConfigs.ANT_MAX_VIEW_DISTANCE ||
+                                map.get‌BorderlessManhattanDistance(x.dst_col, x.dst_row,
+                                        antXPosition, antYPosition) <= ConstConfigs.ANT_MAX_VIEW_DISTANCE)
+                .collect(Collectors.toList());
+        return attackDTOs;
     }
 }

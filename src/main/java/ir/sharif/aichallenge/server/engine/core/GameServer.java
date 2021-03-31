@@ -1,6 +1,8 @@
 package ir.sharif.aichallenge.server.engine.core;
 
 import com.google.gson.JsonObject;
+
+import ir.sharif.aichallenge.server.common.network.Json;
 import ir.sharif.aichallenge.server.common.network.data.ClientMessageInfo;
 import ir.sharif.aichallenge.server.common.network.data.Message;
 import ir.sharif.aichallenge.server.common.network.data.MessageTypes;
@@ -9,11 +11,14 @@ import ir.sharif.aichallenge.server.engine.config.ClientConfig;
 import ir.sharif.aichallenge.server.engine.config.Configs;
 import ir.sharif.aichallenge.server.engine.network.ClientNetwork;
 import ir.sharif.aichallenge.server.engine.network.UINetwork;
+import ir.sharif.aichallenge.server.logic.GameHandler.AntInfo;
+import ir.sharif.aichallenge.server.logic.utility.AntGenerator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -235,27 +240,27 @@ public class GameServer {
         public void run() {
 
             Runnable simulate = new Runnable() {
-                ArrayList<Integer> newIDs;
+                ArrayList<AntInfo> newIDs;
                 boolean newToAdd = false;
 
                 @Override
                 public void run() {
-
                     if (newToAdd) {
                         mClientsNum += newIDs.size();
-                        for (int id : newIDs) {
+                        for (AntInfo id : newIDs) {
                             ClientConfig config = new ClientConfig();
                             mClientConfigs.add(config);
                             Configs.CLIENT_CONFIGS.add(config);
 
                             int newId = mClientNetwork.defineClient(config.getToken());
-                            if (id != newId) {
+                            if (id.id != newId) {
                                 throw new RuntimeException("Client ID and client order does not match" + " new id: "
                                         + newId + " id: " + id);
                             }
-                            config.setID(id);
+                            config.setID(id.id);
+                            AntGenerator.runNewAnt(id.type, id.id, id.colonyID);
                             try {
-                                mClientNetwork.waitForClient(id);
+                                mClientNetwork.waitForClient(id.id);
                             } catch (InterruptedException e) {
                                 // TODO Auto-generated catch block
                                 e.printStackTrace();
@@ -271,7 +276,6 @@ public class GameServer {
                     for (int i = 0; i < output.length; ++i) {
                         mClientNetwork.queue(i, output[i]);
                     }
-
                     mClientNetwork.startReceivingAll();
                     mClientNetwork.sendAllBlocking();
                     mClientNetwork.setIsActiveFlags(mGameLogic.getActiveClients());
@@ -303,6 +307,7 @@ public class GameServer {
                         Thread.sleep(10);
                         start = System.currentTimeMillis();
                         newIDs = mGameLogic.simulateEvents(clientEvents);
+                        mClientNetwork.deadIDs = new ConcurrentLinkedQueue<Integer>(mGameLogic.getDeads());
                         if (newIDs.size() > 0)
                             newToAdd = true;
                         end = System.currentTimeMillis();

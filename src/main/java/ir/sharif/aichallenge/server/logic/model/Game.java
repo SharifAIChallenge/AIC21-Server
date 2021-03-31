@@ -69,6 +69,7 @@ public class Game {
         map.getAllCells().forEach(Cell::manageResources);
         if (isFinished()) {
             Colony winnerColony = gameJudge.getWinner();
+            this.graphicLogDTO.game_config.winner = winnerColony.getId();
             Log.i("Game", "Game finished, winner colony id: " + winnerColony.getId());
             System.exit(0);
         }
@@ -158,6 +159,11 @@ public class Game {
             log.team0_alive_workers = workers_alive;
             log.team0_total_soldiers = soldiers;
             log.team0_total_workers = workers;
+        } else {
+            log.team1_alive_soldiers = soldier_alive;
+            log.team1_alive_workers = workers_alive;
+            log.team1_total_soldiers = soldiers;
+            log.team1_total_workers = workers;
         }
         return log;
     }
@@ -263,5 +269,13 @@ public class Game {
 
     public List<Colony> getColonies() {
         return antRepository.getColonies();
+    }
+
+    public AttackHandler getAttackHandler() {
+        return attackHandler;
+    }
+
+    public AntRepository getAntRepository() {
+        return antRepository;
     }
 }

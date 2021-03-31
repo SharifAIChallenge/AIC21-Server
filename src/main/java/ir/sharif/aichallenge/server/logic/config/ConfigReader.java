@@ -48,6 +48,7 @@ public class ConfigReader {
             ConstConfigs.BASE_MAX_ATTACK_DISTANCE = Integer.parseInt(props.getProperty("BASE_MAX_ATTACK_DISTANCE"));
             ConstConfigs.BASE_ATTACK_DAMAGE = Integer.parseInt(props.getProperty("BASE_ATTACK_DAMAGE"));
             ConstConfigs.BASE_INIT_HEALTH = Integer.parseInt(props.getProperty("BASE_INIT_HEALTH"));
+            ConstConfigs.READ_MAP_FROM_FILE = Boolean.parseBoolean(props.getProperty("READ_MAP_FROM_FILE"));
             GameHandler.initialAntsNum = Integer.parseInt(props.getProperty("INIT_ANTS_NUM"));
         } catch (Exception e) {
             e.printStackTrace();

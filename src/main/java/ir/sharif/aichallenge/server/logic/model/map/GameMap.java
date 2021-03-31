@@ -77,6 +77,9 @@ public class GameMap {
                     if (getManhattanDistance(x, y, xPos, yPos) > i)
                         continue;
                     Cell cell = getCell(x, y);
+                    if (cell.cellType != CellType.EMPTY) {
+                        continue;
+                    }
 
                     if (cell.getResourceType() == ResourceType.NONE) {
                         cell.setResourceType(resourceType);
@@ -90,6 +93,11 @@ public class GameMap {
                 }
             }
         }
+    }
+
+    public int get‌BorderlessManhattanDistance(int x1, int y1, int x2, int y2) {
+        return Math.min(Math.abs(x1 - x2), xAxisLength - Math.abs(x1 - x2)) +
+                Math.min(Math.abs(y1 - y2), yAxisLength - Math.abs(y1 - y2));
     }
 
     private int getManhattanDistance(int x1, int y1, int x2, int y2) {

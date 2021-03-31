@@ -271,7 +271,7 @@ public class ClientHandler {
             }
             if (!endReceived.get())
                 simulationSemaphore.release();
-            Log.i(logTag, String.format("Client Terminated at turn: %d", currentTurn.get()));
+            Log.i(logTag, String.format("Client Terminated with id: %d", id));
         };
     }
 

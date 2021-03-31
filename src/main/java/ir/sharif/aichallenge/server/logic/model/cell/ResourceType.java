@@ -16,6 +16,19 @@ public enum ResourceType {
         }
     }
 
+    public static ResourceType getResourceType(int value) {
+        switch (value) {
+            case 2:
+                return NONE;
+            case 0:
+                return BREAD;
+            case 1:
+                return GRASS;
+            default:
+                return NONE;
+        }
+    }
+
     @Override
     public String toString() {
         switch (this) {
