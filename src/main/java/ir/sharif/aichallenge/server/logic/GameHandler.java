@@ -48,6 +48,10 @@ public class GameHandler implements GameLogic {
         this.antsNum = 0;
     }
 
+    public ArrayList<Integer> getDeads() {
+        return deads;
+    }
+
     @Override
     public int getClientsNum() {
         return antsNum;

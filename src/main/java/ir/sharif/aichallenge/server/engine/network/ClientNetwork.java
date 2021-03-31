@@ -297,6 +297,8 @@ public class ClientNetwork extends NetServer {
         });
     }
 
+    public ConcurrentLinkedQueue<Integer> deadIDs = new ConcurrentLinkedQueue<>();
+
     private synchronized void verifyClient(JsonSocket client) throws Exception {
         // get the token, timeout is 2000 seconds
         Future<Message> futureMessage = acceptExecutor.submit(() -> client.get(Message.class));
@@ -308,7 +310,7 @@ public class ClientNetwork extends NetServer {
             if (ids != null) {
                 for (int clientID : ids) {
                     ClientHandler clientHandler = mClients.get(clientID);
-                    if (!clientHandler.isConnected()) {
+                    if (!clientHandler.isConnected() && !deadIDs.contains(clientID)) {
                         clientHandler.bind(client);
                         Runnable receiver = clientHandler.getReceiver(() -> receiveTimeFlag);
                         receiveExecutor.submit(receiver);
