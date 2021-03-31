@@ -38,8 +38,16 @@ public class GameStatusDTO {
         return attackSummaries.stream()
                 .map(x -> new AttackDTO(x.src_row, x.src_col,
                         x.dst_col, x.dst_row,
-                        game.getAntRepository().getAliveOrDeadAnt(x.attacker_id).getColonyId() ==
-                                ant.getColonyId()))
+                        isAttackerEnemy(game, ant, x)))
                 .collect(Collectors.toList());
+    }
+
+    private boolean isAttackerEnemy(Game game, Ant ant, AttackSummary x) {
+        if (x.attacker_id == -1) {
+            return ant.getColonyId() != 0;
+        } else if (x.attacker_id == -2) {
+            return ant.getColonyId() != 1;
+        }
+        return game.getAntRepository().getAliveOrDeadAnt(x.attacker_id).getColonyId() != ant.getColonyId();
     }
 }
