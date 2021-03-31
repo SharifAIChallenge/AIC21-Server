@@ -361,6 +361,7 @@ public class GameHandler implements GameLogic {
             Log.i("Killer!", "Killing ants... [if not worked, kill them manually :)]");
             AntGenerator.killAnts();
             game.graphicLogDTO.game_config.winner = winner.getId();
+            game.graphicLogDTO.stats.winner = winner.getId();
             GraphicUtils.generateLogFile(game.graphicLogDTO);
         }
         return game.isFinished();
