@@ -5,6 +5,7 @@ import ir.sharif.aichallenge.server.logic.model.Game;
 import ir.sharif.aichallenge.server.logic.model.ant.Ant;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class GameStatusDTO {
     AroundCell[] around_cells;
@@ -28,5 +29,9 @@ public class GameStatusDTO {
             this.chat_box = game.getColony(currentAnt.getColonyId()).getChatBox().getChatMessages().stream()
                     .map(ChatBoxMessageDTO::new).toArray(ChatBoxMessageDTO[]::new);
         }
+    }
+
+    private List<AttackDTO> getNearByAttacks(Game game, Integer ant_id) {
+        return null;
     }
 }
