@@ -16,6 +16,7 @@ public class GameStatusDTO {
     int current_resource_value;
     int current_resource_type;
     int health;
+    AttackDTO[] attacks;
 
     public GameStatusDTO(Game game, Integer antID) {
         Ant currentAnt = game.getAntByID(antID);
@@ -29,6 +30,8 @@ public class GameStatusDTO {
                     .map(x -> new AroundCell(x, currentAnt)).toArray(AroundCell[]::new);
             this.chat_box = game.getColony(currentAnt.getColonyId()).getChatBox().getChatMessages().stream()
                     .map(ChatBoxMessageDTO::new).toArray(ChatBoxMessageDTO[]::new);
+            List<AttackDTO> nearByAttacks = getNearByAttacks(game, antID);
+            this.attacks = nearByAttacks.toArray(new AttackDTO[nearByAttacks.size()]);
         }
     }
 
@@ -36,9 +39,7 @@ public class GameStatusDTO {
         Ant ant = game.getAntByID(ant_id);
         List<AttackSummary> attackSummaries = game.getAttackHandler().getNearByAttacks(ant_id);
         return attackSummaries.stream()
-                .map(x -> new AttackDTO(x.src_row, x.src_col,
-                        x.dst_col, x.dst_row,
-                        isAttackerEnemy(game, ant, x)))
+                .map(x -> new AttackDTO(x.src_row, x.src_col, x.dst_col, x.dst_row, isAttackerEnemy(game, ant, x)))
                 .collect(Collectors.toList());
     }
 
