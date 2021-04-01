@@ -1,6 +1,8 @@
 package ir.sharif.aichallenge.server.engine.core;
 
 import com.google.gson.JsonObject;
+
+import ir.sharif.aichallenge.server.common.network.Json;
 import ir.sharif.aichallenge.server.common.network.data.ClientMessageInfo;
 import ir.sharif.aichallenge.server.common.network.data.Message;
 import ir.sharif.aichallenge.server.common.network.data.MessageTypes;
@@ -16,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -242,7 +245,6 @@ public class GameServer {
 
                 @Override
                 public void run() {
-
                     if (newToAdd) {
                         mClientsNum += newIDs.size();
                         for (AntInfo id : newIDs) {
@@ -274,7 +276,6 @@ public class GameServer {
                     for (int i = 0; i < output.length; ++i) {
                         mClientNetwork.queue(i, output[i]);
                     }
-
                     mClientNetwork.startReceivingAll();
                     mClientNetwork.sendAllBlocking();
                     mClientNetwork.setIsActiveFlags(mGameLogic.getActiveClients());
@@ -306,6 +307,7 @@ public class GameServer {
                         Thread.sleep(10);
                         start = System.currentTimeMillis();
                         newIDs = mGameLogic.simulateEvents(clientEvents);
+                        mClientNetwork.deadIDs = new ConcurrentLinkedQueue<Integer>(mGameLogic.getDeads());
                         if (newIDs.size() > 0)
                             newToAdd = true;
                         end = System.currentTimeMillis();

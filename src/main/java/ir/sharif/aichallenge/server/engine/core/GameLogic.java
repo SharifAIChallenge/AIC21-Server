@@ -65,6 +65,8 @@ public interface GameLogic {
      */
     public void generateOutputs();
 
+    public ArrayList<Integer> getDeads();
+
     public Message getUIMessage();
 
     public Message getStatusMessage();

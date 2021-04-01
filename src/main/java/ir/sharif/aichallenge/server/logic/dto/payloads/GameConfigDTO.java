@@ -14,6 +14,7 @@ public class GameConfigDTO {
     int health_kargar;
     int health_sarbaaz;
     int attack_distance;
+    int view_distance;
     int generate_kargar;
     int generate_sarbaaz;
     int rate_death_resource;
@@ -31,5 +32,6 @@ public class GameConfigDTO {
         this.generate_kargar = ConstConfigs.GENERATE_WORKER_BREAD_AMOUNT;
         this.generate_sarbaaz = ConstConfigs.GENERATE_SOLDIER_GRASS_AMOUNT;
         this.rate_death_resource = 1;
+        this.view_distance = ConstConfigs.ANT_MAX_VIEW_DISTANCE;
     }
 }

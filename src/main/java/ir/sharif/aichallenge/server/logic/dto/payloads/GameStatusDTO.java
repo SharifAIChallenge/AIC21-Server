@@ -1,10 +1,12 @@
 package ir.sharif.aichallenge.server.logic.dto.payloads;
 
-import ir.sharif.aichallenge.server.common.util.Log;
+import ir.sharif.aichallenge.server.logic.handlers.AttackSummary;
 import ir.sharif.aichallenge.server.logic.model.Game;
 import ir.sharif.aichallenge.server.logic.model.ant.Ant;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class GameStatusDTO {
     AroundCell[] around_cells;
@@ -14,6 +16,7 @@ public class GameStatusDTO {
     int current_resource_value;
     int current_resource_type;
     int health;
+    AttackDTO[] attacks;
 
     public GameStatusDTO(Game game, Integer antID) {
         Ant currentAnt = game.getAntByID(antID);
@@ -27,6 +30,23 @@ public class GameStatusDTO {
                     .map(x -> new AroundCell(x, currentAnt)).toArray(AroundCell[]::new);
             this.chat_box = game.getColony(currentAnt.getColonyId()).getChatBox().getChatMessages().stream()
                     .map(ChatBoxMessageDTO::new).toArray(ChatBoxMessageDTO[]::new);
+            List<AttackDTO> nearByAttacks = getNearByAttacks(game, antID);
+            this.attacks = nearByAttacks.toArray(new AttackDTO[nearByAttacks.size()]);
         }
+    }
+
+    private List<AttackDTO> getNearByAttacks(Game game, Integer ant_id) {
+        Ant ant = game.getAntByID(ant_id);
+        List<AttackSummary> attackSummaries = game.getAttackHandler().getNearByAttacks(ant_id);
+        return attackSummaries.stream()
+                .map(x -> new AttackDTO(x.src_row, x.src_col, x.dst_col, x.dst_row, isAttackerEnemy(game, ant, x)))
+                .collect(Collectors.toList());
+    }
+
+    private boolean isAttackerEnemy(Game game, Ant ant, AttackSummary x) {
+        if (x.attacker_id < 0) {
+            return x.attacker_id != game.getColony(ant.getColonyId()).getBaseAttackerId();
+        }
+        return game.getAntRepository().getAliveOrDeadAnt(x.attacker_id).getColonyId() != ant.getColonyId();
     }
 }

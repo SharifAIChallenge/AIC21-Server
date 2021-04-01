@@ -13,6 +13,7 @@ public class GraphicGameConfigDTO {
     public int soldier_health;
     public String team0_name = Configs.FIRST_TEAM_NAME;
     public String team1_name = Configs.SECOND_TEAM_NAME;
+    public int winner;
 
     public GraphicGameConfigDTO(GameMap map) {
         this.map_height = map.getYAxisLength();

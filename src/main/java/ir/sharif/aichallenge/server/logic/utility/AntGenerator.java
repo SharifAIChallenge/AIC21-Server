@@ -25,7 +25,8 @@ public class AntGenerator {
 
     public static void runNewAnt(AntType type, int antID, int colonyID) {
         if (GameHandler.runManually) {
-            Log.i("AntGenerator", "\u001B[32m" + " Run a new instance of your client, waiting... " + "\u001B[0m");
+            Log.i("AntGenerator", "\u001B[32m" + " Run a new instance of your client for teamID: " + colonyID
+                    + ", waiting... " + "\u001B[0m");
             return;
         }
         new Thread(new Runnable() {
@@ -61,11 +62,9 @@ public class AntGenerator {
         if (path.contains(".jar")) {
             return JAVA_EXEC_CMD + " " + path;
         } else {
-            /* if (path.charAt(0) == '/') {
-                return path;
-            } else {
-                return "./" + path;
-            } */
+            /*
+             * if (path.charAt(0) == '/') { return path; } else { return "./" + path; }
+             */
             return path;
         }
     }

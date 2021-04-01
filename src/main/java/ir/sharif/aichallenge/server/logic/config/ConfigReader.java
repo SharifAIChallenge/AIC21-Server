@@ -8,6 +8,7 @@ import java.util.Properties;
 
 import ir.sharif.aichallenge.server.common.util.Log;
 import ir.sharif.aichallenge.server.logic.GameHandler;
+import ir.sharif.aichallenge.server.logic.model.Game;
 
 public class ConfigReader {
     public static void readConfigFile() {
@@ -42,14 +43,15 @@ public class ConfigReader {
             ConstConfigs.CHAT_LIMIT = Integer.parseInt(props.getProperty("CHAT_LIMIT"));
             ConstConfigs.MAX_MESSAGE_LENGTH = Integer.parseInt(props.getProperty("MAX_MESSAGE_LENGTH"));
             ConstConfigs.GAME_MAXIMUM_TURN_COUNT = Integer.parseInt(props.getProperty("GAME_MAXIMUM_TURN_COUNT"));
-            ConstConfigs.RATE_DEATH_RESOURCE = Integer.parseInt(props.getProperty("RATE_DEATH_RESOURCE"));
+            ConstConfigs.RATE_DEATH_RESOURCE = Float.parseFloat(props.getProperty("RATE_DEATH_RESOURCE"));
             ConstConfigs.MAP_WIDTH = Integer.parseInt(props.getProperty("MAP_WIDTH"));
             ConstConfigs.MAP_HEIGHT = Integer.parseInt(props.getProperty("MAP_HEIGHT"));
             ConstConfigs.BASE_MAX_ATTACK_DISTANCE = Integer.parseInt(props.getProperty("BASE_MAX_ATTACK_DISTANCE"));
             ConstConfigs.BASE_ATTACK_DAMAGE = Integer.parseInt(props.getProperty("BASE_ATTACK_DAMAGE"));
             ConstConfigs.BASE_INIT_HEALTH = Integer.parseInt(props.getProperty("BASE_INIT_HEALTH"));
             ConstConfigs.READ_MAP_FROM_FILE = Boolean.parseBoolean(props.getProperty("READ_MAP_FROM_FILE"));
-            GameHandler.initialAntsNum = Integer.parseInt(props.getProperty("INIT_ANTS_NUM"));
+            GameHandler.initSoldiersNum = Integer.parseInt(props.getProperty("INIT_SCORPIONS"));
+            GameHandler.initWorkersNum = Integer.parseInt(props.getProperty("INIT_ANTS"));
         } catch (Exception e) {
             e.printStackTrace();
             Log.e("ConfigReader", "error in config props");

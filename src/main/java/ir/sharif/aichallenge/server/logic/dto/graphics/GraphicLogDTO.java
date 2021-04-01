@@ -6,4 +6,5 @@ import java.util.List;
 public class GraphicLogDTO {
     public GraphicGameConfigDTO game_config;
     public List<TurnDTO> turns = new ArrayList<>();
+    public StatsDTO stats = new StatsDTO();
 }

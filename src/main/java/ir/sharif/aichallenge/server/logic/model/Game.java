@@ -49,12 +49,11 @@ public class Game {
      * Create a Game with specific GameMap and Handlers.
      *
      * @param map           The gameMap of the Game.
-     * @param colonyHashMap A HashMap from colonyId to Colony and contains game
-     *                      colonies.
+     * @param antRepository Game ants and colonies can be reached from this object.
      */
-    public Game(GameMap map, HashMap<Integer, Colony> colonyHashMap) {
+    public Game(GameMap map, AntRepository antRepository) {
         this.map = map;
-        antRepository = new AntRepository(colonyHashMap);
+        this.antRepository = antRepository;
         attackHandler = new AttackHandler(map, antRepository);
         messageAdapter = new MessageAdapter();
         gameJudge = new GameJudge(antRepository);
@@ -70,6 +69,8 @@ public class Game {
         map.getAllCells().forEach(Cell::manageResources);
         if (isFinished()) {
             Colony winnerColony = gameJudge.getWinner();
+            this.graphicLogDTO.game_config.winner = winnerColony.getId();
+            this.graphicLogDTO.stats.winner = winnerColony.getId();
             Log.i("Game", "Game finished, winner colony id: " + winnerColony.getId());
             System.exit(0);
         }
@@ -269,5 +270,13 @@ public class Game {
 
     public List<Colony> getColonies() {
         return antRepository.getColonies();
+    }
+
+    public AttackHandler getAttackHandler() {
+        return attackHandler;
+    }
+
+    public AntRepository getAntRepository() {
+        return antRepository;
     }
 }
