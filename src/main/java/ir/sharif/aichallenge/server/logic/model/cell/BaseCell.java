@@ -9,7 +9,7 @@ public class BaseCell extends Cell {
     private Colony colony;
 
     public BaseCell(int xPosition, int yPosition) {
-        super(xPosition, yPosition, CellType.BASE, ResourceType.NONE, -1);
+        super(xPosition, yPosition, CellType.BASE, ResourceType.NONE, 0);
     }
 
     public Colony getColony() {
