@@ -26,3 +26,11 @@ To run locally follow these instructions
 
 # Graphics
 When server finished successfully (Winner is anounced in console), use generated `log.json` for graphics. 
+
+# Using GUI
+Server gui helps you generating server execution command.
+  - install `PySimpleGUI` package using: 
+    - `pip install pysimplegui`
+    - `pip3 install pysimplegui`
+  - get this file from the code: `gui/gui.py`
+  - run: `python gui.py`
