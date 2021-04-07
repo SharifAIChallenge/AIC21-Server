@@ -310,22 +310,30 @@ public class ClientNetwork extends NetServer {
         if (message != null && message.getType().equals(MessageTypes.TOKEN) && message.getInfo().has("token")) {
             String clientToken = message.getInfo().get("token").getAsString();
             ArrayList<Integer> ids = mTokens.get(clientToken);
-            if (ids != null) {
-                for (int clientID : ids) {
-                    if (deadIDs.contains(clientID))
-                        continue;
-                    ClientHandler clientHandler = mClients.get(clientID);
-                    if (!clientHandler.isConnected() && !deadIDs.contains(clientID)) {
-                        try {
-                            AntGenerator.waitingProcessIDs.remove(clientID);
-                        } catch (Exception ignore) {
-                        }
-                        clientHandler.bind(client);
-                        Runnable receiver = clientHandler.getReceiver(() -> receiveTimeFlag);
-                        receiveExecutor.submit(receiver);
-                        return;
+            if (ids != null && ids.size() > 0) {
+                int clientID = ids.get(ids.size() - 1);
+                // if (deadIDs.contains(clientID))
+                //     continue;
+                ClientHandler clientHandler = mClients.get(clientID);
+                if (!clientHandler.isConnected() && !deadIDs.contains(clientID)) {
+                    try {
+                        AntGenerator.waitingProcessIDs.remove(clientID);
+                    } catch (Exception ignore) {
                     }
+                    clientHandler.bind(client);
+                    Runnable receiver = clientHandler.getReceiver(() -> receiveTimeFlag);
+                    receiveExecutor.submit(receiver);
+                    return;
                 }
+                /*
+                 * for (int clientID : ids) { if (deadIDs.contains(clientID)) continue;
+                 * ClientHandler clientHandler = mClients.get(clientID); if
+                 * (!clientHandler.isConnected() && !deadIDs.contains(clientID)) { try {
+                 * AntGenerator.waitingProcessIDs.remove(clientID); } catch (Exception ignore) {
+                 * } clientHandler.bind(client); Runnable receiver =
+                 * clientHandler.getReceiver(() -> receiveTimeFlag);
+                 * receiveExecutor.submit(receiver); return; } }
+                 */
             }
         }
     }
