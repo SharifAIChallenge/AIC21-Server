@@ -9,6 +9,7 @@ import java.util.Properties;
 import ir.sharif.aichallenge.server.common.util.Log;
 import ir.sharif.aichallenge.server.logic.GameHandler;
 import ir.sharif.aichallenge.server.logic.model.Game;
+import ir.sharif.aichallenge.server.logic.utility.AntGenerator;
 
 public class ConfigReader {
     public static void readConfigFile() {
@@ -52,6 +53,11 @@ public class ConfigReader {
             ConstConfigs.READ_MAP_FROM_FILE = Boolean.parseBoolean(props.getProperty("READ_MAP_FROM_FILE"));
             GameHandler.initSoldiersNum = Integer.parseInt(props.getProperty("INIT_SCORPIONS"));
             GameHandler.initWorkersNum = Integer.parseInt(props.getProperty("INIT_ANTS"));
+            try {
+                AntGenerator.PROCESS_TIMEOUT_SECONDS = Integer.parseInt(props.getProperty("PROCESS_TIMEOUT_SECONDS"));
+            } catch (Exception ignored) {
+                AntGenerator.PROCESS_TIMEOUT_SECONDS = 30;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             Log.e("ConfigReader", "error in config props");

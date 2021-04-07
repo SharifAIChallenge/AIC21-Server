@@ -17,7 +17,6 @@ public class Cell {
     private ResourceType resourceType;
     private int resourceAmount;
     private List<Ant> ants;
-    private Random random;
 
     public Cell(int xPosition, int yPosition, CellType cellType, ResourceType resourceType, int resourceAmount) {
         this.xPosition = xPosition;
@@ -26,7 +25,6 @@ public class Cell {
         this.resourceType = resourceType;
         this.resourceAmount = resourceAmount;
         ants = new ArrayList<>();
-        random = new Random();
     }
 
     public void setResourceType(ResourceType resourceType) {
@@ -67,7 +65,7 @@ public class Cell {
 
     public int getResourceAmount() {
         if (resourceType == ResourceType.NONE)
-            return -1;
+            return 0;
         return resourceAmount;
     }
 
@@ -102,20 +100,19 @@ public class Cell {
 
         Collections.shuffle(freeWorkerAnts);
         for (Ant ant : freeWorkerAnts) {
-            int wantedAmount = ConstConfigs.WORKER_MAX_CARRYING_RESOURCE_AMOUNT - ant.getCarryingResourceAmount();
-            if (wantedAmount > this.getResourceAmount()) {
-                ant.setCarryingResourceAmount(ant.getCarryingResourceAmount() + this.getResourceAmount());
-                ant.setCarryingResourceType(this.getResourceType());
-                this.decreaseResource(this.getResourceAmount());
-            } else {
-                ant.setCarryingResourceAmount(ant.getCarryingResourceAmount() + wantedAmount);
-                ant.setCarryingResourceType(this.getResourceType());
-                this.decreaseResource(wantedAmount);
-            }
-
             if (this.getResourceAmount() <= 0){
                 break;
             }
+
+            int wantedAmount = ConstConfigs.WORKER_MAX_CARRYING_RESOURCE_AMOUNT - ant.getCarryingResourceAmount();
+            if (wantedAmount > this.getResourceAmount()) {
+                ant.setCarryingResourceAmount(ant.getCarryingResourceAmount() + this.getResourceAmount());
+                this.decreaseResource(this.getResourceAmount());
+            } else {
+                ant.setCarryingResourceAmount(ant.getCarryingResourceAmount() + wantedAmount);
+                this.decreaseResource(wantedAmount);
+            }
+            ant.setCarryingResourceType(this.getResourceType());
         }
     }
 }

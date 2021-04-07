@@ -27,7 +27,7 @@ public class JsonUtility {
                 ConstConfigs.MAP_HEIGHT = ((Long) map.get("MAP_HEIGHT")).intValue();
                 ConstConfigs.MAP_WIDTH = ((Long) map.get("MAP_WIDTH")).intValue();
             } catch (Exception e) {
-                Log.e("JsonUtility", "MAP_HEITH or MAP_WIDTH is not available in map.json!");
+                Log.e("JsonUtility", "MAP_HEIGHT or MAP_WIDTH is not available in map.json!");
                 System.exit(-1);
             }
             JSONArray cells = (JSONArray) map.get("cells_type");

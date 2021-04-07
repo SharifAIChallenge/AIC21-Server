@@ -67,13 +67,13 @@ public class Game {
         handleChatMessages(messages);
         handleAntsMove(messages);
         map.getAllCells().forEach(Cell::manageResources);
-        if (isFinished()) {
+        /* if (isFinished()) {
             Colony winnerColony = gameJudge.getWinner();
             this.graphicLogDTO.game_config.winner = winnerColony.getId();
             this.graphicLogDTO.stats.winner = winnerColony.getId();
             Log.i("Game", "Game finished, winner colony id: " + winnerColony.getId());
             System.exit(0);
-        }
+        } */
         generateTurnGraphicLog();
         currentTurn++;
     }

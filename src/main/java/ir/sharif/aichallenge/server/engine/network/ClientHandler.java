@@ -114,6 +114,12 @@ public class ClientHandler {
      */
     private AtomicBoolean isActive;
 
+    private ClientNetwork network;
+
+    public void setNetwork(ClientNetwork network) {
+        this.network = network;
+    }
+
     public ClientHandler(int id, Semaphore simulationSemaphore, AtomicInteger currentTurn, AtomicBoolean endReceived,
             AtomicBoolean isActive) {
         this.id = id;
@@ -263,7 +269,7 @@ public class ClientHandler {
                     }
 
                 } catch (IOException e) {
-                    Log.i(logTag, "message receiving failure", e);
+                    Log.i(logTag, "message receiving failure");
                     handleIOE(e);
                 } catch (Exception e) {
                     Log.i(logTag, "message receiving failure", e);
@@ -272,6 +278,9 @@ public class ClientHandler {
             if (!endReceived.get())
                 simulationSemaphore.release();
             Log.i(logTag, String.format("Client Terminated with id: %d", id));
+            if (!network.deadIDs.contains(id)) {
+                network.deadIDs.add(id);
+            }
         };
     }
 

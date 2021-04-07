@@ -245,6 +245,7 @@ public class GameServer {
 
                 @Override
                 public void run() {
+                    mClientNetwork.deadIDs = new ConcurrentLinkedQueue<Integer>(mGameLogic.getDeads());
                     if (newToAdd) {
                         mClientsNum += newIDs.size();
                         for (AntInfo id : newIDs) {
@@ -307,7 +308,6 @@ public class GameServer {
                         Thread.sleep(10);
                         start = System.currentTimeMillis();
                         newIDs = mGameLogic.simulateEvents(clientEvents);
-                        mClientNetwork.deadIDs = new ConcurrentLinkedQueue<Integer>(mGameLogic.getDeads());
                         if (newIDs.size() > 0)
                             newToAdd = true;
                         end = System.currentTimeMillis();

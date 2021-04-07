@@ -135,7 +135,7 @@ public class GameHandler implements GameLogic {
             if (showGameLog)
                 showMap(true);
             else
-                System.out.println("turn passed");
+                Log.i("GameHandler", "\u001B[33mturn " + game.getTurn() + " passed \u001B[0m");
             return result;
         }
     }
