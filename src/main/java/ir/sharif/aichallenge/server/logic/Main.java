@@ -2,6 +2,7 @@ package ir.sharif.aichallenge.server.logic;
 
 import ir.sharif.aichallenge.server.common.util.Log;
 import ir.sharif.aichallenge.server.engine.core.GameServer;
+import ir.sharif.aichallenge.server.logic.utility.AntGenerator;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -45,6 +46,8 @@ class ShutDownHookThread extends Thread {
     @Override
     public void run() {
         System.out.println("\u001B[31m" + "Bye!" + "\u001B[0m");
+        // kill ants
+        AntGenerator.killAnts();
         super.run();
     }
 }

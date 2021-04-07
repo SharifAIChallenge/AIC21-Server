@@ -8,6 +8,7 @@ import ir.sharif.aichallenge.server.common.network.data.Message;
 import ir.sharif.aichallenge.server.common.network.data.MessageTypes;
 import ir.sharif.aichallenge.server.common.util.Log;
 import ir.sharif.aichallenge.server.engine.config.Configs;
+import ir.sharif.aichallenge.server.logic.utility.AntGenerator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -134,6 +135,8 @@ public class ClientNetwork extends NetServer {
         AtomicBoolean endReceivedFlag = new AtomicBoolean(false);
         AtomicBoolean isActiveFlag = new AtomicBoolean(true);
         ClientHandler client = new ClientHandler(id, simulationSemaphore, currentTurn, endReceivedFlag, isActiveFlag);
+        // added in AIC21
+        client.setNetwork(this);
         sendExecutor.submit(client.getSender());
         endReceivedFlags.add(endReceivedFlag);
         isActiveFlags.add(isActiveFlag);
@@ -309,8 +312,14 @@ public class ClientNetwork extends NetServer {
             ArrayList<Integer> ids = mTokens.get(clientToken);
             if (ids != null) {
                 for (int clientID : ids) {
+                    if (deadIDs.contains(clientID))
+                        continue;
                     ClientHandler clientHandler = mClients.get(clientID);
                     if (!clientHandler.isConnected() && !deadIDs.contains(clientID)) {
+                        try {
+                            AntGenerator.waitingProcessIDs.remove(clientID);
+                        } catch (Exception ignore) {
+                        }
                         clientHandler.bind(client);
                         Runnable receiver = clientHandler.getReceiver(() -> receiveTimeFlag);
                         receiveExecutor.submit(receiver);

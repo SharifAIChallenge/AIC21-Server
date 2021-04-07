@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import ir.sharif.aichallenge.server.common.util.Log;
 import ir.sharif.aichallenge.server.engine.config.Configs;
@@ -19,15 +20,35 @@ public class AntGenerator {
     static final String WORKER_JAR = "worker.jar";
     static final String SOLDIER_JAR = "soldier.jar";
     static final String JAVA_EXEC_CMD = "java -jar";
+    public static Integer PROCESS_TIMEOUT_SECONDS = 20;
 
     static ConcurrentLinkedDeque<Process> processes = new ConcurrentLinkedDeque();
     static boolean finished = false;
+    public static ConcurrentLinkedDeque<Integer> waitingProcessIDs = new ConcurrentLinkedDeque<>();
 
     public static void runNewAnt(AntType type, int antID, int colonyID) {
         if (GameHandler.runManually) {
             Log.i("AntGenerator", "\u001B[32m" + " Run a new instance of your client for teamID: " + colonyID
                     + ", waiting... " + "\u001B[0m");
             return;
+        } else {
+            waitingProcessIDs.add(antID);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(PROCESS_TIMEOUT_SECONDS * 1000);
+                        if (waitingProcessIDs.contains(antID)) {
+                            System.out.println("\u001B[31mClient Process Timeout passed\u001B[0m");
+                            killAnts();
+                            System.exit(-1);
+                        }
+                    } catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
         }
         new Thread(new Runnable() {
             @Override
