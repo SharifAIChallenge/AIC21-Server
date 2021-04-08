@@ -4,7 +4,7 @@ import sys
 
 def generate_cmd(server, first_team, second_team, map_file, show_log):
     show_log = "--show-log" if (show_log == "Yes") else ""
-    return "java -jar {} --first-team={} --second-team={} --read-map={} {}".format(
+    return "java -jar \"{}\" --first-team=\"{}\" --second-team=\"{}\" --read-map=\"{}\" {}".format(
         server, first_team, second_team, map_file, show_log
     )
 
