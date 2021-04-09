@@ -45,7 +45,7 @@ public class Main {
 class ShutDownHookThread extends Thread {
     @Override
     public void run() {
-        System.out.println("\u001B[31m" + "Bye!" + "\u001B[0m");
+        Log.i("Server", "\u001B[31m" + "Bye!" + "\u001B[0m");
         // kill ants
         AntGenerator.killAnts();
         super.run();

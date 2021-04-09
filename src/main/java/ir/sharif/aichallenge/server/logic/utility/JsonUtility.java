@@ -17,7 +17,7 @@ import java.io.IOException;
 
 public class JsonUtility {
 
-    public static ExternalMap readMapFromFile(String fileName, int height, int width)
+    public static ExternalMap readMapFromFile(String fileName)
             throws IOException, ParseException {
 
         JSONParser jsonParser = new JSONParser();
@@ -31,8 +31,8 @@ public class JsonUtility {
                 System.exit(-1);
             }
             JSONArray cells = (JSONArray) map.get("cells_type");
-            height = ConstConfigs.MAP_HEIGHT;
-            width = ConstConfigs.MAP_WIDTH;
+            int height = ConstConfigs.MAP_HEIGHT;
+            int width = ConstConfigs.MAP_WIDTH;
             Cell[][] mapCells = new Cell[height][width];
             ExternalMap externalMap = new ExternalMap(mapCells);
             for (Object o : cells) {

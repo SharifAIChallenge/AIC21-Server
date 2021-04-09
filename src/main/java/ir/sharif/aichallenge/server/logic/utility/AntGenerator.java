@@ -39,7 +39,7 @@ public class AntGenerator {
                     try {
                         Thread.sleep(PROCESS_TIMEOUT_SECONDS * 1000);
                         if (waitingProcessIDs.contains(antID)) {
-                            System.out.println("\u001B[31mClient Process Timeout passed\u001B[0m");
+                            Log.e("DEAD_POINT", "\u001B[31mClient Process Timeout passed\u001B[0m");
                             killAnts();
                             System.exit(-1);
                         }

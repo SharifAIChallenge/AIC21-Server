@@ -62,11 +62,11 @@ public class MapGenerator {
     }
 
     public static MapGeneratorResult generateFromFile(String fileName) {
-        int height = ConstConfigs.MAP_HEIGHT;
-        int width = ConstConfigs.MAP_WIDTH;
+        // int height = ConstConfigs.MAP_HEIGHT;
+        // int width = ConstConfigs.MAP_WIDTH;
         try {
-            ExternalMap externalMap = JsonUtility.readMapFromFile(fileName, height, width);
-            GameMap gameMap = new GameMap(externalMap.getCells(), height, width);
+            ExternalMap externalMap = JsonUtility.readMapFromFile(fileName);
+            GameMap gameMap = new GameMap(externalMap.getCells(), ConstConfigs.MAP_HEIGHT, ConstConfigs.MAP_WIDTH);
             List<BaseCell> baseCells = externalMap.getUnAllocatedBaseCells();
             if (baseCells.size() < 2) {
                 Log.e("MapGenerator", "There should be two base cells in map.json!");
