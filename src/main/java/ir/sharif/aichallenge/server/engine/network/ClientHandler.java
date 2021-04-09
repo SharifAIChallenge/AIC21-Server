@@ -33,7 +33,7 @@ public class ClientHandler {
     /**
      * Maximum number of exceptions during connection.
      */
-    public static final int MAX_NUM_EXCEPTIONS = 20;
+    public static final int MAX_NUM_EXCEPTIONS = 5;
 
     /**
      * Logging tag.
@@ -78,6 +78,8 @@ public class ClientHandler {
      * This object is notified when a message is received.
      */
     private final Object messageNotifier;
+
+    private int maxSendingFails = 0;
 
     /**
      * Message queue. These messages will be sent to the client asap.
@@ -181,6 +183,11 @@ public class ClientHandler {
                     client.send(msg);
                 } catch (Exception e) {
                     Log.i(logTag, "Message sending failure", e);
+                    maxSendingFails++;
+                    if (maxSendingFails > MAX_NUM_EXCEPTIONS) {
+                        Log.e("ClientHandler", "Max number of sending failure expections reached");
+                        System.exit(-1);
+                    }
                 }
             }
         };
