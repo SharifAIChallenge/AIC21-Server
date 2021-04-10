@@ -2,6 +2,7 @@ package ir.sharif.aichallenge.server.logic.model;
 
 import ir.sharif.aichallenge.server.logic.model.Colony.Colony;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,6 +27,7 @@ public class GameJudge {
     }
 
     private Colony getWinnerByAssets(List<Colony> colonies) {
+        Collections.shuffle(colonies);
         colonies.sort(new ColonyComparator().reversed());
         return colonies.get(0);
     }
