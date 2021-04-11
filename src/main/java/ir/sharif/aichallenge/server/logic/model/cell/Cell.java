@@ -107,12 +107,13 @@ public class Cell {
             int wantedAmount = ConstConfigs.WORKER_MAX_CARRYING_RESOURCE_AMOUNT - ant.getCarryingResourceAmount();
             if (wantedAmount > this.getResourceAmount()) {
                 ant.setCarryingResourceAmount(ant.getCarryingResourceAmount() + this.getResourceAmount());
+                ant.setCarryingResourceType(this.getResourceType());
                 this.decreaseResource(this.getResourceAmount());
             } else {
                 ant.setCarryingResourceAmount(ant.getCarryingResourceAmount() + wantedAmount);
+                ant.setCarryingResourceType(this.getResourceType());
                 this.decreaseResource(wantedAmount);
             }
-            ant.setCarryingResourceType(this.getResourceType());
         }
     }
 }
