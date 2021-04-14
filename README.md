@@ -23,6 +23,7 @@ To run locally follow these instructions
   - `--read-map`: if `map.json` is not at the same dir as `server.jar`, pass the address
   - `--max-agents`: maximum agents (client instances) to run 
   - `--show-log`: show more output logs for server debug
+  - `--first-team-name` and `--second-team-name`
 
 # Graphics
 When server finished successfully (Winner is anounced in console), use generated `log.json` for graphics. 
