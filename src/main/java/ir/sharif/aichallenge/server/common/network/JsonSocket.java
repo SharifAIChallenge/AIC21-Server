@@ -141,6 +141,8 @@ public class JsonSocket {
      * @see com.google.gson.Gson#fromJson(String, Class)
      * @see #get
      */
+    public int id;
+
     public <T> T get(Class<T> classOfInput) throws IOException {
         int length = 1000, total = 0, current;
         byte buffer[] = new byte[length];
@@ -163,7 +165,7 @@ public class JsonSocket {
         }
         String json = new String(buffer, 0, total, ENCODING);
         if (GameHandler.showGameLog)
-            Log.i(TAG, "Message received: " + json);
+            Log.i(TAG, "Message received from " + id + ": " + json);
         T result = null;
         try {
             result = Json.GSON.fromJson(json, classOfInput);

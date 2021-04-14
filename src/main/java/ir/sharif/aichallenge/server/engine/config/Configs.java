@@ -85,6 +85,10 @@ public class Configs {
             GameHandler.runManually = true;
         } else if (split[0].equals("--read-map")) {
             MAP_PATH = split[1];
+        } else if (split[0].equals("--first-team-name")) {
+            FIRST_TEAM_NAME = split[1];
+        } else if (split[0].equals("--second-team-name")) {
+            SECOND_TEAM_NAME = split[1];
         }
     }
 

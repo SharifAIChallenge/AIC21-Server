@@ -301,6 +301,7 @@ public class ClientHandler {
         lastReceivedMessage = null;
         if (receiveTerminateFlag)
             return;
+        client.id = getId();
         lastReceivedMessage = client.get(ClientMessage.class);
         synchronized (messageNotifier) {
             messageNotifier.notifyAll();

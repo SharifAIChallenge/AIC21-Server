@@ -67,13 +67,13 @@ public class Game {
         handleChatMessages(messages);
         handleAntsMove(messages);
         map.getAllCells().forEach(Cell::manageResources);
-        /* if (isFinished()) {
-            Colony winnerColony = gameJudge.getWinner();
-            this.graphicLogDTO.game_config.winner = winnerColony.getId();
-            this.graphicLogDTO.stats.winner = winnerColony.getId();
-            Log.i("Game", "Game finished, winner colony id: " + winnerColony.getId());
-            System.exit(0);
-        } */
+        /*
+         * if (isFinished()) { Colony winnerColony = gameJudge.getWinner();
+         * this.graphicLogDTO.game_config.winner = winnerColony.getId();
+         * this.graphicLogDTO.stats.winner = winnerColony.getId(); Log.i("Game",
+         * "Game finished, winner colony id: " + winnerColony.getId()); System.exit(0);
+         * }
+         */
         generateTurnGraphicLog();
         currentTurn++;
     }
@@ -158,13 +158,13 @@ public class Game {
         if (colonyID == 0) {
             log.team0_alive_soldiers = soldier_alive;
             log.team0_alive_workers = workers_alive;
-            log.team0_total_soldiers = soldiers;
-            log.team0_total_workers = workers;
+            log.team0_total_soldiers = getColonies().get(0).getAllSoldierAntsGeneratedCount();
+            log.team0_total_workers = getColonies().get(0).getAllAntsGeneratedCount() - log.team0_total_soldiers;
         } else {
             log.team1_alive_soldiers = soldier_alive;
             log.team1_alive_workers = workers_alive;
-            log.team1_total_soldiers = soldiers;
-            log.team1_total_workers = workers;
+            log.team1_total_soldiers = getColonies().get(1).getAllSoldierAntsGeneratedCount();
+            log.team1_total_workers = getColonies().get(1).getAllAntsGeneratedCount() - log.team1_total_soldiers;
         }
         return log;
     }
