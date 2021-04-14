@@ -24,7 +24,7 @@ class JsonUtilityTest {
     void read() {
 
         try {
-            JsonUtility.readMapFromFile("map.json", ConstConfigs.MAP_HEIGHT, ConstConfigs.MAP_WIDTH);
+            JsonUtility.readMapFromFile("map.json");
         } catch (IOException | ParseException e) {
             e.printStackTrace();
             fail();
