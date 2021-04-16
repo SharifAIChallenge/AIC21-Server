@@ -49,8 +49,10 @@ class ColonyComparator implements Comparator<Colony> {
             return o1.getAllAntsGeneratedCount() - o2.getAllAntsGeneratedCount();
         if (o1.getAllSoldierAntsGeneratedCount() != o2.getAllSoldierAntsGeneratedCount())
             return o1.getAllSoldierAntsGeneratedCount() - o2.getAllSoldierAntsGeneratedCount();
-        if (o1.getAllResourcesAmount() != o2.getAllResourcesAmount())
-            return o1.getAllResourcesAmount() - o2.getAllResourcesAmount();
+        if (o1.getGainedBread() != o2.getGainedBread())
+            return o1.getGainedBread() - o2.getGainedBread();
+        if (o1.getGainedGrass() != o2.getGainedGrass())
+            return o1.getGainedGrass() - o2.getGainedGrass();
         return 0;
     }
 }
