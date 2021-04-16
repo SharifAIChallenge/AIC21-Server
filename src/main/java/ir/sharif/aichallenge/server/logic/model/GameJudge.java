@@ -43,6 +43,8 @@ class ColonyComparator implements Comparator<Colony> {
     public int compare(Colony o1, Colony o2) {
         if (o1.getBaseHealth() != o2.getBaseHealth())
             return o1.getBaseHealth() - o2.getBaseHealth();
+        if (o1.getAnts().size() != o2.getAnts().size())
+            return o1.getAnts().size() - o2.getAnts().size();
         if (o1.getAllAntsGeneratedCount() != o2.getAllAntsGeneratedCount())
             return o1.getAllAntsGeneratedCount() - o2.getAllAntsGeneratedCount();
         if (o1.getAllSoldierAntsGeneratedCount() != o2.getAllSoldierAntsGeneratedCount())
