@@ -6,6 +6,7 @@ public class MessageTypes {
     public static final String GAME_STATUS = "4";
     public static final String YOUR_TURN = "5";
     public static final String KILL = "7";
+    public static final String DUMMY_TURN = "8";
 
     // Client messages
     public static final String GET_GAME_STATUS = "0";

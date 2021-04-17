@@ -62,21 +62,30 @@ class GameJudgeTest {
         gameJudge = new GameJudge(antRepository);
 
         Colony winner = gameJudge.getWinner();
-        assertEquals(antRepository.getColony(1),winner);
+        assertEquals(colony2,winner);
     }
 
     @Test
     void getWinner2() {
         ColonyBuilder colonyBuilder1 = new ColonyBuilder(0,0);
-        colonyBuilder1.setBaseCell(new BaseCell(0,0), 6);
+        colonyBuilder1.setBaseCell(new BaseCell(0,0), 5);
         Colony colony1=  colonyBuilder1.getColony();
+        Ant ant1 = new Ant(0,0,0,0, AntType.WORKER);
+        try {
+            colony1.addNewAnt(ant1);
+            colony1.removeAnt(ant1.getId());
+        } catch (GameActionException e) {
+            e.printStackTrace();
+            fail();
+        }
+
 
         ColonyBuilder colonyBuilder2 = new ColonyBuilder(1, 1);
         colonyBuilder2.setBaseCell(new BaseCell(100,100),5);
         Colony colony2 = colonyBuilder2.getColony();
-        Ant ant = new Ant(0,1,100,100, AntType.WORKER);
+        Ant ant2 = new Ant(0,1,100,100, AntType.WORKER);
         try {
-            colony2.addNewAnt(ant);
+            colony2.addNewAnt(ant2);
         } catch (GameActionException e) {
             e.printStackTrace();
             fail();
@@ -88,6 +97,6 @@ class GameJudgeTest {
         gameJudge = new GameJudge(antRepository);
 
         Colony winner = gameJudge.getWinner();
-        assertEquals(antRepository.getColony(0),winner);
+        assertEquals(antRepository.getColony(1),winner);
     }
 }

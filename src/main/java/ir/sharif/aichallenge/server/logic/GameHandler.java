@@ -130,6 +130,7 @@ public class GameHandler implements GameLogic {
             result = handleAntGeneration();
             return result;
         } else {
+            newAntIDs = new ArrayList<>();
             game.passTurn(messages);
             result = handleAntGeneration();
             if (showGameLog)
