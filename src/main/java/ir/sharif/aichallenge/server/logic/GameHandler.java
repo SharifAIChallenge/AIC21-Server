@@ -307,12 +307,16 @@ public class GameHandler implements GameLogic {
     @Override
     public boolean isGameFinished() {
         if (game.isFinished()) {
-            Colony winner = game.getGameJudge().getWinner();
-            Log.i("Game Finished", "\u001B[32m" + " Winner Colony ID: " + winner.getId() + " " + "\u001B[0m");
+            int winnerID;
+            if (Game.quickResult.finished) {
+                winnerID = Game.quickResult.winnerID;
+            } else
+                winnerID = game.getGameJudge().getWinner().getId();
+            Log.i("Game Finished", "\u001B[32m" + " Winner Colony ID: " + winnerID + " " + "\u001B[0m");
             Log.i("Killer!", "Killing ants... [if not worked, kill them manually :)]");
             AntGenerator.killAnts();
-            game.graphicLogDTO.game_config.winner = winner.getId();
-            game.graphicLogDTO.stats.winner = winner.getId();
+            game.graphicLogDTO.game_config.winner = winnerID;
+            game.graphicLogDTO.stats.winner = winnerID;
             GraphicUtils.generateLogFile(game.graphicLogDTO);
         }
         return game.isFinished();

@@ -6,6 +6,7 @@ import ir.sharif.aichallenge.server.common.network.data.ClientMessage;
 import ir.sharif.aichallenge.server.common.network.data.Message;
 import ir.sharif.aichallenge.server.common.network.data.MessageTypes;
 import ir.sharif.aichallenge.server.common.util.Log;
+import ir.sharif.aichallenge.server.logic.model.Game;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class ClientHandler {
     /**
      * Maximum number of exceptions during connection.
      */
-    public static final int MAX_NUM_EXCEPTIONS = 5;
+    public static final int MAX_NUM_EXCEPTIONS = 3;
 
     /**
      * Logging tag.
@@ -185,8 +186,8 @@ public class ClientHandler {
                     Log.i(logTag, "Message sending failure", e);
                     maxSendingFails++;
                     if (maxSendingFails > MAX_NUM_EXCEPTIONS) {
-                        Log.e("ClientHandler", "Max number of sending failure expections reached");
-                        System.exit(-1);
+                        Log.e("ClientHandler", "Max number of sending failure expections reached " + id);
+                        Game.quickResult.antFailed(id);
                     }
                 }
             }

@@ -45,8 +45,6 @@ public class ConfigReader {
             ConstConfigs.MAX_MESSAGE_LENGTH = Integer.parseInt(props.getProperty("MAX_MESSAGE_LENGTH"));
             ConstConfigs.GAME_MAXIMUM_TURN_COUNT = Integer.parseInt(props.getProperty("GAME_MAXIMUM_TURN_COUNT"));
             ConstConfigs.RATE_DEATH_RESOURCE = Float.parseFloat(props.getProperty("RATE_DEATH_RESOURCE"));
-            // ConstConfigs.MAP_WIDTH = Integer.parseInt(props.getProperty("MAP_WIDTH"));
-            // ConstConfigs.MAP_HEIGHT = Integer.parseInt(props.getProperty("MAP_HEIGHT"));
             ConstConfigs.BASE_MAX_ATTACK_DISTANCE = Integer.parseInt(props.getProperty("BASE_MAX_ATTACK_DISTANCE"));
             ConstConfigs.BASE_ATTACK_DAMAGE = Integer.parseInt(props.getProperty("BASE_ATTACK_DAMAGE"));
             ConstConfigs.BASE_INIT_HEALTH = Integer.parseInt(props.getProperty("BASE_INIT_HEALTH"));
@@ -57,6 +55,16 @@ public class ConfigReader {
                 AntGenerator.PROCESS_TIMEOUT_SECONDS = Integer.parseInt(props.getProperty("PROCESS_TIMEOUT_SECONDS"));
             } catch (Exception ignored) {
                 AntGenerator.PROCESS_TIMEOUT_SECONDS = 30;
+            }
+            try {
+                ConstConfigs.SHIFT_X = Integer.parseInt(props.getProperty("SHIFT_X"));
+            } catch (Exception ignore) {
+
+            }
+            try {
+                ConstConfigs.SHIFT_Y = Integer.parseInt(props.getProperty("SHIFT_Y"));
+            } catch (Exception ignore) {
+
             }
         } catch (Exception e) {
             e.printStackTrace();

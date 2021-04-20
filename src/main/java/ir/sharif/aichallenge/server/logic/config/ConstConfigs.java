@@ -14,7 +14,6 @@ public class ConstConfigs {
     public static int ANT_MAX_ATTACK_DISTANCE = 2;
     public static int ANT_ATTACK_DAMAGE = 2;
 
-
     public static int CHAT_LIMIT = 2;
     public static int MAX_MESSAGE_LENGTH = 10;
 
@@ -34,4 +33,6 @@ public class ConstConfigs {
     public static int WORKER_MAX_CARRYING_RESOURCE_AMOUNT = 10;
 
     public static boolean READ_MAP_FROM_FILE = false;
+    public static int SHIFT_X = 0;
+    public static int SHIFT_Y = 0;
 }

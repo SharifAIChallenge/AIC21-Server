@@ -14,6 +14,8 @@ public class GraphicGameConfigDTO {
     public String team0_name = Configs.FIRST_TEAM_NAME;
     public String team1_name = Configs.SECOND_TEAM_NAME;
     public int winner;
+    public int shift_x;
+    public int shift_y;
 
     public GraphicGameConfigDTO(GameMap map) {
         this.map_height = map.getYAxisLength();
@@ -28,5 +30,7 @@ public class GraphicGameConfigDTO {
                 this.cells_type[index++] = new CellTypeDTO(y, x, map.getCell(x, y).getCellType());
             }
         }
+        shift_x = ConstConfigs.SHIFT_X;
+        shift_y = ConstConfigs.SHIFT_Y;
     }
 }
