@@ -1,6 +1,7 @@
 package ir.sharif.aichallenge.server.logic.model;
 
 import ir.sharif.aichallenge.server.logic.model.Colony.Colony;
+import ir.sharif.aichallenge.server.logic.model.Game.QuickResult;
 
 import java.util.Collections;
 import java.util.Comparator;

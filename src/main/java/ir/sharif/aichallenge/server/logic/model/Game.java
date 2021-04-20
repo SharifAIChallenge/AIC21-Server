@@ -44,6 +44,7 @@ public class Game {
     // messages to be sent to clients in this turn
     private Message[] clientTurnMessages;
     private HashMap<Integer, Ant> newDeadAnts;
+    public static QuickResult quickResult = new QuickResult();
 
     /**
      * Create a Game with specific GameMap and Handlers.
@@ -236,6 +237,11 @@ public class Game {
     }
 
     public boolean isFinished() {
+        if (Game.quickResult.finished) {
+            Game.quickResult.winnerID = getAntByID(Game.quickResult.antID).getColonyId();
+            Game.quickResult.winnerID = (Game.quickResult.winnerID + 1) % 2;
+            return true;
+        }
         if (currentTurn >= ConstConfigs.GAME_MAXIMUM_TURN_COUNT) {
             return true;
         }
@@ -278,5 +284,17 @@ public class Game {
 
     public AntRepository getAntRepository() {
         return antRepository;
+    }
+
+    // when one process fails, stop the game, declare winner
+    public static class QuickResult {
+        public int winnerID;
+        public boolean finished = false;
+        public int antID;
+
+        public void antFailed(int antID) {
+            finished = true;
+            this.antID = antID;
+        }
     }
 }
