@@ -56,16 +56,6 @@ public class ConfigReader {
             } catch (Exception ignored) {
                 AntGenerator.PROCESS_TIMEOUT_SECONDS = 30;
             }
-            try {
-                ConstConfigs.SHIFT_X = Integer.parseInt(props.getProperty("SHIFT_X"));
-            } catch (Exception ignore) {
-
-            }
-            try {
-                ConstConfigs.SHIFT_Y = Integer.parseInt(props.getProperty("SHIFT_Y"));
-            } catch (Exception ignore) {
-
-            }
         } catch (Exception e) {
             e.printStackTrace();
             Log.e("ConfigReader", "error in config props");
