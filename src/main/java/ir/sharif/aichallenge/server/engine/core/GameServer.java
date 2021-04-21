@@ -12,6 +12,7 @@ import ir.sharif.aichallenge.server.engine.config.Configs;
 import ir.sharif.aichallenge.server.engine.network.ClientNetwork;
 import ir.sharif.aichallenge.server.engine.network.UINetwork;
 import ir.sharif.aichallenge.server.logic.GameHandler.AntInfo;
+import ir.sharif.aichallenge.server.logic.model.Game;
 import ir.sharif.aichallenge.server.logic.utility.AntGenerator;
 
 import java.util.ArrayList;
@@ -338,6 +339,9 @@ public class GameServer {
                             Thread.sleep(300);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
+                        }
+                        if (Game.quickResult.finished) {
+                            System.exit(-1);
                         }
                         System.exit(0);
                         return;
