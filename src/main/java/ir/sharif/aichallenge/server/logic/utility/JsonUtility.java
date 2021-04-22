@@ -17,8 +17,7 @@ import java.io.IOException;
 
 public class JsonUtility {
 
-    public static ExternalMap readMapFromFile(String fileName)
-            throws IOException, ParseException {
+    public static ExternalMap readMapFromFile(String fileName) throws IOException, ParseException {
 
         JSONParser jsonParser = new JSONParser();
         try (FileReader reader = new FileReader(fileName)) {
@@ -26,6 +25,14 @@ public class JsonUtility {
             try {
                 ConstConfigs.MAP_HEIGHT = ((Long) map.get("MAP_HEIGHT")).intValue();
                 ConstConfigs.MAP_WIDTH = ((Long) map.get("MAP_WIDTH")).intValue();
+                try {
+                    ConstConfigs.SHIFT_X = ((Long) map.get("SHIFT_X")).intValue();
+                } catch (Exception ignore) {
+                }
+                try {
+                    ConstConfigs.SHIFT_Y = ((Long) map.get("SHIFT_Y")).intValue();
+                } catch (Exception ignore) {
+                }
             } catch (Exception e) {
                 Log.e("JsonUtility", "MAP_HEIGHT or MAP_WIDTH is not available in map.json!");
                 System.exit(-1);
