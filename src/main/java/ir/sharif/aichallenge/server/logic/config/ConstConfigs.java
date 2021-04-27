@@ -35,4 +35,6 @@ public class ConstConfigs {
     public static boolean READ_MAP_FROM_FILE = false;
     public static int SHIFT_X = 0;
     public static int SHIFT_Y = 0;
+
+    public static int SWAMP_TURNS = 1;
 }
