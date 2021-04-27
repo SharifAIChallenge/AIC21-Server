@@ -8,12 +8,12 @@ public class Ant {
     private int colonyId;
     private int health;
     private AntType antType;
-    // TODO: use Cell instead of x, y
     private int xPosition;
     private int yPosition;
     // just used for worker ant
     private ResourceType carryingResourceType;
     private int carryingResourceAmount;
+    private int inTrap = 0;
 
     public Ant(int id, int colonyId, int xPosition, int yPosition, AntType antType) {
         this.id = id;
@@ -31,9 +31,8 @@ public class Ant {
     }
 
     private void setInitialHealth(AntType antType) {
-        health = antType == AntType.WORKER ?
-                ConstConfigs.WORKER_ANT_INITIAL_HEALTH :
-                ConstConfigs.SOLDIER_ANT_INITIAL_HEALTH;
+        health = antType == AntType.WORKER ? ConstConfigs.WORKER_ANT_INITIAL_HEALTH
+                : ConstConfigs.SOLDIER_ANT_INITIAL_HEALTH;
     }
 
     public int getCarryingResourceAmount() {
@@ -90,7 +89,16 @@ public class Ant {
     public void setCarryingResourceType(ResourceType carryingResourceType) {
         this.carryingResourceType = carryingResourceType;
     }
+
+    public int getInTrap() {
+        return this.inTrap;
+    }
+
+    public void setIntrap(int trap) {
+        this.inTrap = trap;
+    }
+
+    public void callback() {
+        // handle ant callbacks each turn
+    }
 }
-
-
-

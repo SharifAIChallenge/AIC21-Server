@@ -4,6 +4,7 @@ import ir.sharif.aichallenge.server.logic.config.ConstConfigs;
 import ir.sharif.aichallenge.server.logic.model.Colony.Colony;
 import ir.sharif.aichallenge.server.logic.model.Colony.ColonyBuilder;
 import ir.sharif.aichallenge.server.logic.model.ant.Ant;
+import ir.sharif.aichallenge.server.logic.model.ant.AntType;
 import ir.sharif.aichallenge.server.logic.model.ant.MoveType;
 import ir.sharif.aichallenge.server.logic.model.cell.BaseCell;
 import ir.sharif.aichallenge.server.logic.model.cell.Cell;
@@ -13,7 +14,7 @@ import ir.sharif.aichallenge.server.logic.model.cell.ResourceType;
 import java.util.*;
 
 public class GameMap {
-    //cells[yAxisLength][xAxisLength]
+    // cells[yAxisLength][xAxisLength]
     private Cell[][] cells;
     private int yAxisLength;
     private int xAxisLength;
@@ -34,12 +35,13 @@ public class GameMap {
         this.cells = cells;
     }
 
-    void setCell(int xPosition, int yPosition, Cell cell){
+    void setCell(int xPosition, int yPosition, Cell cell) {
         cells[yPosition][xPosition] = cell;
     }
 
     public Cell getCell(int xPosition, int yPosition) {
-        return cells[((yPosition % yAxisLength) + yAxisLength) % yAxisLength][((xPosition % xAxisLength) + xAxisLength) % xAxisLength];
+        return cells[((yPosition % yAxisLength) + yAxisLength) % yAxisLength][((xPosition % xAxisLength) + xAxisLength)
+                % xAxisLength];
     }
 
     public Cell[] getAntViewableCells(int xPosition, int yPosition) {
@@ -96,8 +98,8 @@ public class GameMap {
     }
 
     public int get‌BorderlessManhattanDistance(int x1, int y1, int x2, int y2) {
-        return Math.min(Math.abs(x1 - x2), xAxisLength - Math.abs(x1 - x2)) +
-                Math.min(Math.abs(y1 - y2), yAxisLength - Math.abs(y1 - y2));
+        return Math.min(Math.abs(x1 - x2), xAxisLength - Math.abs(x1 - x2))
+                + Math.min(Math.abs(y1 - y2), yAxisLength - Math.abs(y1 - y2));
     }
 
     private int getManhattanDistance(int x1, int y1, int x2, int y2) {
@@ -113,27 +115,34 @@ public class GameMap {
     }
 
     public void changeAntCurrentCell(Ant ant, int moveType) {
+        if (ant.getInTrap() > 0) {
+            ant.setIntrap(ant.getInTrap() - 1);
+            return;
+        }
         int newX = ant.getXPosition();
         int newY = ant.getYPosition();
         switch (moveType) {
-            case MoveType.UP:
-                newY -= 1;
-                break;
-            case MoveType.DOWN:
-                newY += 1;
-                break;
-            case MoveType.LEFT:
-                newX -= 1;
-                break;
-            case MoveType.RIGHT:
-                newX += 1;
-                break;
-            default:
-                return;
+        case MoveType.UP:
+            newY -= 1;
+            break;
+        case MoveType.DOWN:
+            newY += 1;
+            break;
+        case MoveType.LEFT:
+            newX -= 1;
+            break;
+        case MoveType.RIGHT:
+            newX += 1;
+            break;
+        default:
+            return;
         }
         newX = newX % getXAxisLength();
         newY = newY % getYAxisLength();
         Cell targetCell = getCell(newX, newY);
+        if (targetCell.cellType == CellType.SWAMP) {
+            ant.setIntrap(ConstConfigs.SWAMP_TURNS);
+        }
         if (targetCell.cellType == CellType.WALL)
             return;
 
@@ -144,5 +153,15 @@ public class GameMap {
         getCell(ant.getXPosition(), ant.getYPosition()).removeAnt(ant);
         ant.moveTo(targetCell.getX(), targetCell.getY());
         targetCell.addAnt(ant);
+        if (targetCell.cellType == CellType.TRAP) {
+            handleTrapCell(ant);
+        }
+    }
+
+    private void handleTrapCell(Ant ant) {
+        if (ant.getAntType() == AntType.WORKER && ant.getCarryingResourceAmount() > 0) {
+            ant.setCarryingResourceAmount(0);
+            ant.setCarryingResourceType(ResourceType.NONE);
+        }
     }
 }

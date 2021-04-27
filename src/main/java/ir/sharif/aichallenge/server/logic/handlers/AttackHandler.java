@@ -35,21 +35,22 @@ public class AttackHandler {
 
         for (Colony colony : antRepository.getColonies()) {
             int attackerId = colony.getBaseAttackerId();
-            runAttack(colony.getId(), colony.getBase().getX(), colony.getBase().getY(),
-                    ConstConfigs.BASE_ATTACK_DAMAGE, ConstConfigs.BASE_MAX_ATTACK_DISTANCE, attackerId);
+            runAttack(colony.getId(), colony.getBase().getX(), colony.getBase().getY(), ConstConfigs.BASE_ATTACK_DAMAGE,
+                    ConstConfigs.BASE_MAX_ATTACK_DISTANCE, attackerId);
         }
 
         for (Colony colony : antRepository.getColonies()) {
             for (Ant ant : colony.getAnts()) {
                 if (ant.getAntType().equals(AntType.SOLDIER))
-                    runAttack(colony.getId(), ant.getXPosition(), ant.getYPosition(),
-                            ConstConfigs.ANT_ATTACK_DAMAGE, ConstConfigs.ANT_MAX_ATTACK_DISTANCE, ant.getId());
+                    runAttack(colony.getId(), ant.getXPosition(), ant.getYPosition(), ConstConfigs.ANT_ATTACK_DAMAGE,
+                            ConstConfigs.ANT_MAX_ATTACK_DISTANCE, ant.getId());
             }
         }
         handleDeadAnts();
     }
 
-    private void runAttack(int colonyId, int fromXPosition, int fromYPosition, int damage, int maxDistance, int attackerId) {
+    private void runAttack(int colonyId, int fromXPosition, int fromYPosition, int damage, int maxDistance,
+            int attackerId) {
         Cell[] cells = map.getAttackableCells(fromXPosition, fromYPosition, maxDistance);
         List<Ant> workers = new ArrayList<>();
         List<Ant> soldiers = new ArrayList<>();
@@ -60,7 +61,8 @@ public class AttackHandler {
                 if (colony.getBaseHealth() > 0) {
                     colony.decreaseBaseHealth(damage);
                     int defenderId = colony.getBaseAttackerId();
-                    AttackSummary attackSummary = new AttackSummary(attackerId, defenderId, fromYPosition, fromXPosition, cell.getY(), cell.getX());
+                    AttackSummary attackSummary = new AttackSummary(attackerId, defenderId, fromYPosition,
+                            fromXPosition, cell.getY(), cell.getX());
                     attackSummaries.add(attackSummary);
                     return;
                 }
@@ -87,10 +89,22 @@ public class AttackHandler {
 
     private void runAttack(int fromXPosition, int fromYPosition, int damage, int attackerId, List<Ant> ants) {
         // attackerId = negative attacker id --> base attack
-        int index = rand.nextInt(ants.size());
+        // int index = rand.nextInt(ants.size());
+        if (ants.size() == 0)
+            return;
+        int index = 0;
+        int minHealth = ants.get(0).getHealth();
+        // the ant with lower health
+        for (int i = 0; i < ants.size(); i++) {
+            if (ants.get(i).getHealth() < minHealth) {
+                index = i;
+                minHealth = ants.get(i).getHealth();
+            }
+        }
         Ant defender = ants.get(index);
         defender.decreaseHealth(damage);
-        AttackSummary attackSummary = new AttackSummary(attackerId, defender.getId(), fromYPosition, fromXPosition, defender.getYPosition(), defender.getXPosition());
+        AttackSummary attackSummary = new AttackSummary(attackerId, defender.getId(), fromYPosition, fromXPosition,
+                defender.getYPosition(), defender.getXPosition());
         attackSummaries.add(attackSummary);
     }
 
@@ -112,7 +126,8 @@ public class AttackHandler {
             } else {
                 if (ant.getCarryingResourceType() == ResourceType.NONE)
                     map.addResource(ResourceType.BREAD,
-                            (int) Math.ceil(ConstConfigs.RATE_DEATH_RESOURCE * ConstConfigs.GENERATE_WORKER_BREAD_AMOUNT),
+                            (int) Math
+                                    .ceil(ConstConfigs.RATE_DEATH_RESOURCE * ConstConfigs.GENERATE_WORKER_BREAD_AMOUNT),
                             ant.getXPosition(), ant.getYPosition());
                 else if (ant.getCarryingResourceType() == ResourceType.BREAD)
                     map.addResource(ResourceType.BREAD,
@@ -121,7 +136,8 @@ public class AttackHandler {
                             ant.getXPosition(), ant.getYPosition());
                 else {
                     map.addResource(ResourceType.BREAD,
-                            (int) Math.ceil(ConstConfigs.RATE_DEATH_RESOURCE * ConstConfigs.GENERATE_WORKER_BREAD_AMOUNT),
+                            (int) Math
+                                    .ceil(ConstConfigs.RATE_DEATH_RESOURCE * ConstConfigs.GENERATE_WORKER_BREAD_AMOUNT),
                             ant.getXPosition(), ant.getYPosition());
                     map.addResource(ResourceType.GRASS, ant.getCarryingResourceAmount(), ant.getXPosition(),
                             ant.getYPosition());
@@ -147,11 +163,10 @@ public class AttackHandler {
         int antXPosition = ant.getXPosition();
         int antYPosition = ant.getYPosition();
         List<AttackSummary> attackDTOs = getAttackSummaries().stream()
-                .filter(x ->
-                        map.get‌BorderlessManhattanDistance(x.src_col, x.src_row,
-                                antXPosition, antYPosition) <= ConstConfigs.ANT_MAX_VIEW_DISTANCE ||
-                                map.get‌BorderlessManhattanDistance(x.dst_col, x.dst_row,
-                                        antXPosition, antYPosition) <= ConstConfigs.ANT_MAX_VIEW_DISTANCE)
+                .filter(x -> map.get‌BorderlessManhattanDistance(x.src_col, x.src_row, antXPosition,
+                        antYPosition) <= ConstConfigs.ANT_MAX_VIEW_DISTANCE
+                        || map.get‌BorderlessManhattanDistance(x.dst_col, x.dst_row, antXPosition,
+                                antYPosition) <= ConstConfigs.ANT_MAX_VIEW_DISTANCE)
                 .collect(Collectors.toList());
         return attackDTOs;
     }

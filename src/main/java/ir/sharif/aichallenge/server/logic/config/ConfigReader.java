@@ -56,6 +56,10 @@ public class ConfigReader {
             } catch (Exception ignored) {
                 AntGenerator.PROCESS_TIMEOUT_SECONDS = 30;
             }
+            try {
+                ConstConfigs.SWAMP_TURNS = Integer.parseInt(props.getProperty("SWAMP_TURNS"));
+            } catch (Exception ignore) {
+            }
         } catch (Exception e) {
             e.printStackTrace();
             Log.e("ConfigReader", "error in config props");
