@@ -1,14 +1,14 @@
 package ir.sharif.aichallenge.server.logic.model.cell;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
-
 import ir.sharif.aichallenge.server.logic.config.ConstConfigs;
 import ir.sharif.aichallenge.server.logic.model.ant.Ant;
 import ir.sharif.aichallenge.server.logic.model.ant.AntType;
+import ir.sharif.aichallenge.server.logic.model.map.GameMap;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Cell {
     private int xPosition;
@@ -38,11 +38,10 @@ public class Cell {
         this.toBeAddedTurn = toBeAddedTurn;
     }
 
-    public void renew(int currentTurn) {
+    public void renew(GameMap map, int currentTurn) {
         if (currentTurn != this.toBeAddedTurn)
             return;
-        this.resourceType = toBeAddedResourceType;
-        this.resourceAmount = toBeAddedResourceAmount;
+        map.addResource(toBeAddedResourceType, toBeAddedResourceAmount, xPosition, yPosition);
         this.toBeAddedTurn = -1;
     }
 
