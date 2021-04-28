@@ -34,6 +34,8 @@ public class Cell {
     public Cell(int xPosition, int yPosition, ResourceType resourceType, int resourceAmount, int toBeAddedTurn) {
         this(xPosition, yPosition, CellType.EMPTY, ResourceType.NONE, 0);
         this.toBeAddedResourceType = resourceType;
+        this.resourceType = ResourceType.NONE;
+        this.resourceAmount = 0;
         this.toBeAddedResourceAmount = resourceAmount;
         this.toBeAddedTurn = toBeAddedTurn;
     }
@@ -111,14 +113,14 @@ public class Cell {
         if (cellType == CellType.WALL || resourceType == ResourceType.NONE)
             return;
         List<Ant> freeWorkerAnts = getWorkerAnts().stream()
-                .filter(x -> x.getCarryingResourceType() == ResourceType.NONE ||
-                        (x.getCarryingResourceType() == this.getResourceType() &&
-                                x.getCarryingResourceAmount() < ConstConfigs.WORKER_MAX_CARRYING_RESOURCE_AMOUNT))
+                .filter(x -> x.getCarryingResourceType() == ResourceType.NONE
+                        || (x.getCarryingResourceType() == this.getResourceType()
+                                && x.getCarryingResourceAmount() < ConstConfigs.WORKER_MAX_CARRYING_RESOURCE_AMOUNT))
                 .collect(Collectors.toList());
 
         Collections.shuffle(freeWorkerAnts);
         for (Ant ant : freeWorkerAnts) {
-            if (this.getResourceAmount() <= 0){
+            if (this.getResourceAmount() <= 0) {
                 break;
             }
 
