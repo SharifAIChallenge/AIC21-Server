@@ -17,6 +17,9 @@ public class Cell {
     private ResourceType resourceType;
     private int resourceAmount;
     private List<Ant> ants;
+    private int toBeAddedTurn = -1;
+    private ResourceType toBeAddedResourceType;
+    private int toBeAddedResourceAmount;
 
     public Cell(int xPosition, int yPosition, CellType cellType, ResourceType resourceType, int resourceAmount) {
         this.xPosition = xPosition;
@@ -25,6 +28,22 @@ public class Cell {
         this.resourceType = resourceType;
         this.resourceAmount = resourceAmount;
         ants = new ArrayList<>();
+    }
+
+    // for future resource
+    public Cell(int xPosition, int yPosition, ResourceType resourceType, int resourceAmount, int toBeAddedTurn) {
+        this(xPosition, yPosition, CellType.EMPTY, ResourceType.NONE, 0);
+        this.toBeAddedResourceType = resourceType;
+        this.toBeAddedResourceAmount = resourceAmount;
+        this.toBeAddedTurn = toBeAddedTurn;
+    }
+
+    public void renew(int currentTurn) {
+        if (currentTurn != this.toBeAddedTurn)
+            return;
+        this.resourceType = toBeAddedResourceType;
+        this.resourceAmount = toBeAddedResourceAmount;
+        this.toBeAddedTurn = -1;
     }
 
     public void setResourceType(ResourceType resourceType) {

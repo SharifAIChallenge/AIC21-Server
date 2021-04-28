@@ -67,6 +67,7 @@ public class Game {
         removeDeadAntsNewMessages(messages);
         handleChatMessages(messages);
         handleAntsMove(messages);
+        map.getAllCells().forEach(cell -> cell.renew(currentTurn)); //for future resources
         map.getAllCells().forEach(Cell::manageResources);
         /*
          * if (isFinished()) { Colony winnerColony = gameJudge.getWinner();
