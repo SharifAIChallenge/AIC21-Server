@@ -102,6 +102,16 @@ public class AttackHandler {
             }
         }
         Ant defender = ants.get(index);
+        if (attackerId < 0) {
+            // base attack to all ants of a cell
+            for (Ant defAnt : map.getCell(defender.getXPosition(), defender.getYPosition()).getAnts()) {
+                defAnt.decreaseHealth(damage);
+                AttackSummary attackSummary = new AttackSummary(attackerId, defAnt.getId(), fromYPosition,
+                        fromXPosition, defAnt.getYPosition(), defAnt.getXPosition());
+                attackSummaries.add(attackSummary);
+            }
+            return;
+        }
         defender.decreaseHealth(damage);
         AttackSummary attackSummary = new AttackSummary(attackerId, defender.getId(), fromYPosition, fromXPosition,
                 defender.getYPosition(), defender.getXPosition());
