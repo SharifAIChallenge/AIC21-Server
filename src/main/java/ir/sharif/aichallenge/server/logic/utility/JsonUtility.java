@@ -14,6 +14,9 @@ import org.json.simple.parser.ParseException;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class JsonUtility {
 
@@ -58,6 +61,8 @@ public class JsonUtility {
         }
     }
 
+    private static HashMap<Integer, Integer> cellTypeToTurn = new HashMap<Integer, Integer>();
+
     private static Cell parseCellObject(JSONObject cell) {
         // Get cell first name
         int yPosition = ((Long) cell.get("row")).intValue();
@@ -94,6 +99,17 @@ public class JsonUtility {
 
         if (cellType == CellType.BASE) {
             return new BaseCell(xPosition, yPosition);
+        }
+        // future resource
+        if (cell_type_value > 6) {
+            int toBeAddedTurn = ThreadLocalRandom.current().nextInt(1, ConstConfigs.GAME_MAXIMUM_TURN_COUNT);
+            if (cellTypeToTurn.keySet().contains(cell_type_value)) {
+                toBeAddedTurn = cellTypeToTurn.get(cell_type_value);
+            } else {
+                cellTypeToTurn.put(cell_type_value, toBeAddedTurn);
+            }
+            // Log.i("JsonUtility", "cell will be added in " + toBeAddedTurn);
+            return new Cell(xPosition, yPosition, resourceType, resourceAmount, toBeAddedTurn);
         }
         return new Cell(xPosition, yPosition, cellType, resourceType, resourceAmount);
     }
